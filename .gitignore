@@ -1,0 +1,7 @@
+kernel.bin
+kernel.iso
+kernel/*.o
+kernel/*.d
+isodir
+xbochs.log
+bx_enh_dbg.ini
