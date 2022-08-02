@@ -6,6 +6,10 @@
 
 _start:
 	mov $stack_top, %esp
+	pushl $0
+	pushl %eax
+	pushl $0
+	pushl %ebx
 
 	call check_multiboot
 	call check_cpuid
@@ -62,6 +66,19 @@ setup_page_tables:
 	or $0x3, %eax
 	mov %eax, page_table_lvl3
 
+	mov $page_table_lvl2 + 4096, %eax
+	or $0x3, %eax
+	mov %eax, page_table_lvl3+8
+
+	mov $page_table_lvl2 + 8192, %eax
+	or $0x3, %eax
+	mov %eax, page_table_lvl3+16
+
+	mov $page_table_lvl2 + 12288, %eax
+	or $0x3, %eax
+	mov %eax, page_table_lvl3+24
+
+
 	movl $0, %ecx
 1:
 	movl $0x200000, %eax
@@ -71,7 +88,7 @@ setup_page_tables:
 	leal (%edx, %ecx, 8), %edx
 	movl %eax, (%edx)
 	inc %ecx
-	cmp $512, %ecx
+	cmp $512*4, %ecx
 	jne 1b
 
 	ret
@@ -100,15 +117,12 @@ enable_paging:
 	ret
 
 no_multiboot:
-	movl $0x4f4d, 0xb8000
 	hlt
 
 no_cpuid:
-	movl $0x4f43, 0xb8000
 	hlt
 
 no_long_mode:
-	movl $0x4f4c, 0xb8000
 	hlt
 
 
@@ -125,8 +139,9 @@ page_table_lvl4:
 	.skip 4096
 page_table_lvl3:
 	.skip 4096
+// map first 4GB
 page_table_lvl2:
-	.skip 4096
+	.skip 4096*4
 
 .section .rodata
 gdt64:

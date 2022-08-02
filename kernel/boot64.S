@@ -4,7 +4,6 @@
 .code64
 
 begin_long_mode:
-
 	// reload segment registers
 	mov $0, %eax
 	mov %eax, %ss
@@ -13,5 +12,9 @@ begin_long_mode:
 	mov %eax, %fs
 	mov %eax, %gs
 
-	call main
+	popq %rdi
+	popq %rsi
+
+	cli
+	call kernel_main
 	hlt

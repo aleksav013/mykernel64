@@ -6,8 +6,9 @@ OBJDUMP = $(ARCH)objcopy
 OBJCOPY = $(ARCH)objdump
 
 
-CFLAGS = -Wall -Werror -Wno-error=infinite-recursion -O -fno-omit-frame-pointer -ggdb
-CFLAGS += -MD
+CFLAGS = -Wall -Werror -Wno-error=infinite-recursion -O -fno-omit-frame-pointer
+# -mgeneral-regs-only disables SIMD instructions
+CFLAGS += -MD -O3 -mgeneral-regs-only
 CFLAGS += -ffreestanding -fno-common -nostdlib
 CFLAGS += -I.
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
@@ -22,7 +23,7 @@ OBJS = \
 	$K/boot64.o \
 	$K/main.o \
 
-kernel.iso: kernel.bin
+kernel.iso: kernel.bin $K/grub.cfg
 	mkdir -p isodir/boot/grub
 	cp kernel.bin isodir/boot/kernel.bin
 	cp $K/grub.cfg isodir/boot/grub/grub.cfg
