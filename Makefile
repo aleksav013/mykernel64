@@ -10,7 +10,7 @@ CFLAGS = -Wall -Werror -Wno-error=infinite-recursion -O -fno-omit-frame-pointer
 # -mgeneral-regs-only disables SIMD instructions
 CFLAGS += -MD -O3 -mgeneral-regs-only
 CFLAGS += -ffreestanding -fno-common -nostdlib
-CFLAGS += -I.
+CFLAGS += -I include
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 CFLAGS += -fno-pie -no-pie -fno-pic
 LDFLAGS = -z max-page-size=4096
@@ -22,6 +22,9 @@ OBJS = \
 	$K/boot.o \
 	$K/boot64.o \
 	$K/main.o \
+	$K/graphics.o \
+	$K/multiboot2.o \
+	$K/debug.o \
 
 kernel.iso: kernel.bin $K/grub.cfg
 	mkdir -p isodir/boot/grub
