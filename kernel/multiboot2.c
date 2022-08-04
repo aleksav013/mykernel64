@@ -4,6 +4,8 @@
 
 fb_t fb;
 
+/* https://www.gnu.org/software/grub/manual/multiboot2/html_node/Boot-information-format.html */
+
 void init_fb(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 {
 	if (multiboot_magic != MB2_MAGIC) {

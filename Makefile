@@ -43,13 +43,16 @@ kernel.bin: $(OBJS) $K/kernel.ld Makefile
 	$(CC) $(CFLAGS) -c $< -o $@
 
 
-.PHONY: qemu clean run
+.PHONY: qemu bochs clean run
 
 QEMU = qemu-system-x86_64
-QEMUFLAGS =
+BOCHS = bochs -q
 
 qemu: kernel.iso
-	$(QEMU) $(QEMUFLAGS) -cdrom kernel.iso
+	$(QEMU) -cdrom kernel.iso
+
+bochs: kernel.iso
+	$(BOCHS) -qf .bochsrc
 
 clean:
 	rm -f kernel.bin kernel.iso $K/*.o $K/*.d xbochs.log bx_enh_dbg.ini
