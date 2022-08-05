@@ -25,6 +25,12 @@ OBJS = \
 	$K/graphics.o \
 	$K/multiboot2.o \
 	$K/debug.o \
+	$K/idt.o \
+	$K/irq.o \
+	$K/irq_stub.o \
+	$K/io.o \
+	$K/pic.o \
+	$K/keyboard.o \
 
 kernel.iso: kernel.bin $K/grub.cfg
 	mkdir -p isodir/boot/grub

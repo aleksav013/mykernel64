@@ -88,6 +88,8 @@ void fb_draw_line(fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32
 
 void fb_draw_character(fb_t fb, char c, uint32_t x, uint32_t y, uint32_t char_col, uint32_t bg_col)
 {
+	if (c < 0) return;
+
 	uint32_t offset = 32 + c * 16;
 	for (uint32_t i = 0 ; i < 16; i++)
 	{

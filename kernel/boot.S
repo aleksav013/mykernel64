@@ -5,6 +5,7 @@
 .code32
 
 _start:
+	cli
 	mov $stack_top, %esp
 	pushl $0
 	pushl %eax
@@ -18,8 +19,8 @@ _start:
 	call setup_page_tables
 	call enable_paging
 
-	lgdt gdt64_pointer
-	ljmp $gdt64_code_segment, $begin_long_mode
+	lgdt gdt_pointer
+	ljmp $0x08, $begin_long_mode
 
 
 check_multiboot:
@@ -143,11 +144,38 @@ page_table_lvl3:
 page_table_lvl2:
 	.skip 4096*4
 
+// Access bits
 .section .rodata
-gdt64:
+.set PRESENT,		1 << 7
+.set NOT_SYS,		1 << 4
+.set EXEC,		1 << 3
+.set DC,		1 << 2
+.set RW,		1 << 1
+.set ACCESSED,		1 << 0
+
+// Flags bits
+.set GRAN_4K,		1 << 7
+.set SZ_32,		1 << 6
+.set LONG_MODE,		1 << 5
+
+gdt:
+gdt_null = . - gdt
 	.quad 0
-gdt64_code_segment = . - gdt64
-	.quad 1<<43 + 1<<44 + 1<<47 + 1<<53
-gdt64_pointer:
-	.word . - gdt64 - 1
-	.quad gdt64
+gdt_code = . - gdt
+	.long 0xFFFF				// Limit & Base (low, bits 0-15)
+	.byte 0					// Base (mid, bits 16-23)
+	.byte PRESENT | NOT_SYS | EXEC | RW	// Access
+	.byte GRAN_4K | LONG_MODE | 0xF		// Flags & Limit (high, bits 16-19)
+	.byte 0					// Base (high, bits 24-31)
+gdt_data = . - gdt
+	.long 0xFFFF
+	.byte 0
+	.byte PRESENT | NOT_SYS | RW
+	.byte GRAN_4K | SZ_32 | 0xF
+	.byte 0
+gdt_tss = . - gdt
+	.long 0x00000068
+	.long 0x00CF8900
+gdt_pointer:
+	.word . - gdt - 1
+	.quad gdt
