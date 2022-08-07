@@ -14,6 +14,5 @@ begin_long_mode:
 
 	popq %rdi
 	popq %rsi
-
 	call kernel_main
 	hlt

@@ -12,6 +12,8 @@ OBJS = \
 	src/cpu/pic.o \
 	src/devices/keyboard.o \
 	src/main.o \
+	src/mem/paging_asm.o \
+	src/mem/paging.o \
 	src/misc/debug.o \
 	src/misc/graphics.o \
 

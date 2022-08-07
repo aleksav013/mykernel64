@@ -39,6 +39,12 @@ void itos(uint32_t num, char** s)
 
 void print_char(char c)
 {
+
+	if (c == '\n') {
+		x = 0;
+		y++;
+		return;
+	}
 	if (x * 8 >= fb.width) {
 		x = 0;
 		y++;
@@ -76,8 +82,7 @@ void keyboard_handler(void)
 			print_char(' ');
 			x--;
 		} else if (keycode == KEY_ENTER) {
-			x = 0;
-			y++;
+			print_char(keymap[keycode]);
 		} else {
 			if (keymap[keycode] == ' ') return;
 			if (is_pressed[KEY_LSHIFT] || is_pressed[KEY_RSHIFT])

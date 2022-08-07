@@ -59,37 +59,25 @@ check_long_mode:
 	ret
 
 setup_page_tables:
-	mov $page_table_lvl3, %eax
+	mov $pt_lvl3, %eax
 	or $0x3, %eax
-	mov %eax, page_table_lvl4
+	mov %eax, pt_lvl4
 
-	mov $page_table_lvl2, %eax
+	// 0x00000000 -  0x00200000 : 0x00000000
+	mov $pt_lvl2, %eax
 	or $0x3, %eax
-	mov %eax, page_table_lvl3
-
-	mov $page_table_lvl2 + 4096, %eax
-	or $0x3, %eax
-	mov %eax, page_table_lvl3+8
-
-	mov $page_table_lvl2 + 8192, %eax
-	or $0x3, %eax
-	mov %eax, page_table_lvl3+16
-
-	mov $page_table_lvl2 + 12288, %eax
-	or $0x3, %eax
-	mov %eax, page_table_lvl3+24
-
+	mov %eax, pt_lvl3
 
 	movl $0, %ecx
 1:
-	movl $0x200000, %eax
+	movl $0x00200000, %eax
 	mul %ecx
 	or $0b10000011, %eax
-	movl $page_table_lvl2, %edx
+	movl $pt_lvl2, %edx
 	leal (%edx, %ecx, 8), %edx
 	movl %eax, (%edx)
 	inc %ecx
-	cmp $512*4, %ecx
+	cmp $1, %ecx
 	jne 1b
 
 	ret
@@ -106,8 +94,8 @@ enable_paging:
 	or $1<<8, %eax
 	wrmsr
 
-	// page_table_lvl4
-	mov $page_table_lvl4, %eax
+	// pt_lvl4
+	mov $pt_lvl4, %eax
 	mov %eax, %cr3
 
 	// enable paging (+ protected mode if not already enabled)
@@ -136,13 +124,13 @@ stack_bottom:
 stack_top:
 
 // page tables
-page_table_lvl4:
+pt_lvl4:
 	.skip 4096
-page_table_lvl3:
+pt_lvl3:
 	.skip 4096
 // map first 4GB
-page_table_lvl2:
-	.skip 4096*4
+pt_lvl2:
+	.skip 4096
 
 // Access bits
 .section .rodata
