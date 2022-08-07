@@ -1,0 +1,43 @@
+#include <types.h>
+
+size_t strlen(const char* s)
+{
+	char *p = (char*)s;
+	while (*p) p++;
+	return p - s;
+}
+
+uint64_t stoi(const char *s)
+{
+	uint64_t num = 0;
+	size_t n = strlen(s);
+
+	for (size_t i = 0; i < n; i++) {
+		num *= 10;
+		num += s[i] - '0';
+	}
+
+	return num;
+}
+
+void strrev(char *s)
+{
+	size_t n = strlen(s);
+	char a[100];
+	for (size_t i = 0; i < n; i++) {
+		a[i] = s[n - 1 - i];
+	}
+	for (size_t i = 0; i < n; i++) {
+		s[i] = a[i];
+	}
+}
+
+void itos(uint64_t num, char* s)
+{
+	size_t i;
+	for (i = 0; num; num/=10, i++) {
+		s[i] = '0' + num%10;
+	}
+	s[i] = '\0';
+	strrev(s);
+}

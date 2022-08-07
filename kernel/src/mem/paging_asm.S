@@ -2,11 +2,11 @@
 
 .global load_pt_lvl4
 load_pt_lvl4:
-    push %rbp
-    mov %rsp, %rbp
+	push %rbp
+	mov %rsp, %rbp
 
-    mov %rdi, %cr3
+	mov %rdi, %cr3
 
-    mov %rbp, %rsp
-    pop %rbp
-    ret
+	mov %rbp, %rsp
+	pop %rbp
+	ret

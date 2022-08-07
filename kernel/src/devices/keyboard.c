@@ -1,11 +1,11 @@
-#include <stdint.h>
-#include <stdbool.h>
+#include <types.h>
 
 #include <pic.h>
 #include <io.h>
 #include <graphics.h>
 #include <debug.h>
 #include <keymap.h>
+#include <libk/string.h>
 
 #define KEYBOARD_DATA_PORT	0x60
 #define KEYBOARD_STATUS_PORT	0x64
@@ -13,29 +13,6 @@
 static uint32_t x;
 static uint32_t y;
 bool is_pressed[128];
-
-uint32_t strlen(const char *s);
-
-uint32_t stoi(const char *s)
-{
-	static uint32_t num;
-	uint32_t s_len = strlen(s);
-
-	for (int i = s_len - 1; i >= 0; i--) {
-		num += s[i] - '0';
-	}
-
-	return num;
-}
-
-void itos(uint32_t num, char** s)
-{
-	uint32_t i;
-	for (i = 0; num; num/=10, i++) {
-		*s[i] = num%10 - '0';
-	}
-	*s[i] = '\0';
-}
 
 void print_char(char c)
 {
@@ -59,9 +36,16 @@ void print_char(char c)
 
 void print_string(char* s)
 {
-	for (uint32_t i = 0; i < strlen(s); i++) {
+	for (size_t i = 0; i < strlen(s); i++) {
 		print_char(s[i]);
 	}
+}
+
+void print_int(uint64_t num)
+{
+	char a[100];
+	itos(num, a);
+	print_string(a);
 }
 
 void keyboard_handler(void)

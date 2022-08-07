@@ -1,4 +1,5 @@
-#include <stdint.h>
+#include <types.h>
+
 #include <paging.h>
 
 void load_pt_lvl4(uint64_t*);

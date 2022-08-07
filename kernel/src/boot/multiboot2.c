@@ -1,4 +1,5 @@
-#include <stdint.h>
+#include <types.h>
+
 #include <multiboot2.h>
 #include <graphics.h>
 

@@ -1,4 +1,5 @@
-#include <stdint.h>
+#include <types.h>
+
 #include <pic.h>
 #include <io.h>
 #include <keyboard.h>

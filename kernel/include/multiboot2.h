@@ -1,7 +1,7 @@
 #ifndef MULTIBOOT2_H
 #define MULTIBOOT2_H
 
-#include <stdint.h>
+#include <types.h>
 
 struct mb2_tag_header {
 	uint32_t type;

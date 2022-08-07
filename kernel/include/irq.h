@@ -1,7 +1,7 @@
 #ifndef IRQ_H
 #define IRQ_H
 
-#include <stdint.h>
+#include <types.h>
 
 // exceptions
 void isr0(void);

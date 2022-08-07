@@ -1,7 +1,7 @@
 #ifndef KEYMAP_H
 #define KEYMAP_H
 
-#include <stdint.h>
+#include <types.h>
 
 #define KEY_ESCAPE		0x01
 #define KEY_1			0x02

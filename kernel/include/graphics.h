@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include <stdint.h>
+#include <types.h>
 
 struct fb_t {
 	uint64_t addr;
