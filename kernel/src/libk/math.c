@@ -1,4 +1,5 @@
 #include <types.h>
+#include <libk/math.h>
 
 int64_t abs(int64_t val)
 {

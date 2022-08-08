@@ -8,9 +8,6 @@
 
 uint64_t stoi(const char *s);
 void itos(uint64_t num, char* s);
-void print_char(char c);
-void print_string(char* s);
 void keyboard_handler(void);
-void print_int(uint64_t num);
 
 #endif

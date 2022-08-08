@@ -12,9 +12,9 @@ OBJS = \
 	src/cpu/pic.o \
 	src/devices/keyboard.o \
 	src/libk/math.o \
+	src/libk/stdio.o \
 	src/libk/string.o \
 	src/main.o \
-	src/mem/heap.o \
 	src/mem/paging_asm.o \
 	src/mem/paging.o \
 	src/misc/debug.o \

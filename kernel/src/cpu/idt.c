@@ -1,4 +1,5 @@
 #include <idt.h>
+
 #include <irq.h>
 #include <pic.h>
 
@@ -14,7 +15,7 @@ void add_to_idt(uint16_t num, uint64_t offset, uint16_t selector, uint8_t type)
 {
 	idt_table[num].offset_1 = offset & 0xFFFF;
 	idt_table[num].offset_2 = (offset >> 16) & 0xFFFF;
-	idt_table[num].offset_3 = offset >> 32;
+	idt_table[num].offset_3 = (uint32_t)(offset >> 32);
 	idt_table[num].selector = selector;
 	idt_table[num].type_attributes = type;
 	idt_table[num].ist = 0;

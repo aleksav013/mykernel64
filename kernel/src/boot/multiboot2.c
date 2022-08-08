@@ -1,13 +1,10 @@
 #include <types.h>
-
 #include <multiboot2.h>
+
 #include <graphics.h>
 #include <debug.h>
 
-
 #define KERNEL_VMA 0xc0000000
-
-fb_t fb;
 
 /* https://www.gnu.org/software/grub/manual/multiboot2/html_node/Boot-information-format.html */
 
@@ -39,9 +36,9 @@ void init_fb(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 		tag_header += tag_header->size / 8 + ((tag_header->size % 8) > 0);
 	}
 
-	fb.addr = tag_fb->framebuffer_addr;
-	fb.width = tag_fb->framebuffer_width;
-	fb.height = tag_fb->framebuffer_height;
-	fb.pitch = tag_fb->framebuffer_pitch;
-	fb.bpp = tag_fb->framebuffer_bpp;
+	main_fb.addr = tag_fb->framebuffer_addr;
+	main_fb.width = tag_fb->framebuffer_width;
+	main_fb.height = tag_fb->framebuffer_height;
+	main_fb.pitch = tag_fb->framebuffer_pitch;
+	main_fb.bpp = tag_fb->framebuffer_bpp;
 }

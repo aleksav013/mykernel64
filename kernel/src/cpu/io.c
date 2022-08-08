@@ -1,4 +1,5 @@
 #include <types.h>
+#include <io.h>
 
 uint8_t inb(uint32_t port)
 {

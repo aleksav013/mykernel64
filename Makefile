@@ -7,7 +7,12 @@ LD = $(ARCH)ld
 OBJDUMP = $(ARCH)objcopy
 OBJCOPY = $(ARCH)objdump
 
-CFLAGS = -Wall -Werror -Wno-error=infinite-recursion -O -fno-omit-frame-pointer
+WARNINGS := -Wall -Werror -Wextra -pedantic -Wshadow -Wpointer-arith \
+	-Wcast-align -Wwrite-strings -Wmissing-prototypes \
+	-Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline \
+	-Wno-long-long -Wconversion -Wstrict-prototypes
+
+CFLAGS = $(WARNINGS) -Wno-error=infinite-recursion -O -fno-omit-frame-pointer
 # -mgeneral-regs-only disables SIMD instructions
 CFLAGS += -MD -O3 -mgeneral-regs-only -mcmodel=large
 CFLAGS += -ffreestanding -fno-common -nostdlib

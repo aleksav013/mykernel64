@@ -1,10 +1,11 @@
 #include <types.h>
+#include <libk/string.h>
 
 size_t strlen(const char* s)
 {
 	char *p = (char*)s;
 	while (*p) p++;
-	return p - s;
+	return (size_t)(p - s);
 }
 
 uint64_t stoi(const char *s)
@@ -14,7 +15,7 @@ uint64_t stoi(const char *s)
 
 	for (size_t i = 0; i < n; i++) {
 		num *= 10;
-		num += s[i] - '0';
+		num += (uint64_t)(s[i] - '0');
 	}
 
 	return num;
@@ -36,7 +37,7 @@ void itos(uint64_t num, char* s)
 {
 	size_t i;
 	for (i = 0; num; num/=10, i++) {
-		s[i] = '0' + num%10;
+		s[i] = (char)('0' + num%10);
 	}
 	s[i] = '\0';
 	strrev(s);

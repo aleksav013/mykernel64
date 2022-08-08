@@ -1,6 +1,7 @@
 #include <types.h>
-
 #include <paging.h>
+
+#include <libk/stdio.h>
 
 void load_pt_lvl4(uint64_t*);
 
@@ -34,4 +35,9 @@ void init_paging(void)
 	}
 
 	load_pt_lvl4(page_table_lvl4);
+}
+
+void page_fault(uint64_t error)
+{
+	printf("%d\n", error);
 }
