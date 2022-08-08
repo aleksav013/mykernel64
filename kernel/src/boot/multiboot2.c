@@ -2,6 +2,10 @@
 
 #include <multiboot2.h>
 #include <graphics.h>
+#include <debug.h>
+
+
+#define KERNEL_VMA 0xc0000000
 
 fb_t fb;
 
@@ -18,7 +22,8 @@ void init_fb(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	static mb2_tag_fb* tag_fb;
 
 	// skip first 8 bytes (total_size + reserved)
-	mb2_tag_header* tag_header = multiboot_bootinfo + 1;
+	mb2_tag_header* tag_header = (mb2_tag_header*)((char*)multiboot_bootinfo + 8 + KERNEL_VMA);
+	bochs_breakpoint();
 
 	while (tag_header->type != MB2_TAG_END) {
 		// process tag_type

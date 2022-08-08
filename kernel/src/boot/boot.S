@@ -1,12 +1,13 @@
+.code32
 .global _start
 .extern begin_long_mode
 
-.section .text
-.code32
+.set KERNEL_VMA, 0xc0000000
 
+.section .boot.text, "a"
 _start:
 	cli
-	mov $stack_top, %esp
+	mov $stack_top - KERNEL_VMA, %esp
 	pushl $0
 	pushl %eax
 	pushl $0
@@ -19,9 +20,9 @@ _start:
 	call setup_page_tables
 	call enable_paging
 
-	lgdt gdt_pointer
-	ljmp $0x08, $begin_long_mode
-
+	addl $KERNEL_VMA, %esp
+	mov $4f, %ecx
+	jmp *%ecx
 
 check_multiboot:
 	cmp $0x36d76289, %eax
@@ -59,26 +60,45 @@ check_long_mode:
 	ret
 
 setup_page_tables:
-	mov $pt_lvl3, %eax
+	mov $pt_lvl3 - KERNEL_VMA, %eax
 	or $0x3, %eax
-	mov %eax, pt_lvl4
+	mov %eax, pt_lvl4 - KERNEL_VMA
 
-	// 0x00000000 -  0x00200000 : 0x00000000
-	mov $pt_lvl2, %eax
+	// 0x00000000 - 0x00200000 : 0x00000000 - 0x00200000
+	mov $pt_lvl2 - KERNEL_VMA, %eax
 	or $0x3, %eax
-	mov %eax, pt_lvl3
+	mov %eax, pt_lvl3 - KERNEL_VMA
 
-	movl $0, %ecx
+	// 0xc0000000 - 0xc0200000 : 0xc0000000 - 0xc0200000
+	mov $pt_lvl2_hh - KERNEL_VMA, %eax
+	or $0x3, %eax
+	mov %eax, pt_lvl3 + 24 - KERNEL_VMA
+
+// first 2mb
+	xor %ecx, %ecx
 1:
 	movl $0x00200000, %eax
 	mul %ecx
 	or $0b10000011, %eax
-	movl $pt_lvl2, %edx
+	movl $pt_lvl2 - KERNEL_VMA, %edx
 	leal (%edx, %ecx, 8), %edx
 	movl %eax, (%edx)
 	inc %ecx
 	cmp $1, %ecx
 	jne 1b
+
+// first 2mb in higher_half
+	xor %ecx, %ecx
+2:
+	movl $0x00200000, %eax
+	mul %ecx
+	or $0b10000011, %eax
+	movl $pt_lvl2_hh - KERNEL_VMA, %edx
+	leal (%edx, %ecx, 8), %edx
+	movl %eax, (%edx)
+	inc %ecx
+	cmp $1, %ecx
+	jne 2b
 
 	ret
 
@@ -95,7 +115,7 @@ enable_paging:
 	wrmsr
 
 	// pt_lvl4
-	mov $pt_lvl4, %eax
+	mov $pt_lvl4 - KERNEL_VMA, %eax
 	mov %eax, %cr3
 
 	// enable paging (+ protected mode if not already enabled)
@@ -114,6 +134,11 @@ no_cpuid:
 no_long_mode:
 	hlt
 
+.section .text
+4:
+	lgdt gdt_pointer
+	ljmp $0x08, $begin_long_mode
+
 
 .section .bss
 .align 4096
@@ -123,14 +148,17 @@ stack_bottom:
 	.skip 4096*4
 stack_top:
 
+
 // page tables
 pt_lvl4:
 	.skip 4096
 pt_lvl3:
 	.skip 4096
-// map first 4GB
 pt_lvl2:
 	.skip 4096
+pt_lvl2_hh:
+	.skip 4096
+
 
 // Access bits
 .section .rodata

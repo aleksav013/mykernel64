@@ -9,7 +9,7 @@ OBJCOPY = $(ARCH)objdump
 
 CFLAGS = -Wall -Werror -Wno-error=infinite-recursion -O -fno-omit-frame-pointer
 # -mgeneral-regs-only disables SIMD instructions
-CFLAGS += -MD -O3 -mgeneral-regs-only
+CFLAGS += -MD -O3 -mgeneral-regs-only -mcmodel=large
 CFLAGS += -ffreestanding -fno-common -nostdlib
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 CFLAGS += -fno-pie -no-pie -fno-pic
