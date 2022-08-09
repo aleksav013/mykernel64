@@ -119,8 +119,8 @@ void isr13_handler(uint64_t error)
 
 void isr14_handler(uint64_t error)
 {
+	page_fault(error);
 	printf("%s\n", exception_name[14]);
-	printf("error: %d\n", error);
 }
 
 void isr15_handler(void)

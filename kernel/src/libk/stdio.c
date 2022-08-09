@@ -47,6 +47,13 @@ inline void print_int(uint64_t num)
 	print_string(a);
 }
 
+inline void print_hex(uint64_t num)
+{
+	char a[100];
+	itoh(num, a);
+	print_string(a);
+}
+
 void printf(const char *s, ...)
 {
 	size_t count = 0;
@@ -63,6 +70,7 @@ void printf(const char *s, ...)
 			if(s[i] == 'c') print_char((char)va_arg(list, uint32_t));
 			else if(s[i] == 's') print_string(va_arg(list, char*));
 			else if(s[i] == 'd') print_int((uint64_t)va_arg(list, uint64_t));
+			else if(s[i] == 'x') print_hex((uint64_t)va_arg(list, uint64_t));
 			else
 			{
 				print_string("Wrong format using printf\n");

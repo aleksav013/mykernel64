@@ -35,9 +35,34 @@ void strrev(char *s)
 
 void itos(uint64_t num, char* s)
 {
+	if (num == 0) {
+		s[0] = '0';
+		s[1] = '\0';
+		return;
+	}
+
 	size_t i;
-	for (i = 0; num; num/=10, i++) {
-		s[i] = (char)('0' + num%10);
+	for (i = 0; num; num /= 10, i++) {
+		s[i] = (char)('0' + num % 10);
+	}
+	s[i] = '\0';
+	strrev(s);
+}
+
+void itoh(uint64_t num, char* s)
+{
+	if (num == 0) {
+		s[0] = '0';
+		s[1] = '\0';
+		return;
+	}
+
+	size_t i;
+	for (i = 0; num; num /= 16, i++) {
+		if (num % 16 < 10)
+			s[i] = (char)('0' + num % 16);
+		else
+			s[i] = (char)('A' + num % 16 - 10);
 	}
 	s[i] = '\0';
 	strrev(s);

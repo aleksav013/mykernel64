@@ -3,6 +3,7 @@
 
 #include <graphics.h>
 #include <debug.h>
+#include <paging.h>
 
 #define KERNEL_VMA 0xc0000000
 
@@ -20,7 +21,6 @@ void init_fb(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 
 	// skip first 8 bytes (total_size + reserved)
 	mb2_tag_header* tag_header = (mb2_tag_header*)((char*)multiboot_bootinfo + 8 + KERNEL_VMA);
-	bochs_breakpoint();
 
 	while (tag_header->type != MB2_TAG_END) {
 		// process tag_type
@@ -41,4 +41,8 @@ void init_fb(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	main_fb.height = tag_fb->framebuffer_height;
 	main_fb.pitch = tag_fb->framebuffer_pitch;
 	main_fb.bpp = tag_fb->framebuffer_bpp;
+
+	// identity map framebuffer address
+	map_addr(main_fb.addr, main_fb.addr, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
+	map_addr(main_fb.addr + PAGE_SIZE, main_fb.addr + PAGE_SIZE, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
 }
