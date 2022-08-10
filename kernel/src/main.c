@@ -7,16 +7,15 @@
 #include <heap.h>
 #include <keyboard.h>
 #include <libk/stdio.h>
+#include <libk/math.h>
 
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 {
 	init_paging();
-//	init_heap(HEAP_START_ADDR, HEAP_SIZE, HEAP_BLOCK_SIZE);
 	init_idt();
+	init_heap();
 	init_fb(multiboot_bootinfo, multiboot_magic);
-
-	__asm__ volatile ("movl $4, 0x500000");
 
 	for(;;) {
 		__asm__ volatile ("hlt;");
