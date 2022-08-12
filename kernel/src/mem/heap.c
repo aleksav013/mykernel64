@@ -121,7 +121,7 @@ void init_heap()
 
 	// allocate pages for kheap
 	for (size_t i = 0; i < upper_div(HEAP_SIZE, PAGE_SIZE); i++)
-		map_addr(HEAP_START_ADDR + i * PAGE_SIZE, HEAP_START_ADDR + i * PAGE_SIZE, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
+		map_addr(HEAP_VMEM_ADDR + i * PAGE_SIZE, HEAP_PMEM_ADDR + i * PAGE_SIZE, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
 
-	kheap_add_block(&main_kheap, HEAP_START_ADDR, HEAP_SIZE, HEAP_BLOCK_SIZE);
+	kheap_add_block(&main_kheap, HEAP_VMEM_ADDR, HEAP_SIZE, HEAP_BLOCK_SIZE);
 }

@@ -25,7 +25,8 @@ void keyboard_handler(void)
 			printf(" ");
 
 		} else if (keycode == KEY_BACKSPACE) {
-			printf("\b \b");
+			if (curr_x != 0)
+				printf("\b \b");
 		} else if (keycode == KEY_ENTER) {
 			printf("%c", keymap[keycode]);
 		} else {

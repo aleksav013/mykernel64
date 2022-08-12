@@ -5,32 +5,32 @@
 #include <libk/string.h>
 #include <graphics.h>
 
-int32_t x;
-int32_t y;
+uint32_t curr_x;
+uint32_t curr_y;
 
 inline void print_char(char c)
 {
+	if (curr_x * 8 >= main_fb.width) {
+		curr_x = 0;
+		curr_y++;
+	}
+	if (curr_y * 16 >= main_fb.height) {
+		curr_x = 0;
+		curr_y = 0;
+	}
 	if (c == '\n') {
-		x = 0;
-		y++;
+		curr_x = 0;
+		curr_y++;
 		return;
 	}
 	if (c == '\b') {
-		if (x != 0) {
-			x--;
+		if (curr_x != 0) {
+			curr_x--;
 		}
 		return;
 	}
-	if (x * 8 >= (int32_t)main_fb.width) {
-		x = 0;
-		y++;
-	}
-	if (y * 16 >= (int32_t)main_fb.height) {
-		x = 0;
-		y = 0;
-	}
-	fb_draw_character(main_fb, c, x * 8, y * 16, WHITE, BLACK);
-	x++;
+	fb_draw_character(main_fb, c, (int32_t)curr_x * 8, (int32_t)curr_y * 16, WHITE, BLACK);
+	curr_x++;
 }
 
 inline void print_string(const char* s)

@@ -6,8 +6,6 @@
 #define KEYBOARD_DATA_PORT	0x60
 #define KEYBOARD_STATUS_PORT	0x64
 
-uint64_t stoi(const char *s);
-void itos(uint64_t num, char* s);
 void keyboard_handler(void);
 
 #endif

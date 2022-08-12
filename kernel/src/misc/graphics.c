@@ -8,9 +8,9 @@
 
 fb_t main_fb;
 
-uint64_t* pixel_offset(fb_t fb, int32_t x, int32_t y)
+uint32_t* pixel_offset(fb_t fb, uint32_t x, uint32_t y)
 {
-	return (uint64_t*)((char*)fb.addr + y * (int32_t)fb.pitch + x * fb.bpp / 8);
+	return (uint32_t*)((char*)fb.addr + y * fb.pitch + x * fb.bpp / 8);
 }
 
 void fb_draw_pixel(fb_t fb, int32_t x, int32_t y, uint32_t col)
@@ -18,7 +18,7 @@ void fb_draw_pixel(fb_t fb, int32_t x, int32_t y, uint32_t col)
 	if (x < 0 || y < 0) return;
 	if (x >= (int32_t)fb.width || y >= (int32_t)fb.height) return;
 
-	uint32_t* fb_offset = (uint32_t*)pixel_offset(fb, x, y);
+	uint32_t* fb_offset = pixel_offset(fb, (uint32_t)x, (uint32_t)y);
 	*fb_offset = col;
 }
 

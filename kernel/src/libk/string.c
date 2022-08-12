@@ -67,3 +67,44 @@ void itoh(uint64_t num, char* s)
 	s[i] = '\0';
 	strrev(s);
 }
+
+void memcpy(const void* destptr, const void* srcptr, size_t n)
+{
+	uint8_t* dest = (uint8_t*)destptr;
+	const uint8_t* src = (const uint8_t*)srcptr;
+
+	for(size_t i = 0; i < n; i++) {
+		dest[i] = src[i];
+	}
+}
+
+void memset(const void* destptr, uint8_t value, size_t n)
+{
+	uint8_t* dest = (uint8_t*)destptr;
+
+	for (size_t i = 0; i < n; i++) {
+		dest[i] = value;
+	}
+}
+
+int32_t memcmp(const void* aptr, const void* bptr)
+{
+	const uint8_t* a = (const uint8_t*)aptr;
+	const uint8_t* b = (const uint8_t*)bptr;
+
+	const size_t len_a = strlen((char*)a);
+	const size_t len_b = strlen((char*)b);
+
+	for (size_t i = 0; i < len_a && i < len_b; i++) {
+		if (a[i] != b[i])
+			return a[i] - b[i];
+	}
+
+	if (len_a < len_b) {
+		return -1;
+	}
+	if (len_a > len_b) {
+		return 1;
+	}
+	return 0;
+}

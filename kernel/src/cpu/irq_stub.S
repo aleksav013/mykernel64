@@ -38,10 +38,11 @@ isr\number:
 .macro isr_error number
 .global isr\number
 isr\number:
-	# rdi not saved
-	pop %rdi
+	add $8, %rsp
 	pushall
 	cld
+	# setting error to 0
+	mov $0, %rdi
 	call isr\number\()_handler
 	popall
 	iretq
