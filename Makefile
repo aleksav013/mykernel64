@@ -7,16 +7,17 @@ LD = $(ARCH)ld
 OBJDUMP = $(ARCH)objcopy
 OBJCOPY = $(ARCH)objdump
 
-WARNINGS := -Wall -Werror -Wextra -pedantic -Wshadow -Wpointer-arith \
-	-Wcast-align -Wwrite-strings -Wmissing-prototypes \
-	-Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline \
-	-Wno-long-long -Wconversion -Wstrict-prototypes
+W := -Wall -Werror -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align
+W += -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations
+W += -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wconversion
+W += -Wstrict-prototypes
+WNO := -Wno-error=unused-parameter -Wno-error=unused-variable
+WNO += -Wno-error=infinite-recursion
 
-CFLAGS = $(WARNINGS) -Wno-error=infinite-recursion -O -fno-omit-frame-pointer
-# -mgeneral-regs-only disables SIMD instructions
-CFLAGS += -MD -O3 -mgeneral-regs-only -mcmodel=large
-CFLAGS += -ffreestanding -fno-common -nostdlib
-CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
+CFLAGS = $(W) $(WNO) -fno-omit-frame-pointer -mcmodel=large
+CFLAGS += -mgeneral-regs-only # disables SIMD instructions
+CFLAGS += -MD -O3 -ffreestanding -nostdlib
+CFLAGS += -fno-common -fno-stack-protector
 CFLAGS += -fno-pie -no-pie -fno-pic
 LDFLAGS = -z max-page-size=4096
 

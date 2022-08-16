@@ -21,6 +21,23 @@ struct mb2_tag_fb {
 } __attribute__((packed, aligned(8)));
 typedef struct mb2_tag_fb mb2_tag_fb;
 
+struct mb2_tag_mmap {
+	uint32_t type;
+	uint32_t size;
+	uint32_t entry_size;
+	uint32_t entry_version;
+};
+typedef struct mb2_tag_mmap mb2_tag_mmap;
+
+struct mb2_tag_mmap_entry {
+	uint64_t base_addr;
+	uint64_t length;
+	uint32_t type;
+	uint32_t reserved;
+};
+typedef struct mb2_tag_mmap_entry mb2_tag_mmap_entry;
+
+
 // multiboot2 magic check
 #define MB2_MAGIC		0x36D76289
 
@@ -35,6 +52,9 @@ typedef struct mb2_tag_fb mb2_tag_fb;
 #define MB2_TAG_VBE		7
 #define MB2_TAG_FB		8
 
-void init_fb(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic);
+
+void read_mb2(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic);
+void init_fb(mb2_tag_fb* tag_fb);
+void init_mmap(mb2_tag_mmap* tag_mmap);
 
 #endif

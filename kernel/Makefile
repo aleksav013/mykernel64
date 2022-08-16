@@ -11,6 +11,7 @@ OBJS = \
 	src/cpu/irq_stub.o \
 	src/cpu/pic.o \
 	src/devices/keyboard.o \
+	src/libk/list.o \
 	src/libk/math.o \
 	src/libk/stdio.o \
 	src/libk/string.o \
