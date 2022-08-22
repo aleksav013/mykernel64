@@ -14,6 +14,7 @@ void add_to_list_tail(list_t** ptr, void* data)
 {
 	list_t* node = (list_t*)kalloc(sizeof(list_t));
 	node->data = data;
+	node->next = NULL;
 
 	if (*ptr == NULL) {
 		*ptr = node;

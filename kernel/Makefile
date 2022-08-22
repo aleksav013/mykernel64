@@ -10,7 +10,9 @@ OBJS = \
 	src/cpu/irq.o \
 	src/cpu/irq_stub.o \
 	src/cpu/pic.o \
+	src/devices/disc.o \
 	src/devices/keyboard.o \
+	src/fs/ext2.o \
 	src/libk/list.o \
 	src/libk/math.o \
 	src/libk/stdio.o \

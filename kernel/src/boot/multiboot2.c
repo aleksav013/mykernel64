@@ -13,6 +13,8 @@
 
 /* https://www.gnu.org/software/grub/manual/multiboot2/html_node/Boot-information-format.html */
 
+mb2_tag_module* ext2_module;
+
 void init_fb(mb2_tag_fb* tag_fb)
 {
 	main_fb.addr = tag_fb->framebuffer_addr;
@@ -42,7 +44,8 @@ void init_mmap(mb2_tag_mmap* tag_mmap)
 	for (list_t* tmp = mmap; tmp != NULL; tmp = tmp->next) {
 		mb2_tag_mmap_entry* mmap_entry;
 		mmap_entry = tmp->data;
-		printf("base_addr: 0x%x, length: 0x%x, type: %d\n", mmap_entry->base_addr, mmap_entry->length, mmap_entry->type);
+//		printf("base_addr: 0x%x, length: 0x%x, type: %d\n", mmap_entry->base_addr, mmap_entry->length, mmap_entry->type);
+		mmap_entry = mmap_entry;
 	}
 
 	// free data
@@ -52,6 +55,15 @@ void init_mmap(mb2_tag_mmap* tag_mmap)
 
 	// free list
 	free_list(&mmap);
+}
+
+void init_module(mb2_tag_module* tag_module)
+{
+	// name is utf-8 encoded string!
+	uint32_t name_size = tag_module->size - sizeof(tag_module) + sizeof(char*);
+	tag_module->name = (char*)kalloc(name_size);
+	memcpy(tag_module->name, tag_module + tag_module->size - name_size, name_size);
+	kfree(tag_module->name);
 }
 
 void read_mb2(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
@@ -77,6 +89,9 @@ void read_mb2(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 			case MB2_TAG_MMAP:
 				tag_mmap = (mb2_tag_mmap*)tag_header;
 				break;
+			case MB2_TAG_MODULE:
+				ext2_module = (mb2_tag_module*)tag_header;
+				break;
 			default:
 				break;
 		}
@@ -87,4 +102,5 @@ void read_mb2(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 
 	init_fb(tag_fb);
 	init_mmap(tag_mmap);
+	init_module(ext2_module);
 }

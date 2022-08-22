@@ -3,8 +3,8 @@
 
 #include <types.h>
 
-#define HEAP_VMEM_ADDR		0xc0400000
-#define HEAP_PMEM_ADDR		0x00400000
+#define HEAP_VMEM_ADDR		0xc1000000
+#define HEAP_PMEM_ADDR		0x01000000
 #define HEAP_SIZE		0x01000000
 #define HEAP_BLOCK_SIZE		0x00000010
 
