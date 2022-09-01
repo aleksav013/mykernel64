@@ -12,6 +12,7 @@ OBJS = \
 	src/cpu/pic.o \
 	src/devices/disc.o \
 	src/devices/keyboard.o \
+	src/devices/timer.o \
 	src/fs/ext2.o \
 	src/libk/list.o \
 	src/libk/math.o \
@@ -23,6 +24,7 @@ OBJS = \
 	src/mem/paging.o \
 	src/misc/debug.o \
 	src/misc/graphics.o \
+	src/misc/stdbuff.o \
 
 all: kernel.bin
 

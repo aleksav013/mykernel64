@@ -19,6 +19,6 @@ void remap_pic(void)
 	outb(PIC2_DATA, ICW4_8086);
 
 	// mask interrupts
-	outb(PIC1_DATA, 0xfd);
+	outb(PIC1_DATA, 0xfc);
 	outb(PIC2_DATA, 0xff);
 }

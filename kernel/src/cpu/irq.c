@@ -4,6 +4,7 @@
 #include <pic.h>
 #include <io.h>
 #include <keyboard.h>
+#include <timer.h>
 #include <paging.h>
 #include <libk/stdio.h>
 
@@ -214,6 +215,7 @@ void isr31_handler(void)
 
 void irq0_handler(void)
 {
+	timer_handler();
 	outb(PIC1_COMMAND, PIC_EOI);
 }
 

@@ -1,5 +1,4 @@
 #include <types.h>
-
 #include <multiboot2.h>
 #include <graphics.h>
 #include <idt.h>
@@ -11,12 +10,14 @@
 #include <libk/math.h>
 #include <disc.h>
 #include <ext2.h>
+#include <timer.h>
 
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 {
 	init_paging();
 	init_idt();
+	init_timer(TICKS_PER_SECOND);
 	init_heap();
 	read_mb2(multiboot_bootinfo, multiboot_magic);
 
