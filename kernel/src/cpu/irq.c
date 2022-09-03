@@ -8,7 +8,7 @@
 #include <paging.h>
 #include <libk/stdio.h>
 
-const char* exception_name[] = {
+const char* const exception_name[] = {
 	"Divide-by-zero Error",
 	"Debug",
 	"Non-maskable Interrupt",
@@ -120,8 +120,9 @@ void isr13_handler(uint64_t error)
 
 void isr14_handler(uint64_t error)
 {
-	page_fault(error);
 	printf("%s\n", exception_name[14]);
+	printf("error: %d\n", error);
+	page_fault(error);
 }
 
 void isr15_handler(void)

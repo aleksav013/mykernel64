@@ -89,7 +89,7 @@
 #define KEY_F11			0x57
 #define KEY_F12			0x58
 
-char keymap[] = {
+const char keymap[] = {
 	' ',
 	' ',
 	'1',
@@ -220,9 +220,9 @@ char keymap[] = {
 	' ',
 };
 
-uint16_t keymap_len = 128;
+const uint16_t keymap_len = 128;
 
-char shift_keymap[] = {
+const char shift_keymap[] = {
 	' ',
 	' ',
 	'!',
@@ -353,6 +353,6 @@ char shift_keymap[] = {
 	' ',
 };
 
-uint16_t shift_keymap_len = 128;
+const uint16_t shift_keymap_len = 128;
 
 #endif

@@ -130,6 +130,7 @@ extern ext2_superblock_t* ext2_superblock;
 #define INODES_PER_BLOCK (BLOCK_SIZE / INODE_SIZE)
 
 
+void ext2_init(void);
 void read_block(uint32_t block_num, void* block_ptr);
 void read_superblock(ext2_superblock_t* ext2_superblock);
 void read_bg_desc(uint32_t bg_desc, ext2_bg_desc_t* ext2_bg_desc);

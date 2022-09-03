@@ -1,10 +1,10 @@
 .code32
-.global _start
 .extern begin_long_mode
 
 .set KERNEL_VMA, 0xc0000000
 
 .section .boot.text, "a"
+.global _start
 _start:
 	cli
 	mov $stack_top - KERNEL_VMA, %esp
@@ -136,7 +136,7 @@ no_long_mode:
 
 .section .text
 4:
-	lgdt gdt_pointer
+	lgdt gdtp
 	ljmp $0x08, $begin_long_mode
 
 
@@ -189,9 +189,6 @@ gdt_data = . - gdt
 	.byte PRESENT | NOT_SYS | RW
 	.byte GRAN_4K | SZ_32 | 0xF
 	.byte 0
-gdt_tss = . - gdt
-	.long 0x00000068
-	.long 0x00CF8900
-gdt_pointer:
+gdtp:
 	.word . - gdt - 1
 	.quad gdt

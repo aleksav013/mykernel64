@@ -51,9 +51,10 @@ void init_paging(void)
 	page_table_lvl3[2] = (uint64_t)page_table_lvl2_2 + FLAG_PRESENT + FLAG_WRITABLE - KERNEL_VMA;
 	page_table_lvl3[3] = (uint64_t)page_table_lvl2_3 + FLAG_PRESENT + FLAG_WRITABLE - KERNEL_VMA;
 
-	// higher half map first 4mb
-	map_addr(KERNEL_VMA, 0x00000000, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
-	map_addr(KERNEL_VMA + PAGE_SIZE, 0x00000000 + PAGE_SIZE, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
+	// higher half map first 6mb
+	for (size_t i = 0; i < 3; i++) {
+		map_addr(KERNEL_VMA + PAGE_SIZE * i, 0x00000000 + PAGE_SIZE * i, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
+	}
 
 	load_pt_lvl4(page_table_lvl4);
 }

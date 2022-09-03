@@ -1,8 +1,7 @@
-.global begin_long_mode
-
 .section .text
 .code64
 
+.global begin_long_mode
 begin_long_mode:
 	// reload segment registers
 	mov $0x10, %eax

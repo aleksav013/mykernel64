@@ -11,27 +11,23 @@
 #include <disc.h>
 #include <ext2.h>
 #include <timer.h>
+#include <gdt.h>
+#include <userspace.h>
+#include <tss.h>
 
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 {
+	init_gdt();
 	init_paging();
 	init_idt();
 	init_timer(TICKS_PER_SECOND);
 	init_heap();
 	read_mb2(multiboot_bootinfo, multiboot_magic);
-
-	// init disc
 	disc_init();
-
-	// read superblock
-	ext2_superblock = (ext2_superblock_t*)kalloc(sizeof(ext2_superblock_t));
-	read_superblock(ext2_superblock);
-
-	ls(path_to_inode("/"));
-
-	// free superblock
-	kfree(ext2_superblock);
+	ext2_init();
+//	ls(path_to_inode("/"));
+//	jump_userspace();
 
 	for(;;) {
 		__asm__ volatile ("hlt;");

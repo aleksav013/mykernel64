@@ -5,11 +5,13 @@ OBJS = \
 	src/boot/boot.o \
 	src/boot/header.o \
 	src/boot/multiboot2.o \
+	src/cpu/gdt.o \
 	src/cpu/idt.o \
 	src/cpu/io.o \
 	src/cpu/irq.o \
 	src/cpu/irq_stub.o \
 	src/cpu/pic.o \
+	src/cpu/tss.o \
 	src/devices/disc.o \
 	src/devices/keyboard.o \
 	src/devices/timer.o \
@@ -25,6 +27,9 @@ OBJS = \
 	src/misc/debug.o \
 	src/misc/graphics.o \
 	src/misc/stdbuff.o \
+	src/sys/syscall.o \
+	src/sys/userspace_asm.o \
+	src/sys/userspace.o \
 
 all: kernel.bin
 

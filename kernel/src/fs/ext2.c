@@ -24,6 +24,12 @@ void read_superblock(ext2_superblock_t* superblock)
 	memcpy(superblock, block, sizeof(ext2_superblock_t));
 }
 
+void ext2_init()
+{
+	ext2_superblock = (ext2_superblock_t*)kalloc(sizeof(ext2_superblock_t));
+	read_superblock(ext2_superblock);
+}
+
 void read_bg_desc(uint32_t bg_desc, ext2_bg_desc_t* ext2_bg_desc)
 {
 	uint32_t starting_block_num = BLOCK_SIZE == 1024 ? 2 : 1;
