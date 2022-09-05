@@ -14,10 +14,12 @@
 #include <gdt.h>
 #include <userspace.h>
 #include <tss.h>
+#include <serial.h>
 
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 {
+	init_serial();
 	init_gdt();
 	init_paging();
 	init_idt();

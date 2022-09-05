@@ -1,9 +1,9 @@
 #include <types.h>
 #include <libk/stdio.h>
-
 #include <stdarg.h>
 #include <libk/string.h>
 #include <graphics.h>
+#include <serial.h>
 
 uint32_t curr_x;
 uint32_t curr_y;
@@ -19,6 +19,7 @@ inline void print_char(char c)
 		curr_y = 0;
 	}
 	if (c == '\n') {
+		write_serial('\n');
 		curr_x = 0;
 		curr_y++;
 		return;
@@ -31,6 +32,8 @@ inline void print_char(char c)
 	}
 	fb_draw_character(main_fb, c, (int32_t)curr_x * 8, (int32_t)curr_y * 16, WHITE, BLACK);
 	curr_x++;
+
+	write_serial(c);
 }
 
 inline void print_string(const char* s)

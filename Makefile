@@ -52,10 +52,12 @@ QEMU = qemu-system-x86_64
 BOCHS = bochs -q
 
 qemu: kernel.iso
-	$(QEMU) -cdrom kernel.iso
+	@$(QEMU) -cdrom kernel.iso -serial file:serial.log
+	@cat serial.log
 
 bochs: kernel.iso
-	$(BOCHS) -qf .bochsrc
+	@$(BOCHS) -qf .bochsrc
+	@cat serial.log
 
 mount: isodir
 ifeq ("$(wildcard /mnt/ext2/lost+found/)","")
