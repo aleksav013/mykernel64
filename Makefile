@@ -75,6 +75,6 @@ endif
 clean:
 	@find -name "*.o" -exec rm {} \;
 	@find -name "*.d" -exec rm {} \;
-	@rm -f kernel.iso $K/kernel.bin xbochs.log bx_enh_dbg.ini
+	@rm -f kernel.iso $K/kernel.bin xbochs.log bx_enh_dbg.ini log serial.log
 	@rm -rf isodir
 	@$(MAKE) umount

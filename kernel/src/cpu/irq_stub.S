@@ -24,7 +24,6 @@
 	pop %rax
 .endm
 
-
 .macro isr_no_error number
 .global isr\number
 isr\number:
@@ -38,11 +37,12 @@ isr\number:
 .macro isr_error number
 .global isr\number
 isr\number:
-	pop %rdi
 	pushall
+	mov 0x50(%rsp), %rdi
 	cld
 	call isr\number\()_handler
 	popall
+	add $8, %rsp
 	iretq
 .endm
 

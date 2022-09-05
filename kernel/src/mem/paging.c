@@ -45,15 +45,15 @@ void map_addr(uint64_t virt, uint64_t phys, uint32_t flags)
 
 void init_paging(void)
 {
-	page_table_lvl4[0] = (uint64_t)page_table_lvl3 + FLAG_PRESENT + FLAG_WRITABLE - KERNEL_VMA;
-	page_table_lvl3[0] = (uint64_t)page_table_lvl2_0 + FLAG_PRESENT + FLAG_WRITABLE - KERNEL_VMA;
-	page_table_lvl3[1] = (uint64_t)page_table_lvl2_1 + FLAG_PRESENT + FLAG_WRITABLE - KERNEL_VMA;
-	page_table_lvl3[2] = (uint64_t)page_table_lvl2_2 + FLAG_PRESENT + FLAG_WRITABLE - KERNEL_VMA;
-	page_table_lvl3[3] = (uint64_t)page_table_lvl2_3 + FLAG_PRESENT + FLAG_WRITABLE - KERNEL_VMA;
+	page_table_lvl4[0] = (uint64_t)page_table_lvl3   + FLAG_PRESENT + FLAG_WRITABLE + FLAG_USER - KERNEL_VMA;
+	page_table_lvl3[0] = (uint64_t)page_table_lvl2_0 + FLAG_PRESENT + FLAG_WRITABLE + FLAG_USER - KERNEL_VMA;
+	page_table_lvl3[1] = (uint64_t)page_table_lvl2_1 + FLAG_PRESENT + FLAG_WRITABLE + FLAG_USER - KERNEL_VMA;
+	page_table_lvl3[2] = (uint64_t)page_table_lvl2_2 + FLAG_PRESENT + FLAG_WRITABLE + FLAG_USER - KERNEL_VMA;
+	page_table_lvl3[3] = (uint64_t)page_table_lvl2_3 + FLAG_PRESENT + FLAG_WRITABLE + FLAG_USER - KERNEL_VMA;
 
 	// higher half map first 6mb
 	for (size_t i = 0; i < 3; i++) {
-		map_addr(KERNEL_VMA + PAGE_SIZE * i, 0x00000000 + PAGE_SIZE * i, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
+		map_addr(KERNEL_VMA + PAGE_SIZE * i, 0x00000000 + PAGE_SIZE * i, FLAG_PRESENT + FLAG_WRITABLE + FLAG_USER + FLAG_HUGE);
 	}
 
 	load_pt_lvl4(page_table_lvl4);
@@ -65,7 +65,7 @@ void page_fault(uint64_t error)
 	uint64_t addr;
 	__asm__ volatile ("mov %%cr2, %0;" : "=r"(addr) : : "memory");
 
-	map_addr(addr, addr, FLAG_PRESENT | FLAG_WRITABLE | FLAG_HUGE);
+	map_addr(addr, addr, FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER | FLAG_HUGE);
 
 	printf("address: 0x%x, error code: %d\n", addr, error);
 }

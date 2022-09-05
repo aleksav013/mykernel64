@@ -4,12 +4,12 @@
 .global begin_long_mode
 begin_long_mode:
 	// reload segment registers
-	mov $0x10, %eax
-	mov %eax, %ss
-	mov %eax, %ds
-	mov %eax, %es
-	mov %eax, %fs
-	mov %eax, %gs
+	mov $0x10, %ax
+	mov %ax, %ds
+	mov %ax, %es
+	mov %ax, %ss
+	mov %ax, %fs
+	mov %ax, %gs
 
 	popq %rdi
 	popq %rsi

@@ -22,14 +22,15 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	init_serial();
 	init_gdt();
 	init_paging();
-	init_idt();
 	init_timer(TICKS_PER_SECOND);
+	init_idt();
 	init_heap();
 	read_mb2(multiboot_bootinfo, multiboot_magic);
-	disc_init();
-	ext2_init();
+	init_tss();
+//	disc_init();
+//	ext2_init();
 //	ls(path_to_inode("/"));
-//	jump_userspace();
+	jump_userspace();
 
 	for(;;) {
 		__asm__ volatile ("hlt;");

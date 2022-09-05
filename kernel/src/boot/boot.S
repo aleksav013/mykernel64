@@ -145,7 +145,7 @@ no_long_mode:
 
 // stack
 stack_bottom:
-	.skip 4096*4
+	.skip 4096*16
 stack_top:
 
 

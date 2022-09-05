@@ -3,6 +3,5 @@ kernel.iso
 **/*.o
 **/*.d
 isodir
-xbochs.log
+*log
 bx_enh_dbg.ini
-serial.log
