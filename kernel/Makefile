@@ -28,6 +28,7 @@ OBJS = \
 	src/misc/debug.o \
 	src/misc/graphics.o \
 	src/misc/stdbuff.o \
+	src/sys/syscall_asm.o \
 	src/sys/syscall.o \
 	src/sys/userspace_asm.o \
 	src/sys/userspace.o \

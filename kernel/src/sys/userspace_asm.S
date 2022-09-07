@@ -1,6 +1,7 @@
 .text
 
 .extern begin_userspace
+.extern syscall_handler
 
 .global jump_userspace
 jump_userspace:
@@ -11,6 +12,10 @@ jump_userspace:
 	mov %ax, %gs
 
 	mov $0xc0000082, %rcx
+	movabs $__syscall, %rax
+	shr $32, %rax
+	mov %eax, %edx
+	movabs $__syscall, %rax
 	wrmsr
 	mov $0xc0000080, %rcx
 	rdmsr

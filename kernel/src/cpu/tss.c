@@ -18,5 +18,4 @@ void init_tss()
 	tss.rsp0_high = (uint32_t)(stack >> 32);
 
 	load_tss();
-	printf("rsp0 addr in tss: 0x%x\n", stack);
 }
