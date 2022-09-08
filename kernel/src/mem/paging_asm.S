@@ -1,6 +1,6 @@
 .section .text
 
-.set KERNEL_VMA, 0xc0000000
+.set KERNEL_VMA, 0xffffffff80000000
 
 .global load_pt_lvl4
 load_pt_lvl4:
@@ -8,7 +8,7 @@ load_pt_lvl4:
 	mov %rsp, %rbp
 
 	push %r12
-	mov $KERNEL_VMA, %r12
+	movabs $KERNEL_VMA, %r12
 	sub %r12, %rdi
 	mov %rdi, %cr3
 	pop %r12

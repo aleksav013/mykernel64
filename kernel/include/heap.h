@@ -2,11 +2,17 @@
 #define HEAP_H
 
 #include <types.h>
+#include <kernel_vma.h>
 
-#define HEAP_VMEM_ADDR		0xc2000000
-#define HEAP_PMEM_ADDR		0x02000000
-#define HEAP_SIZE		0x02000000
-#define HEAP_BLOCK_SIZE		0x00000010
+#define HEAP1_VMEM_ADDR		KERNEL_VMA + 0x01000000
+#define HEAP1_PMEM_ADDR		0x01000000
+#define HEAP1_SIZE		0x01000000
+#define HEAP1_BLOCK_SIZE	0x00000010
+
+#define HEAP2_VMEM_ADDR		KERNEL_VMA + 0x02000000
+#define HEAP2_PMEM_ADDR		0x02000000
+#define HEAP2_SIZE		0x01000000
+#define HEAP2_BLOCK_SIZE	0x00001000
 
 struct kheapblock_t {
 	struct kheapblock_t* next;

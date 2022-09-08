@@ -1,7 +1,7 @@
 ENTRY(_start)
 
-KERNEL_PMA = 0x00100000;
-KERNEL_VMA = 0xc0000000;
+KERNEL_PMA = 0x0000000000100000;
+KERNEL_VMA = 0xffffffff80000000;
 
 SECTIONS
 {
@@ -10,7 +10,10 @@ SECTIONS
 	.boot BLOCK(4K) : ALIGN(4K)
 	{
 		KEEP(*(.multiboot_header))
-		*(.boot.text)
+		*(.boot32.text)
+		*(.boot32.rodata)
+		*(.boot32.bss)
+		*(.boot64.text)
 	}
 
 	. += KERNEL_VMA;

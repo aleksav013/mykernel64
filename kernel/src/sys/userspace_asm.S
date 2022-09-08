@@ -26,6 +26,6 @@ jump_userspace:
 	mov $0x00100008, %edx
 	wrmsr
 
-	mov $begin_userspace, %ecx
+	movabs $begin_userspace, %rcx
 	mov $0x202, %r11
 	sysretq

@@ -3,14 +3,13 @@
 #include <libk/string.h>
 #include <paging.h>
 #include <libk/math.h>
-
-#define KERNEL_VMA 0xc0000000
+#include <kernel_vma.h>
 
 disc_sector_t* disc;
 
 void disc_init()
 {
-	disc = (disc_sector_t*)(uint64_t)ext2_module->mod_start;
+	disc = (disc_sector_t*)((uint64_t)ext2_module->mod_start + KERNEL_VMA);
 	if (disc == NULL) {
 		printf("Error opening disc\n");
 	}

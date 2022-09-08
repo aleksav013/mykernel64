@@ -34,12 +34,12 @@ void kheap_add_block(kheap_t* kheap, uint64_t addr, uint32_t size, uint32_t bsiz
 		bm[i] = 0;
 	}
 
-	bcnt = upper_div(bcnt, bsize);
-	for (size_t i = 0; i < bcnt; i++) {
+	uint32_t bcnt_used = upper_div((bcnt + (uint32_t)sizeof(kheapblock_t)), bsize);
+	for (size_t i = 0; i < bcnt_used; i++) {
 		bm[i] = 5;
 	}
 
-	kheapblock->used = bcnt;
+	kheapblock->used = bcnt_used;
 }
 
 void* kheap_alloc(kheap_t* kheap, uint32_t size)
@@ -50,6 +50,13 @@ void* kheap_alloc(kheap_t* kheap, uint32_t size)
 	for (kheapblock = kheap->fblock; kheapblock; kheapblock = kheapblock->next) {
 		if (kheapblock->size - (kheapblock->used * kheapblock->bsize) < size) {
 			continue;
+		}
+
+		// use heap with bsize 4096 just for that block size
+		bool ind1 = ((size % 4096) == 0);
+		bool ind2 = (kheapblock->bsize == 4096);
+		if (ind1 + ind2 == 1) {
+				continue;
 		}
 
 		uint32_t bcnt = kheapblock->size / kheapblock->bsize;
@@ -81,7 +88,7 @@ void* kheap_alloc(kheap_t* kheap, uint32_t size)
 
 			kheapblock->used += bneed;
 
-			return (void*)(i * kheapblock->bsize + (uintptr_t)&kheapblock[1]);
+			return (void*)(i * kheapblock->bsize + (uintptr_t)&kheapblock[0]);
 		}
 	}
 	printf("Error: there is no remaining memory in kheap\n");
@@ -118,10 +125,6 @@ void kheap_free(kheap_t* kheap, void* pointer)
 void init_heap()
 {
 	kheap_init(&main_kheap);
-
-	// allocate pages for kheap
-	for (size_t i = 0; i < upper_div(HEAP_SIZE, PAGE_SIZE); i++)
-		map_addr(HEAP_VMEM_ADDR + i * PAGE_SIZE, HEAP_PMEM_ADDR + i * PAGE_SIZE, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
-
-	kheap_add_block(&main_kheap, HEAP_VMEM_ADDR, HEAP_SIZE, HEAP_BLOCK_SIZE);
+	kheap_add_block(&main_kheap, HEAP1_VMEM_ADDR, HEAP1_SIZE, HEAP1_BLOCK_SIZE);
+	kheap_add_block(&main_kheap, HEAP2_VMEM_ADDR, HEAP2_SIZE, HEAP2_BLOCK_SIZE);
 }

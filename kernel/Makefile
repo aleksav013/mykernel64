@@ -25,7 +25,6 @@ OBJS = \
 	src/mem/heap.o \
 	src/mem/paging_asm.o \
 	src/mem/paging.o \
-	src/misc/debug.o \
 	src/misc/graphics.o \
 	src/misc/stdbuff.o \
 	src/sys/syscall_asm.o \

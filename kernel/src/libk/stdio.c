@@ -30,7 +30,7 @@ inline void print_char(char c)
 		}
 		return;
 	}
-	fb_draw_character(main_fb, c, (int32_t)curr_x * 8, (int32_t)curr_y * 16, WHITE, BLACK);
+//	fb_draw_character(main_fb, c, (int32_t)curr_x * 8, (int32_t)curr_y * 16, WHITE, BLACK);
 	curr_x++;
 
 	write_serial(c);

@@ -8,8 +8,7 @@
 #include <libk/string.h>
 #include <libk/list.h>
 #include <heap.h>
-
-#define KERNEL_VMA 0xc0000000
+#include <kernel_vma.h>
 
 /* https://www.gnu.org/software/grub/manual/multiboot2/html_node/Boot-information-format.html */
 
