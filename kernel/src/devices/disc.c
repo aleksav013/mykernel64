@@ -13,11 +13,6 @@ void disc_init()
 	if (disc == NULL) {
 		printf("Error opening disc\n");
 	}
-
-	uint32_t disc_size = ext2_module->mod_end - ext2_module->mod_start;
-	for (size_t i = 0; i < upper_div(disc_size, PAGE_SIZE) + 1; i++) {
-		map_addr((uint64_t)((char*)disc + i * PAGE_SIZE), (uint64_t)((char*)disc + i * PAGE_SIZE), FLAG_PRESENT | FLAG_WRITABLE | FLAG_HUGE);
-	}
 }
 
 void read_sector(size_t sector_num, disc_sector_t* disc_sector)

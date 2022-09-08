@@ -231,7 +231,7 @@ void ls(uint32_t inode)
 	for (list_t* tmp = dir; tmp != NULL; tmp = tmp->next) {
 		ext2_dentry_t* ext2_dentry;
 		ext2_dentry = tmp->data;
-		printf("inode: %d, name: %s\n", ext2_dentry->inode, ext2_dentry->name);
+		printf("inode: %d\n", ext2_dentry->inode);
 	}
 }
 

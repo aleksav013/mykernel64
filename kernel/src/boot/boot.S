@@ -124,5 +124,5 @@ pt_lvl2_hh:
 	.skip 4096
 
 stack_bottom:
-	.skip 4096*4
+	.skip 4096*8
 stack_top:

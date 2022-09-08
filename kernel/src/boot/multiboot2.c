@@ -23,8 +23,8 @@ void init_fb(mb2_tag_fb* tag_fb)
 	main_fb.bpp = tag_fb->framebuffer_bpp;
 
 	// identity map framebuffer address
-	map_addr(main_fb.addr, main_fb.addr, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
-	map_addr(main_fb.addr + PAGE_SIZE, main_fb.addr + PAGE_SIZE, FLAG_PRESENT + FLAG_WRITABLE + FLAG_HUGE);
+	map_addr(main_fb.addr, main_fb.addr, FLAG_PRESENT + FLAG_WRITABLE);
+	map_addr(main_fb.addr + PAGE_SIZE, main_fb.addr + PAGE_SIZE, FLAG_PRESENT + FLAG_WRITABLE);
 }
 
 void init_mmap(mb2_tag_mmap* tag_mmap)

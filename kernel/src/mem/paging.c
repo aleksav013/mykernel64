@@ -35,10 +35,10 @@ void map_addr(uint64_t virt, uint64_t phys, uint32_t flags)
 		pt_lvl2 = (uint64_t*)kalloc(4096);
 		pt_lvl3[pt_lvl3_i] = ((uint64_t)pt_lvl2 - KERNEL_VMA) | flags;
 	} else {
-		pt_lvl2 -= (uint64_t)pt_lvl2 % 4096;
+		pt_lvl2 = (uint64_t*)((uint64_t)pt_lvl2 - (uint64_t)pt_lvl2 % 4096);
 	}
 
-	pt_lvl2[pt_lvl2_i] = virt | flags;
+	pt_lvl2[pt_lvl2_i] = phys | flags | FLAG_HUGE;
 }
 
 void init_paging(void)

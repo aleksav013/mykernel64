@@ -8,7 +8,7 @@
 uint32_t curr_x;
 uint32_t curr_y;
 
-inline void print_char(char c)
+void print_char(char c)
 {
 	if (curr_x * 8 >= main_fb.width) {
 		curr_x = 0;
@@ -30,27 +30,27 @@ inline void print_char(char c)
 		}
 		return;
 	}
-//	fb_draw_character(main_fb, c, (int32_t)curr_x * 8, (int32_t)curr_y * 16, WHITE, BLACK);
+	fb_draw_character(main_fb, c, (int32_t)curr_x * 8, (int32_t)curr_y * 16, WHITE, BLACK);
 	curr_x++;
 
 	write_serial(c);
 }
 
-inline void print_string(const char* s)
+void print_string(const char* s)
 {
 	for (size_t i = 0; i < strlen(s); i++) {
 		print_char(s[i]);
 	}
 }
 
-inline void print_int(uint64_t num)
+void print_int(uint64_t num)
 {
 	char a[100];
 	itos(num, a);
 	print_string(a);
 }
 
-inline void print_hex(uint64_t num)
+void print_hex(uint64_t num)
 {
 	char a[100];
 	itoh(num, a);
