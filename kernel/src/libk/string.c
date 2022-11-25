@@ -70,6 +70,9 @@ void itoh(uint64_t num, char* s)
 
 void memcpy(const void* destptr, const void* srcptr, size_t n)
 {
+	if (destptr == NULL || srcptr == NULL)
+		return;
+
 	uint8_t* dest = (uint8_t*)destptr;
 	const uint8_t* src = (const uint8_t*)srcptr;
 

@@ -5,6 +5,8 @@
 #include <libk/math.h>
 #include <kernel_vma.h>
 
+#include <libk/serial_stdio.h>
+
 disc_sector_t* disc;
 
 void disc_init()

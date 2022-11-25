@@ -1,5 +1,6 @@
 #include <types.h>
 #include <libk/stdio.h>
+#include <libk/serial_stdio.h>
 #include <stdarg.h>
 #include <libk/string.h>
 #include <graphics.h>

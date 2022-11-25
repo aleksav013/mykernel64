@@ -6,6 +6,7 @@
 #include <keyboard.h>
 #include <timer.h>
 #include <paging.h>
+#include <libk/serial_stdio.h>
 #include <libk/stdio.h>
 
 const char* const exception_name[] = {

@@ -50,7 +50,7 @@ void serial_printf(const char *s, ...)
 			else if(s[i] == 'x') serial_print_hex((uint64_t)va_arg(list, uint64_t));
 			else
 			{
-				serial_print_string("Wrong format using printf\n");
+				serial_print_string("Wrong format using serial_printf\n");
 				return;
 			}
 		}

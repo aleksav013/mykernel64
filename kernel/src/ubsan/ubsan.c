@@ -52,11 +52,12 @@ static void ubsan_abort(const struct ubsan_source_location* location,
 	if ( !location || !location->filename )
 		location = &unknown_location;
 
-        serial_printf(
+        printf(
             "filename = %s; line = %d; column = %d; violation = %s;\n",
             location->filename, location->line, location->column, violation);
-	while (true) {
 
+	for(;;) {
+		__asm__ volatile ("hlt;");
 	}
 }
 

@@ -58,4 +58,5 @@ void keyboard_handler()
 	char* print_buff = kalloc(len + 1);
 	read_buff(keyboard_buffer, print_buff, len);
 	printf("%s", print_buff);
+	kfree(print_buff);
 }

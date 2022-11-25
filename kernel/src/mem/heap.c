@@ -3,6 +3,7 @@
 
 #include <libk/math.h>
 #include <paging.h>
+#include <libk/serial_stdio.h>
 #include <libk/stdio.h>
 
 kheap_t main_kheap;

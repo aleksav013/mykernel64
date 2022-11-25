@@ -1,5 +1,5 @@
 #include <types.h>
-#include <libk/stdio.h>
+#include <libk/serial_stdio.h>
 
 struct registers_t {
 	uint64_t rax;
