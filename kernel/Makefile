@@ -19,6 +19,7 @@ OBJS = \
 	src/fs/ext2.o \
 	src/libk/list.o \
 	src/libk/math.o \
+	src/libk/serial_stdio.o \
 	src/libk/stdio.o \
 	src/libk/string.o \
 	src/main.o \
@@ -31,6 +32,7 @@ OBJS = \
 	src/sys/syscall.o \
 	src/sys/userspace_asm.o \
 	src/sys/userspace.o \
+	src/ubsan/ubsan.o \
 
 all: kernel.bin
 

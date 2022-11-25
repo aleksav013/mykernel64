@@ -7,8 +7,8 @@ LD = $(ARCH)ld
 OBJDUMP = $(ARCH)objcopy
 OBJCOPY = $(ARCH)objdump
 
-W := -Wall -Werror -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align
-W += -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations
+W := -Wall -Werror -Wextra -Wshadow -Wpointer-arith -Wcast-align
+W += -Wwrite-strings
 W += -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wconversion
 W += -Wstrict-prototypes
 WNO := -Wno-error=unused-parameter -Wno-error=unused-variable
@@ -19,6 +19,7 @@ CFLAGS += -mgeneral-regs-only # disables SIMD instructions
 CFLAGS += -MD -O3 -ffreestanding -nostdlib
 CFLAGS += -fno-common -fno-stack-protector
 CFLAGS += -fno-pie -no-pie -fno-pic
+CFLAGS += -g -fsanitize=undefined
 LDFLAGS = -z max-page-size=4096
 
 MAKE:=$(MAKE) -s

@@ -77,7 +77,7 @@ void read_mb2(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	static mb2_tag_mmap* tag_mmap;
 
 	// skip first 8 bytes (total_size + reserved)
-	mb2_tag_header* tag_header = (mb2_tag_header*)((char*)multiboot_bootinfo + 8 + KERNEL_VMA);
+	mb2_tag_header* tag_header = (mb2_tag_header*)((uint64_t)multiboot_bootinfo + 8 + KERNEL_VMA);
 
 	while (tag_header->type != MB2_TAG_END) {
 		// process tag_type

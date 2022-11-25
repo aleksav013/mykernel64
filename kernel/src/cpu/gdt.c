@@ -12,7 +12,7 @@ void add_gdt_entry(uint32_t num, uint32_t offset, uint32_t limit, uint8_t access
 	gdt[num].limit = limit & 0xffff;
 	gdt[num].limitflags = (limit >> 16) & 0xf;
 	gdt[num].access = access;
-	gdt[num].limitflags = flags << 4;
+	gdt[num].limitflags = (uint8_t)(flags << 4);
 }
 
 void add_gdt_tss(uint32_t num, uint64_t offset, uint32_t limit, uint8_t access, uint8_t flags)
