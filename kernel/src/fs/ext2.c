@@ -89,15 +89,16 @@ list_t* directory_to_entries(uint32_t inode)
 			ext2_dentry = (ext2_dentry_t*)kalloc(sizeof(ext2_dentry_t));
 			memcpy(ext2_dentry, (char*)block + block_offset, sizeof(ext2_dentry_t) - sizeof(char*));
 
-			// get dentry name
-			ext2_dentry->name = (char*)kalloc(ext2_dentry->name_length_lower);
-			memcpy(ext2_dentry->name, (char*)block + block_offset + sizeof(ext2_dentry_t) - sizeof(char*), ext2_dentry->name_length_lower);
-
-			if (inode == 0) {
-				kfree(ext2_dentry->name);
+			// dentry is unused
+			if (ext2_dentry->inode == 0) {
 				kfree(ext2_dentry);
-				break;
+				continue;
 			}
+
+			// get dentry name
+			ext2_dentry->name = (char*)kalloc(ext2_dentry->name_length_lower + 1);
+			memcpy(ext2_dentry->name, (char*)block + block_offset + sizeof(ext2_dentry_t) - sizeof(char*), ext2_dentry->name_length_lower);
+			ext2_dentry->name[ext2_dentry->name_length_lower] = '\0';
 
 			// put dentry in list
 			add_to_list_head(&list, ext2_dentry);
@@ -231,7 +232,7 @@ void ls(uint32_t inode)
 	for (list_t* tmp = dir; tmp != NULL; tmp = tmp->next) {
 		ext2_dentry_t* ext2_dentry;
 		ext2_dentry = tmp->data;
-		printf("inode: %d\n", ext2_dentry->inode);
+		printf("inode: %d, name: %s\n", ext2_dentry->inode, ext2_dentry->name);
 	}
 }
 
