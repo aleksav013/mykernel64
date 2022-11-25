@@ -50,7 +50,6 @@ void init_paging(void)
 		page_table_lvl2[i] = (uint64_t)0x0 + PAGE_SIZE * i + FLAG_PRESENT + FLAG_WRITABLE + FLAG_USER + FLAG_HUGE;
 	}
 
-
 	load_pt_lvl4(page_table_lvl4);
 }
 

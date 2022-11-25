@@ -8,18 +8,14 @@
 
 volatile fb_t main_fb;
 
-uint32_t* pixel_offset(volatile fb_t fb, uint32_t x, uint32_t y)
-{
-	return (uint32_t*)((char*)fb.addr + y * fb.pitch + x * fb.bpp / 8);
-}
-
 void fb_draw_pixel(volatile fb_t fb, int32_t x, int32_t y, uint32_t col)
 {
 	if (x < 0 || y < 0) return;
 	if (x >= (int32_t)fb.width || y >= (int32_t)fb.height) return;
 
-	uint32_t* fb_offset = pixel_offset(fb, (uint32_t)x, (uint32_t)y);
-	*fb_offset = col;
+	uint32_t fb_offset = (uint32_t)y * fb.pitch + (uint32_t)x * fb.bpp / 8;
+	uint32_t* fb_buff = (uint32_t*)fb.addr;
+	fb_buff[fb_offset / 4] = col;
 }
 
 /* https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm */
