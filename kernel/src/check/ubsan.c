@@ -21,6 +21,7 @@
 #include <libk/stdio.h>
 #include <libk/serial_stdio.h>
 #include <ubsan.h>
+#include <panic.h>
 
 struct ubsan_source_location
 {
@@ -55,10 +56,7 @@ static void ubsan_abort(const struct ubsan_source_location* location,
         printf(
             "filename = %s; line = %d; column = %d; violation = %s;\n",
             location->filename, location->line, location->column, violation);
-
-	for(;;) {
-		__asm__ volatile ("hlt;");
-	}
+	panic();
 }
 
 #define ABORT_VARIANT(name, params, call) \

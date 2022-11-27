@@ -20,6 +20,7 @@ CFLAGS += -MD -O3 -ffreestanding -nostdlib
 CFLAGS += -fno-common -fno-stack-protector
 CFLAGS += -fno-pie -no-pie -fno-pic
 CFLAGS += -g -fsanitize=undefined
+#CFLAGS += -fstack-protector-all
 LDFLAGS = -z max-page-size=4096
 
 MAKE:=$(MAKE) -s

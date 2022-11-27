@@ -5,6 +5,9 @@ OBJS = \
 	src/boot/boot.o \
 	src/boot/header.o \
 	src/boot/multiboot2.o \
+	src/check/panic.o \
+	src/check/ssp.o \
+	src/check/ubsan.o \
 	src/cpu/gdt.o \
 	src/cpu/idt.o \
 	src/cpu/io.o \
@@ -32,7 +35,6 @@ OBJS = \
 	src/sys/syscall.o \
 	src/sys/userspace_asm.o \
 	src/sys/userspace.o \
-	src/ubsan/ubsan.o \
 
 all: kernel.bin
 
