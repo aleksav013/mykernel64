@@ -1,38 +1,32 @@
-#include <types.h>
 #include <libk/stdio.h>
-#include <libk/serial_stdio.h>
-#include <stdarg.h>
 #include <libk/string.h>
 #include <graphics.h>
 #include <serial.h>
 
-uint32_t curr_x;
-uint32_t curr_y;
-
 void print_char(char c)
 {
-	if (curr_x * 8 >= main_fb.width) {
-		curr_x = 0;
-		curr_y++;
+	if (main_fb.x * 8 >= main_fb.width) {
+		main_fb.x = 0;
+		main_fb.y++;
 	}
-	if (curr_y * 16 >= main_fb.height) {
-		curr_x = 0;
-		curr_y = 0;
+	if (main_fb.y * 16 >= main_fb.height) {
+		main_fb.x = 0;
+		main_fb.y = 0;
 	}
 	if (c == '\n') {
 		write_serial('\n');
-		curr_x = 0;
-		curr_y++;
+		main_fb.x = 0;
+		main_fb.y++;
 		return;
 	}
 	if (c == '\b') {
-		if (curr_x != 0) {
-			curr_x--;
+		if (main_fb.x != 0) {
+			main_fb.x--;
 		}
 		return;
 	}
-	fb_draw_character(main_fb, c, (int32_t)curr_x * 8, (int32_t)curr_y * 16, WHITE, BLACK);
-	curr_x++;
+	fb_draw_character(main_fb, c, (int32_t)main_fb.x * 8, (int32_t)main_fb.y * 16);
+	main_fb.x++;
 
 	write_serial(c);
 }
@@ -60,11 +54,18 @@ void print_hex(uint64_t num)
 
 void printf(const char *s, ...)
 {
-	size_t count = 0;
-	for(size_t i = 0; i < strlen(s); i++) if(s[i] == '%') count++;
-
 	va_list list;
 	va_start(list, s);
+
+	vprintf(s, list);
+
+	va_end(list);
+}
+
+void vprintf(const char *s, va_list list)
+{
+	size_t count = 0;
+	for(size_t i = 0; i < strlen(s); i++) if(s[i] == '%') count++;
 
 	for(size_t i = 0; i < strlen(s); i++)
 	{
@@ -83,6 +84,4 @@ void printf(const char *s, ...)
 		}
 		else print_char(s[i]);
 	}
-
-	va_end(list);
 }

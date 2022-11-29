@@ -21,10 +21,12 @@ void init_fb(mb2_tag_fb* tag_fb)
 	main_fb.height = tag_fb->framebuffer_height;
 	main_fb.pitch = tag_fb->framebuffer_pitch;
 	main_fb.bpp = tag_fb->framebuffer_bpp;
+	main_fb.char_col = WHITE;
+	main_fb.bg_col = BLACK;
 
 	// identity map framebuffer address
-	map_addr(main_fb.addr, main_fb.addr, FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER);
-	map_addr(main_fb.addr + PAGE_SIZE, main_fb.addr + PAGE_SIZE, FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER);
+	map_addr(main_fb.addr, main_fb.addr, FLAG_PRESENT | FLAG_WRITABLE);
+	map_addr(main_fb.addr + PAGE_SIZE, main_fb.addr + PAGE_SIZE, FLAG_PRESENT | FLAG_WRITABLE);
 }
 
 void init_mmap(mb2_tag_mmap* tag_mmap)

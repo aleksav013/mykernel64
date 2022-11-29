@@ -18,6 +18,23 @@ void fb_draw_pixel(volatile fb_t fb, int32_t x, int32_t y, uint32_t col)
 	fb_buff[fb_offset / 4] = col;
 }
 
+void set_color(volatile fb_t* fb, uint32_t char_col, uint32_t bg_col)
+{
+	fb->char_col = char_col;
+	fb->bg_col = bg_col;
+}
+
+void clear_screen(volatile fb_t fb)
+{
+	for (size_t i = 0; i < fb.height; i++) {
+		for (size_t j = 0; j < fb.width; j++) {
+			fb_draw_pixel(fb, (int32_t)i, (int32_t)j, BLACK);
+		}
+	}
+	fb.x = 0;
+	fb.y = 0;
+}
+
 /* https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm */
 
 void fb_draw_line_low(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col)
@@ -82,7 +99,7 @@ void fb_draw_line(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t 
 	}
 }
 
-void fb_draw_character(volatile fb_t fb, char c, int32_t x, int32_t y, uint32_t char_col, uint32_t bg_col)
+void fb_draw_character(volatile fb_t fb, char c, int32_t x, int32_t y)
 {
 	if (c < 0) return;
 
@@ -92,17 +109,10 @@ void fb_draw_character(volatile fb_t fb, char c, int32_t x, int32_t y, uint32_t 
 		for (int32_t j = 0 ; j < 8; j++)
 		{
 			if (font[offset + i] & (1 << (7 - j))) {
-				fb_draw_pixel(fb, x + j, y + i, char_col);
+				fb_draw_pixel(fb, x + j, y + i, fb.char_col);
 			} else {
-				fb_draw_pixel(fb, x + j, y + i, bg_col);
+				fb_draw_pixel(fb, x + j, y + i, fb.bg_col);
 			}
 		}
-	}
-}
-
-void fb_draw_string(volatile fb_t fb, const char* s, int32_t x, int32_t y, uint32_t char_col, uint32_t bg_col)
-{
-	for (size_t i = 0; i < strlen(s); i++) {
-		fb_draw_character(fb, s[i], (x + (int32_t)i * 8), y, char_col, bg_col);
 	}
 }

@@ -33,11 +33,18 @@ void serial_print_hex(uint64_t num)
 
 void serial_printf(const char *s, ...)
 {
-	size_t count = 0;
-	for(size_t i = 0; i < strlen(s); i++) if(s[i] == '%') count++;
-
 	va_list list;
 	va_start(list, s);
+
+	serial_vprintf(s, list);
+
+	va_end(list);
+}
+
+void serial_vprintf(const char *s, va_list list)
+{
+	size_t count = 0;
+	for(size_t i = 0; i < strlen(s); i++) if(s[i] == '%') count++;
 
 	for(size_t i = 0; i < strlen(s); i++)
 	{
@@ -50,12 +57,10 @@ void serial_printf(const char *s, ...)
 			else if(s[i] == 'x') serial_print_hex((uint64_t)va_arg(list, uint64_t));
 			else
 			{
-				serial_print_string("Wrong format using serial_printf\n");
+				serial_print_string("Wrong format using printf\n");
 				return;
 			}
 		}
 		else serial_print_char(s[i]);
 	}
-
-	va_end(list);
 }

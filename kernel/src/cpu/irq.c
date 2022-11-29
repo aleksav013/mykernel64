@@ -47,203 +47,163 @@ const char* const exception_name[] = {
 
 void isr0_handler(void)
 {
-	printf("%s\n", exception_name[0]);
-	panic();
+	panic("%s\n", exception_name[0]);
 }
 
 void isr1_handler(void)
 {
-	printf("%s\n", exception_name[1]);
-	panic();
+	panic("%s\n", exception_name[1]);
 }
 
 void isr2_handler(void)
 {
-	printf("%s\n", exception_name[2]);
-	panic();
+	panic("%s\n", exception_name[2]);
 }
 
 void isr3_handler(void)
 {
-	printf("%s\n", exception_name[3]);
-	panic();
+	panic("%s\n", exception_name[3]);
 }
 
 void isr4_handler(void)
 {
-	printf("%s\n", exception_name[4]);
-	panic();
+	panic("%s\n", exception_name[4]);
 }
 
 void isr5_handler(void)
 {
-	printf("%s\n", exception_name[5]);
-	panic();
+	panic("%s\n", exception_name[5]);
 }
 
 void isr6_handler(void)
 {
-	printf("%s\n", exception_name[6]);
-	panic();
+	panic("%s\n", exception_name[6]);
 }
 
 void isr7_handler(void)
 {
-	printf("%s\n", exception_name[7]);
-	panic();
+	panic("%s\n", exception_name[7]);
 }
 
 void isr8_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[8]);
-	printf("error: %d\n", error);
+	panic("%s, error: %d\n", exception_name[8], error);
 }
 
 void isr9_handler(void)
 {
-	printf("%s\n", exception_name[9]);
-	panic();
+	panic("%s\n", exception_name[9]);
 }
 
 void isr10_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[10]);
-	printf("error: %d\n", error);
-	panic();
+	panic("%s, error: %d\n", exception_name[10], error);
 }
 
 void isr11_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[11]);
-	printf("error: %d\n", error);
-	panic();
+	panic("%s, error: %d\n", exception_name[11], error);
 }
 
 void isr12_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[12]);
-	printf("error: %d\n", error);
-	panic();
+	panic("%s, error: %d\n", exception_name[12], error);
 }
 
 void isr13_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[13]);
-	printf("error: %d\n", error);
-	panic();
+	panic("%s, error: %d\n", exception_name[13], error);
 }
 
 void isr14_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[14]);
-	printf("error: %d\n", error);
+	printf("%s, error: %d\n", exception_name[14], error);
 	page_fault(error);
 }
 
 void isr15_handler(void)
 {
-	printf("%s\n", exception_name[15]);
-	panic();
+	panic("%s\n", exception_name[15]);
 }
 
 void isr16_handler(void)
 {
-	printf("%s\n", exception_name[16]);
-	panic();
+	panic("%s\n", exception_name[16]);
 }
 
 void isr17_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[17]);
-	printf("error: %d\n", error);
-	panic();
+	panic("%s, error: %d\n", exception_name[17], error);
 }
 
 void isr18_handler(void)
 {
-	printf("%s\n", exception_name[18]);
-	panic();
+	panic("%s\n", exception_name[18]);
 }
 
 void isr19_handler(void)
 {
-	printf("%s\n", exception_name[19]);
-	panic();
+	panic("%s\n", exception_name[19]);
 }
 
 void isr20_handler(void)
 {
-	printf("%s\n", exception_name[20]);
-	panic();
+	panic("%s\n", exception_name[20]);
 }
 
 void isr21_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[21]);
-	printf("error: %d\n", error);
-	panic();
+	panic("%s, error: %d\n", exception_name[21], error);
 }
 
 void isr22_handler(void)
 {
-	printf("%s\n", exception_name[22]);
-	panic();
+	panic("%s\n", exception_name[22]);
 }
 
 void isr23_handler(void)
 {
-	printf("%s\n", exception_name[23]);
-	panic();
+	panic("%s\n", exception_name[23]);
 }
 
 void isr24_handler(void)
 {
-	printf("%s\n", exception_name[24]);
-	panic();
+	panic("%s\n", exception_name[24]);
 }
 
 void isr25_handler(void)
 {
-	printf("%s\n", exception_name[25]);
-	panic();
+	panic("%s\n", exception_name[25]);
 }
 
 void isr26_handler(void)
 {
-	printf("%s\n", exception_name[26]);
-	panic();
+	panic("%s\n", exception_name[26]);
 }
 
 void isr27_handler(void)
 {
-	printf("%s\n", exception_name[27]);
-	panic();
+	panic("%s\n", exception_name[27]);
 }
 
 void isr28_handler(void)
 {
-	printf("%s\n", exception_name[28]);
-	panic();
+	panic("%s\n", exception_name[28]);
 }
 
 void isr29_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[29]);
-	printf("error: %d\n", error);
-	panic();
+	panic("%s, error: %d\n", exception_name[29], error);
 }
 
 void isr30_handler(uint64_t error)
 {
-	printf("%s\n", exception_name[30]);
-	printf("error: %d\n", error);
-	panic();
+	panic("%s, error: %d\n", exception_name[30], error);
 }
 
 void isr31_handler(void)
 {
-	printf("%s\n", exception_name[31]);
-	panic();
+	panic("%s\n", exception_name[31]);
 }
 
 void irq0_handler(void)

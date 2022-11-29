@@ -9,6 +9,5 @@ uintptr_t __stack_chk_guard = STACK_CHK_GUARD;
 __attribute__((noreturn))
 void __stack_chk_fail(void)
 {
-	printf("Stack smashing detected");
-	panic();
+	panic("Stack smashing detected");
 }

@@ -8,5 +8,6 @@ void serial_print_string(const char* s);
 void serial_print_int(uint64_t num);
 void serial_print_hex(uint64_t num);
 void serial_printf(const char *s, ...);
+void serial_vprintf(const char *s, va_list list);
 
 #endif

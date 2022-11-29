@@ -1,3 +1,5 @@
+.extern panic_rsp
+
 .macro pushall
 	push %rax
 	push %rcx
@@ -29,6 +31,7 @@
 isr\number:
 	pushall
 	cld
+	mov %rsp, panic_rsp
 	call isr\number\()_handler
 	popall
 	iretq
@@ -40,6 +43,7 @@ isr\number:
 	pushall
 	mov 0x50(%rsp), %rdi
 	cld
+	mov %rsp, panic_rsp
 	call isr\number\()_handler
 	popall
 	add $8, %rsp
@@ -84,6 +88,7 @@ isr_no_error 31
 irq\number:
 	pushall
 	cld
+	mov %rsp, panic_rsp
 	call irq\number\()_handler
 	popall
 	iretq

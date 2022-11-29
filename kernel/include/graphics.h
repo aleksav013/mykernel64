@@ -10,7 +10,11 @@ struct fb_t {
 	uint32_t height;
 	uint8_t bpp;
 	uint8_t type;
-} __attribute__((packed, aligned(8)));
+	uint32_t x;
+	uint32_t y;
+	uint32_t char_col;
+	uint32_t bg_col;
+};
 typedef struct fb_t fb_t;
 
 extern volatile fb_t main_fb;
@@ -23,11 +27,12 @@ extern volatile fb_t main_fb;
 #define WHITE	0x00ffffff
 #define BLACK	0x00000000
 
+void set_color(volatile fb_t* fb, uint32_t char_col, uint32_t bg_col);
+void clear_screen(volatile fb_t fb);
 void fb_draw_pixel(volatile fb_t fb, int32_t x, int32_t y, uint32_t col);
 void fb_draw_line_low(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col);
 void fb_draw_line_high(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col);
 void fb_draw_line(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col);
-void fb_draw_character(volatile fb_t fb, char c, int32_t x, int32_t y, uint32_t char_col, uint32_t bg_col);
-void fb_draw_string(volatile fb_t fb, const char* str, int32_t x, int32_t y, uint32_t char_col, uint32_t bg_col);
+void fb_draw_character(volatile fb_t fb, char c, int32_t x, int32_t y);
 
 #endif

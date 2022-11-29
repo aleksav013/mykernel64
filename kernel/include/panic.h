@@ -1,6 +1,10 @@
 #ifndef PANIC_H
 #define PANIC_H
 
-__attribute__((noreturn)) void panic(void);
+#include <types.h>
+
+extern uint64_t panic_rsp;
+
+__attribute__((noreturn)) void panic(const char *error, ...);
 
 #endif

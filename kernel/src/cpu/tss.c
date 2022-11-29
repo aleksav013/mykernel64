@@ -1,6 +1,7 @@
 #include <tss.h>
 #include <heap.h>
 #include <libk/stdio.h>
+#include <libk/string.h>
 
 tss_type tss;
 

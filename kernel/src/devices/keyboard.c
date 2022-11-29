@@ -3,6 +3,7 @@
 #include <pic.h>
 #include <io.h>
 #include <keymap.h>
+#include <graphics.h>
 #include <libk/stdio.h>
 #include <libk/math.h>
 #include <libk/string.h>
@@ -33,7 +34,7 @@ void keyboard_handler()
 		if (keycode == KEY_SPACE) {
 			write_buff(keyboard_buffer, " ", 1);
 		} else if (keycode == KEY_BACKSPACE) {
-			if (curr_x != 0)
+			if (main_fb.x != 0)
 				write_buff(keyboard_buffer, "\b \b", 3);
 		} else if (keycode == KEY_ENTER) {
 			char* output = kalloc(sizeof(char) + 1);

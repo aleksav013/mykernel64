@@ -1,5 +1,6 @@
 #include <types.h>
 #include <paging.h>
+#include <panic.h>
 
 #include <heap.h>
 #include <libk/serial_stdio.h>
@@ -63,6 +64,10 @@ void page_fault(uint64_t error)
 	__asm__ volatile ("mov %%cr2, %0;" : "=r"(addr) : : "memory");
 
 	printf("address: 0x%x, error code: %d\n", addr, error);
+
+	if (error == 7) {
+		panic("Accessing privileged page in usermode\n");
+	}
 
 	map_addr(addr, addr, FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER);
 }

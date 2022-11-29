@@ -17,7 +17,7 @@
  * Undefined behavior sanitizer runtime support.
  */
 
-#include <stdint.h>
+#include <types.h>
 #include <libk/stdio.h>
 #include <libk/serial_stdio.h>
 #include <ubsan.h>
@@ -53,10 +53,9 @@ static void ubsan_abort(const struct ubsan_source_location* location,
 	if ( !location || !location->filename )
 		location = &unknown_location;
 
-        printf(
+        panic(
             "filename = %s; line = %d; column = %d; violation = %s;\n",
             location->filename, location->line, location->column, violation);
-	panic();
 }
 
 #define ABORT_VARIANT(name, params, call) \
