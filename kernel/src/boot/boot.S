@@ -101,7 +101,7 @@ gdt_code = . - gdt
 gdt_data = . - gdt
 	.long 0xFFFF
 	.byte 0
-	.byte 0xA2
+	.byte 0x92
 	.byte 0xAF
 	.byte 0
 gdtp:

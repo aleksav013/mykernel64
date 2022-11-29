@@ -6,13 +6,12 @@
 
 .global begin_long_mode
 begin_long_mode:
-//	xchgw %bx, %bx
-//	mov $0x10, %ax
-//	mov %ax, %ds
-//	mov %ax, %es
-//	mov %ax, %ss
-//	mov %ax, %fs
-//	mov %ax, %gs
+	mov $0x10, %ax
+	mov %ax, %ds
+	mov %ax, %es
+	mov %ax, %ss
+	mov %ax, %fs
+	mov %ax, %gs
 
 	add $KERNEL_VMA, %rsp
 	movabs $jump_main, %rax

@@ -53,6 +53,7 @@ static void ubsan_abort(const struct ubsan_source_location* location,
 	if ( !location || !location->filename )
 		location = &unknown_location;
 
+	panic_rsp = 0;
         panic(
             "filename = %s; line = %d; column = %d; violation = %s;\n",
             location->filename, location->line, location->column, violation);
