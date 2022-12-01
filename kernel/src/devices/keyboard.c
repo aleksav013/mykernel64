@@ -15,6 +15,17 @@ bool is_pressed[128];
 #define BUFFER_SIZE 10000
 stdbuff* keyboard_buffer;
 
+void init_keyboard()
+{
+//	outb(KEYBOARD_CMD_PORT,  0xF3);
+//	io_wait();
+//	outb(KEYBOARD_DATA_PORT,  0x00);
+//	io_wait();
+//	while (!(inb(KEYBOARD_STATUS_PORT) & 1)) {}
+//	if (inb(KEYBOARD_DATA_PORT) == 0xFA)
+//		printf("[keyboard init]\n");
+}
+
 void keyboard_handler()
 {
 	if (keyboard_buffer == NULL) {

@@ -12,9 +12,10 @@ void load_tss()
 
 void init_tss()
 {
+	memset(&tss, 0, sizeof(tss_type));
 	tss.iopb = sizeof(tss_type);
-	uint64_t stack = (uint64_t)kalloc(4096*4);
-	stack = (uint64_t)kalloc(4096*4) + 8;
+	uint32_t stack_size = 4096*4;
+	uint64_t stack = (uint64_t)kalloc(stack_size) + stack_size - 8;
 	tss.rsp0_low = (uint32_t)stack;
 	tss.rsp0_high = (uint32_t)(stack >> 32);
 

@@ -23,7 +23,7 @@ jump_userspace:
 	wrmsr
 	mov $0xc0000081, %rcx
 	rdmsr
-	mov $0x00100008, %edx
+	mov $0x00130008, %edx
 	wrmsr
 
 	movabs $begin_userspace, %rcx

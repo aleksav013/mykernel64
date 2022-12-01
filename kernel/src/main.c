@@ -26,7 +26,9 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	init_paging();
 	init_heap();
 	read_mb2(multiboot_bootinfo, multiboot_magic);
+	clear_screen(main_fb);
 // framebuffer is enabled from this point
+	init_keyboard();
 	init_timer(TICKS_PER_SECOND);
 	init_idt();
 	disc_init();
