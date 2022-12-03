@@ -8,9 +8,9 @@ OBJDUMP = $(ARCH)objcopy
 OBJCOPY = $(ARCH)objdump
 
 W := -Wall -Werror -Wextra -Wshadow -Wpointer-arith -Wcast-align
-W += -Wwrite-strings
-W += -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wconversion
-W += -Wstrict-prototypes
+#W := -pedantic -Wmissing-prototypes -Wmissing-declarations
+W += -Wwrite-strings -Wredundant-decls -Wnested-externs -Winline -Wno-long-long
+W += -Wconversion -Wstrict-prototypes
 WNO := -Wno-error=unused-parameter -Wno-error=unused-variable
 WNO += -Wno-error=unused-but-set-variable -Wno-error=unused-but-set-parameter
 WNO += -Wno-error=infinite-recursion

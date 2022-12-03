@@ -35,6 +35,9 @@ OBJS = \
 	src/sys/syscall.o \
 	src/sys/userspace_asm.o \
 	src/sys/userspace.o \
+	src/scheduler/scheduler.o \
+	src/scheduler/switch_process.o \
+	src/scheduler/process.o \
 
 all: kernel.bin
 
