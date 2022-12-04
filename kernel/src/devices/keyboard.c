@@ -66,7 +66,7 @@ void keyboard_handler()
 		is_pressed[keycode - 128] = false;
 	}
 
-	uint32_t len = (uint32_t)(keyboard_buffer->head - keyboard_buffer->tail);
+	uint32_t len = (uint32_t)(keyboard_buffer->head >= keyboard_buffer->tail ? keyboard_buffer->head - keyboard_buffer->tail : BUFFER_SIZE + keyboard_buffer->head - keyboard_buffer->tail);
 	char* print_buff = kalloc(len + 1);
 	read_buff(keyboard_buffer, print_buff, len);
 	printf("%s", print_buff);
