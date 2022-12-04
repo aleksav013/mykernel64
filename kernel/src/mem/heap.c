@@ -100,11 +100,11 @@ void kheap_free(kheap_t* kheap, void* pointer)
 {
 	kheapblock_t* kheapblock;
 	for (kheapblock = kheap->fblock; kheapblock; kheapblock = kheapblock->next) {
-		if ((uintptr_t)(pointer) > (uintptr_t)kheapblock && (uintptr_t)kheapblock + sizeof(kheapblock_t) + kheapblock->size) {
+		if ((uintptr_t)(pointer) > (uintptr_t)kheapblock && (uintptr_t)(pointer) < (uintptr_t)kheapblock + sizeof(kheapblock_t) + kheapblock->size) {
 			// found block
 
 			// get index of bitmap entry
-			uintptr_t pointer_offset = (uintptr_t)pointer - (uintptr_t)&kheapblock[1];
+			uintptr_t pointer_offset = (uintptr_t)pointer - (uintptr_t)&kheapblock[0];
 			uint32_t bi = (uint32_t)pointer_offset / kheapblock->bsize;
 			uint8_t* bm = (uint8_t*)&kheapblock[1];
 			uint8_t id = bm[bi];

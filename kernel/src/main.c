@@ -32,7 +32,8 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 // framebuffer is enabled from this point
 	mmap_t* pos;
         list_for_each_entry(pos, (&mmap.list), list) {
-		printf("base_addr: 0x%x\n", pos->mmap_entry.base_addr);
+		mb2_tag_mmap_entry entry = pos->mmap_entry;
+		printf("base_addr: 0x%x, length: 0x%x, reserved: %d, type: %d\n", entry.base_addr, entry.length, entry.reserved, entry.type);
 	}
 
 	init_keyboard();

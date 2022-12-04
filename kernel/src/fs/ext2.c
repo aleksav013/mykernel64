@@ -225,6 +225,13 @@ uint32_t path_to_inode(const char* path)
 			curr_path = list_prev_entry(curr_path, list);
 	}
 
+	path_t* pos;
+	list_for_each_entry_del(pos, (&divided_path->list), list) {
+		kfree(pos->name);
+		kfree(pos);
+	}
+	kfree(divided_path);
+
 	return inode;
 }
 
@@ -240,6 +247,12 @@ void ls(uint32_t inode)
 	list_for_each_entry(pos, (&dir->list), list) {
 		printf("inode: %d, name: %s\n", pos->ext2_dentry.inode, pos->ext2_dentry.name);
 	}
+
+	list_for_each_entry_del(pos, (&dir->list), list) {
+		kfree(pos->ext2_dentry.name);
+		kfree(pos);
+	}
+	kfree(dir);
 }
 
 void print(uint32_t inode)

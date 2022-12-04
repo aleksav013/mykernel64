@@ -11,7 +11,7 @@ void add_to_list(list_t* head, list_t* prev, list_t* next)
 
 void free_node(list_t* head)
 {
-	if (head->prev == head->next) {
+	if (list_is_empty(head)) {
 		head = NULL;
 		return;
 	}

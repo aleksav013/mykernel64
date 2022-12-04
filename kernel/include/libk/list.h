@@ -31,6 +31,9 @@ void free_node(list_t* head);
 #define list_for_each_entry_prev(pos, head, member) \
         for (pos = container_of(head->prev, typeof(*pos), member); pos != container_of(head, typeof(*pos), member); pos = container_of(pos->member.prev, typeof(*pos), member))
 
+#define list_for_each_entry_del(pos, head, member) \
+        for (pos = container_of(head->next, typeof(*pos), member); pos != container_of(head, typeof(*pos), member); free_node(&pos->list), pos = container_of(head->next, typeof(*pos), member))
+
 #define list_is_empty(pos) \
 	(pos == pos->next)
 
