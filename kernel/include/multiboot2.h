@@ -2,6 +2,7 @@
 #define MULTIBOOT2_H
 
 #include <types.h>
+#include <libk/list.h>
 
 struct mb2_tag_header {
 	uint32_t type;
@@ -45,6 +46,14 @@ struct mb2_tag_module {
 	char* name;
 };
 typedef struct mb2_tag_module mb2_tag_module;
+
+struct mmap_t {
+	mb2_tag_mmap_entry mmap_entry;
+	list_t list;
+};
+typedef struct mmap_t mmap_t;
+
+extern mmap_t mmap;
 
 
 // multiboot2 magic check

@@ -121,6 +121,18 @@ struct ext2_dentry_t {
 };
 typedef struct ext2_dentry_t ext2_dentry_t;
 
+struct path_t {
+	char* name;
+	list_t list;
+};
+typedef struct path_t path_t;
+
+struct dentry_list_t {
+	ext2_dentry_t ext2_dentry;
+	list_t list;
+};
+typedef struct dentry_list_t dentry_list_t;
+
 extern ext2_superblock_t* ext2_superblock;
 
 // size of structs
@@ -135,9 +147,9 @@ void read_block(uint32_t block_num, void* block_ptr);
 void read_superblock(ext2_superblock_t* ext2_superblock);
 void read_bg_desc(uint32_t bg_desc, ext2_bg_desc_t* ext2_bg_desc);
 void read_inode(uint32_t starting_block_num, uint32_t inode_index, ext2_inode_t* ext2_inode);
-list_t* directory_to_entries(uint32_t inode);
+dentry_list_t* directory_to_entries(uint32_t inode);
 char* files_to_buffer(uint32_t inode);
-list_t* path_to_list(const char* path);
+path_t* path_to_list(const char* path);
 uint32_t path_to_inode(const char* path);
 void ls(uint32_t inode);
 void print(uint32_t inode);

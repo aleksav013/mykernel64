@@ -7,8 +7,8 @@ LD = $(ARCH)ld
 OBJDUMP = $(ARCH)objcopy
 OBJCOPY = $(ARCH)objdump
 
-W := -Wall -Werror -Wextra -Wshadow -Wpointer-arith -Wcast-align
-#W := -pedantic -Wmissing-prototypes -Wmissing-declarations
+W := -Wall -Werror -Wextra -Wshadow -Wcast-align
+# W:= -Wpointer-arith -pedantic -Wmissing-prototypes -Wmissing-declarations
 W += -Wwrite-strings -Wredundant-decls -Wnested-externs -Winline -Wno-long-long
 W += -Wconversion -Wstrict-prototypes
 WNO := -Wno-error=unused-parameter -Wno-error=unused-variable

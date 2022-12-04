@@ -52,9 +52,15 @@ void read_inode(uint32_t starting_block_num, uint32_t inode_index, ext2_inode_t*
 	memcpy(ext2_inode, (char*)block + block_index * INODE_SIZE, sizeof(ext2_inode_t));
 }
 
-list_t* directory_to_entries(uint32_t inode)
+dentry_list_t* directory_to_entries(uint32_t inode)
 {
-	list_t* list = NULL;
+	dentry_list_t* dentry_list = (dentry_list_t*)kalloc(sizeof(dentry_list_t));
+	INIT_LIST(dentry_list->list);
+
+	if (inode < 2) {
+		return dentry_list;
+	}
+
 
 	uint32_t bg_desc = (inode - 1) / ext2_superblock->inodes_per_group;
 	uint32_t inode_index = (inode - 1) % ext2_superblock->inodes_per_group;
@@ -71,7 +77,7 @@ list_t* directory_to_entries(uint32_t inode)
 
 	// if it is not directory
 	if (!(ext2_inode->type_perms & TYPE_DIR))
-		return list;
+		return dentry_list;
 
 	// read inode contents
 	for (size_t i = 0; i < 12; i++) {
@@ -85,26 +91,25 @@ list_t* directory_to_entries(uint32_t inode)
 		// parse block
 		for (size_t block_offset = 0; block_offset < BLOCK_SIZE;) {
 			// get dentry header
-			ext2_dentry_t* ext2_dentry;
-			ext2_dentry = (ext2_dentry_t*)kalloc(sizeof(ext2_dentry_t));
-			memcpy(ext2_dentry, (char*)block + block_offset, sizeof(ext2_dentry_t) - sizeof(char*));
+			dentry_list_t* ext2_dentry_list = (dentry_list_t*)kalloc(sizeof(dentry_list_t));
+			memcpy(&ext2_dentry_list->ext2_dentry, (char*)block + block_offset, sizeof(ext2_dentry_t) - sizeof(char*));
 
 			// dentry is unused
-			if (ext2_dentry->inode == 0) {
-				kfree(ext2_dentry);
+			if (ext2_dentry_list->ext2_dentry.inode == 0) {
+				kfree(ext2_dentry_list);
 				continue;
 			}
 
 			// get dentry name
-			ext2_dentry->name = (char*)kalloc(ext2_dentry->name_length_lower + 1);
-			memcpy(ext2_dentry->name, (char*)block + block_offset + sizeof(ext2_dentry_t) - sizeof(char*), ext2_dentry->name_length_lower);
-			ext2_dentry->name[ext2_dentry->name_length_lower] = '\0';
+			ext2_dentry_list->ext2_dentry.name = (char*)kalloc(ext2_dentry_list->ext2_dentry.name_length_lower + 1);
+			memcpy(ext2_dentry_list->ext2_dentry.name, (char*)block + block_offset + sizeof(ext2_dentry_t) - sizeof(char*), ext2_dentry_list->ext2_dentry.name_length_lower);
+			ext2_dentry_list->ext2_dentry.name[ext2_dentry_list->ext2_dentry.name_length_lower] = '\0';
 
 			// put dentry in list
-			add_to_list_head(&list, ext2_dentry);
+			add_to_list(&ext2_dentry_list->list, &dentry_list->list, dentry_list->list.next);
 
 			// offset
-			block_offset += ext2_dentry->size;
+			block_offset += ext2_dentry_list->ext2_dentry.size;
 		}
 	}
 
@@ -112,7 +117,7 @@ list_t* directory_to_entries(uint32_t inode)
 	kfree(ext2_bg_desc);
 	kfree(ext2_inode);
 
-	return list;
+	return dentry_list;
 }
 
 char* files_to_buffer(uint32_t inode)
@@ -145,27 +150,30 @@ char* files_to_buffer(uint32_t inode)
 	return data;
 }
 
-list_t* path_to_list(const char* path)
+path_t* path_to_list(const char* path)
 {
 	size_t i, j;
-	list_t* divided_path = NULL;
+	path_t* divided_path = (path_t*)kalloc(sizeof(path_t));
+	INIT_LIST(divided_path->list)
 
 	size_t n = strlen(path);
 	for (i = 0, j = 0; i <= n; i++) {
 		if (i == n || path[i] == '/') {
 			// add data before slash
 			if (i != j) {
-				char* ptr = (char*)kalloc(sizeof(char) * (uint32_t)(i - j + 1));
-				memcpy(ptr, path + j, i - j);
-				ptr[i - j] = '\0';
-				add_to_list_tail(&divided_path, ptr);
+				path_t* curr_path = (path_t*)kalloc(sizeof(path_t));
+				curr_path->name = (char*)kalloc(sizeof(char) * (uint32_t)(i - j + 1));
+				memcpy(curr_path->name, path + j, i - j);
+				curr_path->name[i - j] = '\0';
+				add_to_list(&curr_path->list, &divided_path->list, divided_path->list.next);
 			}
 			// add slash
 			if (i != n) {
-				char* ptr = (char*)kalloc(sizeof(char) * 2);
-				ptr[0] = '/';
-				ptr[1] = '\0';
-				add_to_list_tail(&divided_path, ptr);
+				path_t* curr_path = (path_t*)kalloc(sizeof(path_t));
+				curr_path->name = (char*)kalloc(sizeof(char) * 2);
+				curr_path->name[0] = '/';
+				curr_path->name[1] = '\0';
+				add_to_list(&curr_path->list, &divided_path->list, divided_path->list.next);
 				j = i + 1;
 			}
 		}
@@ -174,37 +182,33 @@ list_t* path_to_list(const char* path)
 	return divided_path;
 }
 
-// only supports absolute path for now
 uint32_t path_to_inode(const char* path)
 {
 	uint32_t inode = 0;
-	list_t* divided_path = path_to_list(path);
-
-	list_t* curr_dir = divided_path;
+	path_t* divided_path = path_to_list(path);
 
 	// first entry is /
-	curr_dir = curr_dir->next;
+	path_t* curr_path = list_prev_entry(divided_path, list);
+	curr_path = list_prev_entry(curr_path, list);
 	inode = 2;
 
-	while (curr_dir != NULL) {
+	while (curr_path != divided_path) {
 		// list of dentry
-		list_t* list = directory_to_entries(inode);
+		dentry_list_t* dentry_list = directory_to_entries(inode);
 
 		// check if inode is actually a dir
-		if (list == NULL) {
+		if (list_is_empty((&dentry_list->list))) {
 			printf("not a directory\n");
 			return 0;
 		}
 
 		// iterate through all direntries
 		uint8_t ind = 1;
-		for (list_t* curr_list = list; curr_list != NULL; curr_list = curr_list->next) {
-			ext2_dentry_t* ext2_dentry;
-			ext2_dentry = curr_list->data;
-
-			if (!memcmp(curr_dir->data, ext2_dentry->name)) {
+		dentry_list_t* curr_dir;
+		list_for_each_entry_prev (curr_dir, (&dentry_list->list), list) {
+			if (!memcmp(curr_dir->ext2_dentry.name, curr_path->name)) {
 				ind = 0;
-				inode = ext2_dentry->inode;
+				inode = curr_dir->ext2_dentry.inode;
 				break;
 			}
 		}
@@ -216,9 +220,9 @@ uint32_t path_to_inode(const char* path)
 		}
 
 		// next dir
-		curr_dir = curr_dir->next;
-		if (curr_dir != NULL)
-			curr_dir = curr_dir->next;
+		curr_path = list_prev_entry(curr_path, list);
+		if (curr_path != divided_path)
+			curr_path = list_prev_entry(curr_path, list);
 	}
 
 	return inode;
@@ -226,13 +230,15 @@ uint32_t path_to_inode(const char* path)
 
 void ls(uint32_t inode)
 {
-	list_t* dir = directory_to_entries(inode);
+	dentry_list_t* dir = directory_to_entries(inode);
+	if (list_is_empty((&dir->list))) {
+		return;
+	}
 
 	printf("ls dir with inode %d:\n", inode);
-	for (list_t* tmp = dir; tmp != NULL; tmp = tmp->next) {
-		ext2_dentry_t* ext2_dentry;
-		ext2_dentry = tmp->data;
-		printf("inode: %d, name: %s\n", ext2_dentry->inode, ext2_dentry->name);
+	dentry_list_t* pos;
+	list_for_each_entry(pos, (&dir->list), list) {
+		printf("inode: %d, name: %s\n", pos->ext2_dentry.inode, pos->ext2_dentry.name);
 	}
 }
 

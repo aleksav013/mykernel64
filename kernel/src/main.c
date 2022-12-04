@@ -9,6 +9,7 @@
 #include <libk/stdio.h>
 #include <libk/string.h>
 #include <libk/math.h>
+#include <libk/list.h>
 #include <disc.h>
 #include <ext2.h>
 #include <timer.h>
@@ -16,6 +17,7 @@
 #include <userspace.h>
 #include <tss.h>
 #include <serial.h>
+#include <containter_of.h>
 
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
@@ -28,6 +30,11 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	read_mb2(multiboot_bootinfo, multiboot_magic);
 	clear_screen(main_fb);
 // framebuffer is enabled from this point
+	mmap_t* pos;
+        list_for_each_entry(pos, (&mmap.list), list) {
+		printf("base_addr: 0x%x\n", pos->mmap_entry.base_addr);
+	}
+
 	init_keyboard();
 	init_timer(TICKS_PER_SECOND);
 	init_idt();

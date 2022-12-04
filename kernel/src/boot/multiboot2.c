@@ -14,6 +14,8 @@
 
 mb2_tag_module* ext2_module;
 
+mmap_t mmap;
+
 void init_fb(mb2_tag_fb* tag_fb)
 {
 	main_fb.addr = tag_fb->framebuffer_addr;
@@ -31,31 +33,14 @@ void init_fb(mb2_tag_fb* tag_fb)
 
 void init_mmap(mb2_tag_mmap* tag_mmap)
 {
-	list_t* mmap = NULL;
+	INIT_LIST(mmap.list)
 
 	// get data and store it into list
 	for (size_t i = sizeof(mb2_tag_mmap); i < tag_mmap->size; i += sizeof(mb2_tag_mmap_entry)) {
-		mb2_tag_mmap_entry* mmap_entry;
-		mmap_entry = (mb2_tag_mmap_entry*)kalloc(sizeof(mb2_tag_mmap_entry));
-		memcpy(mmap_entry, (char*)tag_mmap + i, sizeof(mb2_tag_mmap_entry));
-		add_to_list_head(&mmap, mmap_entry);
+		mmap_t* curr_mmap_entry = (mmap_t*)kalloc(sizeof(mmap_t));
+		memcpy(&curr_mmap_entry->mmap_entry, (char*)tag_mmap + i, sizeof(mb2_tag_mmap_entry));
+		add_to_list(&curr_mmap_entry->list, &mmap.list, mmap.list.next);
 	}
-
-	// print data from list
-	for (list_t* tmp = mmap; tmp != NULL; tmp = tmp->next) {
-		mb2_tag_mmap_entry* mmap_entry;
-		mmap_entry = tmp->data;
-//		printf("base_addr: 0x%x, length: 0x%x, type: %d\n", mmap_entry->base_addr, mmap_entry->length, mmap_entry->type);
-		mmap_entry = mmap_entry;
-	}
-
-	// free data
-	for (list_t* tmp = mmap; tmp != NULL; tmp = tmp->next) {
-		kfree(tmp->data);
-	}
-
-	// free list
-	free_list(&mmap);
 }
 
 void init_module(mb2_tag_module* tag_module)
