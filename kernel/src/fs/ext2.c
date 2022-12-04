@@ -122,6 +122,10 @@ dentry_list_t* directory_to_entries(uint32_t inode)
 
 char* files_to_buffer(uint32_t inode)
 {
+	if (inode < 2) {
+		return NULL;
+	}
+
 	uint32_t bg_desc = (inode - 1) / ext2_superblock->inodes_per_group;
 	uint32_t inode_index = (inode - 1) % ext2_superblock->inodes_per_group;
 
@@ -135,10 +139,17 @@ char* files_to_buffer(uint32_t inode)
 	ext2_inode = (ext2_inode_t*)kalloc(sizeof(ext2_inode_t));
 	read_inode(ext2_bg_desc->inode_block_address, inode_index, ext2_inode);
 
+	if (ext2_inode->type_perms & TYPE_DIR) {
+		printf("can't print directory\n");
+		kfree(ext2_bg_desc);
+		kfree(ext2_inode);
+		return NULL;
+	}
+
 	char* data;
 
 	uint32_t size = ext2_inode->size_lower;
-	data = (char*)kalloc(size);
+	data = (char*)kalloc(size + 1);
 
 	uint32_t block_num = upper_div(size, BLOCK_SIZE);
 	for (size_t i = 0; i < min(block_num, 12); i++) {
@@ -146,6 +157,10 @@ char* files_to_buffer(uint32_t inode)
 		read_block(ext2_inode->dbp[i], block);
 		memcpy(data + i * BLOCK_SIZE, block, size >= (i + 1) * BLOCK_SIZE ? BLOCK_SIZE : size % BLOCK_SIZE);
 	}
+	data[size] = '\0';
+
+	kfree(ext2_bg_desc);
+	kfree(ext2_inode);
 
 	return data;
 }
@@ -257,7 +272,10 @@ void ls(uint32_t inode)
 
 void print(uint32_t inode)
 {
-	printf("contents of inode %d:\n", inode);
 	char *p = files_to_buffer(inode);
-	printf("%s", p);
+	if (p != NULL) {
+		printf("contents of inode %d:\n", inode);
+		printf("%s", p);
+		kfree(p);
+	}
 }

@@ -3,6 +3,9 @@
 
 size_t strlen(const char* s)
 {
+	if (s == NULL)
+		return 0;
+
 	char *p = (char*)s;
 	while (*p) p++;
 	return (size_t)(p - s);
