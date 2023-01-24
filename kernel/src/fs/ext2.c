@@ -270,7 +270,7 @@ void ls(uint32_t inode)
 	kfree(dir);
 }
 
-void print(uint32_t inode)
+void print_inode(uint32_t inode)
 {
 	char *p = files_to_buffer(inode);
 	if (p != NULL) {

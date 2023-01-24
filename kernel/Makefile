@@ -1,6 +1,8 @@
 CFLAGS += -I include
 
 OBJS = \
+	src/apic/madt.o \
+	src/apic/rsdp.o \
 	src/boot/boot64.o \
 	src/boot/boot.o \
 	src/boot/header.o \
@@ -31,13 +33,13 @@ OBJS = \
 	src/mem/paging.o \
 	src/misc/graphics.o \
 	src/misc/stdbuff.o \
+	src/scheduler/process.o \
+	src/scheduler/scheduler.o \
+	src/scheduler/switch_process.o \
 	src/sys/syscall_asm.o \
 	src/sys/syscall.o \
 	src/sys/userspace_asm.o \
 	src/sys/userspace.o \
-	src/scheduler/scheduler.o \
-	src/scheduler/switch_process.o \
-	src/scheduler/process.o \
 
 all: kernel.bin
 

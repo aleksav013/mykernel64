@@ -55,7 +55,7 @@ QEMU = qemu-system-x86_64
 BOCHS = bochs -q
 
 qemu: kernel.iso
-	@$(QEMU) -cdrom kernel.iso -serial file:serial.log
+	@$(QEMU) -cdrom kernel.iso -serial file:serial.log -smp 4
 	@cat serial.log
 
 bochs: kernel.iso

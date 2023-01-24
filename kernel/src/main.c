@@ -18,6 +18,7 @@
 #include <tss.h>
 #include <serial.h>
 #include <containter_of.h>
+#include <madt.h>
 
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
@@ -30,20 +31,23 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	read_mb2(multiboot_bootinfo, multiboot_magic);
 	clear_screen(main_fb);
 // framebuffer is enabled from this point
-	mmap_t* pos;
-        list_for_each_entry(pos, (&mmap.list), list) {
-		mb2_tag_mmap_entry entry = pos->mmap_entry;
-		printf("base_addr: 0x%x, length: 0x%x, reserved: %d, type: %d\n", entry.base_addr, entry.length, entry.reserved, entry.type);
-	}
+	//mmap_t* pos;
+	//list_for_each_entry(pos, (&mmap.list), list) {
+	//	mb2_tag_mmap_entry entry = pos->mmap_entry;
+	//	printf("base_addr: 0x%x, length: 0x%x, reserved: %d, type: %d\n", entry.base_addr, entry.length, entry.reserved, entry.type);
+	//}
 
 	init_keyboard();
 	init_timer(TICKS_PER_SECOND);
 	init_idt();
 	disc_init();
 	ext2_init();
-	ls(path_to_inode("/"));
-	print(path_to_inode("/"));
+	//ls(path_to_inode("/"));
+	//print_inode(path_to_inode("/"));
 	init_tss();
+
+	parse_madt();
+
 	jump_userspace();
 
 	for(;;) {

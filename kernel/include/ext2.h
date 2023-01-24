@@ -152,6 +152,6 @@ char* files_to_buffer(uint32_t inode);
 path_t* path_to_list(const char* path);
 uint32_t path_to_inode(const char* path);
 void ls(uint32_t inode);
-void print(uint32_t inode);
+void print_inode(uint32_t inode);
 
 #endif
