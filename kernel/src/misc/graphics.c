@@ -6,25 +6,25 @@
 #include <libk/string.h>
 #include <libk/math.h>
 
-volatile fb_t main_fb;
+fb_t main_fb;
 
-void fb_draw_pixel(volatile fb_t fb, int32_t x, int32_t y, uint32_t col)
+void fb_draw_pixel(fb_t fb, int32_t x, int32_t y, uint32_t col)
 {
 	if (x < 0 || y < 0) return;
 	if (x >= (int32_t)fb.width || y >= (int32_t)fb.height) return;
 
 	uint32_t fb_offset = (uint32_t)y * fb.pitch + (uint32_t)x * fb.bpp / 8;
-	uint32_t* fb_buff = (uint32_t*)fb.addr;
+	volatile uint32_t* fb_buff = (uint32_t*)fb.addr;
 	fb_buff[fb_offset / 4] = col;
 }
 
-void set_color(volatile fb_t* fb, uint32_t char_col, uint32_t bg_col)
+void set_color(fb_t* fb, uint32_t char_col, uint32_t bg_col)
 {
 	fb->char_col = char_col;
 	fb->bg_col = bg_col;
 }
 
-void clear_screen(volatile fb_t fb)
+void clear_screen(fb_t fb)
 {
 	for (size_t i = 0; i < fb.height; i++) {
 		for (size_t j = 0; j < fb.width; j++) {
@@ -37,7 +37,7 @@ void clear_screen(volatile fb_t fb)
 
 /* https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm */
 
-void fb_draw_line_low(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col)
+void fb_draw_line_low(fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col)
 {
 	int32_t dx = x1 - x0;
 	int32_t dy = y1 - y0;
@@ -61,7 +61,7 @@ void fb_draw_line_low(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int3
 
 }
 
-void fb_draw_line_high(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col)
+void fb_draw_line_high(fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col)
 {
 	int32_t dx = x1 - x0;
 	int32_t dy = y1 - y0;
@@ -84,7 +84,7 @@ void fb_draw_line_high(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int
 	}
 }
 
-void fb_draw_line(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col)
+void fb_draw_line(fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t col)
 {
 	if (abs(y1 - y0) < abs(x1 - x0)) {
 		if (x0 > x1)
@@ -99,7 +99,7 @@ void fb_draw_line(volatile fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t 
 	}
 }
 
-void fb_draw_character(volatile fb_t fb, char c, int32_t x, int32_t y)
+void fb_draw_character(fb_t fb, char c, int32_t x, int32_t y)
 {
 	if (c < 0) return;
 
