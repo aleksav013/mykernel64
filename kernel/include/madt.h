@@ -5,7 +5,7 @@
 
 struct MADT {
 	struct ACPI_header h;
-	uint32_t lacpi_addr;
+	uint32_t lapic_addr;
 	uint32_t flags;
 } __attribute__((packed));
 

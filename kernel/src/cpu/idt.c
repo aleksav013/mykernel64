@@ -8,7 +8,7 @@ idtp idt_pointer;
 
 void load_idt(idtp* pointer)
 {
-	__asm__ volatile ("lidt (%0); sti;" : : "r"(pointer) : );
+	__asm__ volatile ("lidt (%0);" : : "r"(pointer) : );
 }
 
 void add_to_idt(uint16_t num, uint64_t offset, uint16_t selector, uint8_t type)
@@ -61,20 +61,9 @@ void init_idt_table(void)
 	// interrupts
 	add_to_idt(32, (uint64_t)irq0, GDT_CODE_SEG, INTERRUPT_GATE);
 	add_to_idt(33, (uint64_t)irq1, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(34, (uint64_t)irq2, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(35, (uint64_t)irq3, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(36, (uint64_t)irq4, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(37, (uint64_t)irq5, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(38, (uint64_t)irq6, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(39, (uint64_t)irq7, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(40, (uint64_t)irq8, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(41, (uint64_t)irq9, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(42, (uint64_t)irq10, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(43, (uint64_t)irq11, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(44, (uint64_t)irq12, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(45, (uint64_t)irq13, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(46, (uint64_t)irq14, GDT_CODE_SEG, INTERRUPT_GATE);
-	add_to_idt(47, (uint64_t)irq15, GDT_CODE_SEG, INTERRUPT_GATE);
+	for (size_t i = 34; i < 256; i++) {
+		add_to_idt((uint16_t)i, (uint64_t)irq2, GDT_CODE_SEG, INTERRUPT_GATE);
+	}
 }
 
 void init_idt()

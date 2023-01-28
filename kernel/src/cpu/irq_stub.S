@@ -49,27 +49,41 @@
 	pop %rax
 .endm
 
+.macro isrstub
+	pushall
+	mov 0x88(%rsp), %rsi
+	mov %rsp, panic_rsp
+	cld
+	call isr_def_handler
+	popall
+	add $8, %rsp
+	iretq
+.endm
+
 .macro isr_no_error number
 .global isr\number
 isr\number:
-	pushall
-	cld
-	mov %rsp, panic_rsp
-	call isr\number\()_handler
-	popall
-	iretq
+	push $0
+	mov $\number, %rdi
+	isrstub
 .endm
 
 .macro isr_error number
 .global isr\number
 isr\number:
+	mov $\number, %rdi
+	isrstub
+.endm
+
+.macro irq number
+.global irq\number
+irq\number:
 	pushall
-	mov 0x88(%rsp), %rdi
-	cld
+	mov $\number, %rdi
 	mov %rsp, panic_rsp
-	call isr\number\()_handler
+	cld
+	call irq_def_handler
 	popall
-	add $8, %rsp
 	iretq
 .endm
 
@@ -106,30 +120,6 @@ isr_error 29
 isr_error 30
 isr_no_error 31
 
-.macro irq number
-.global irq\number
-irq\number:
-	pushall
-	cld
-	mov %rsp, panic_rsp
-	call irq\number\()_handler
-	popall
-	iretq
-.endm
-
 irq 0
 irq 1
 irq 2
-irq 3
-irq 4
-irq 5
-irq 6
-irq 7
-irq 8
-irq 9
-irq 10
-irq 11
-irq 12
-irq 13
-irq 14
-irq 15

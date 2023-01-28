@@ -46,6 +46,7 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	//print_inode(path_to_inode("/"));
 	init_tss();
 
+	list_sys_tables();
 	parse_madt();
 
 	jump_userspace();

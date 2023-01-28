@@ -63,7 +63,7 @@ void page_fault(uint64_t error)
 	uint64_t addr;
 	__asm__ volatile ("mov %%cr2, %0;" : "=r"(addr) : : "memory");
 
-	printf("address: 0x%x, error code: %d\n", addr, error);
+	printf("address: 0x%x, error code: 0x%x\n", addr, error);
 
 	if (error == 7) {
 		panic("Accessing privileged page in usermode\n");

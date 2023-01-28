@@ -25,6 +25,7 @@ struct ACPI_header {
 
 
 uint64_t* find_rsdp(void);
+void list_sys_tables(void);
 uint64_t* find_sys_table_addr(const char* signature);
 
 #endif
