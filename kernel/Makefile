@@ -33,6 +33,7 @@ OBJS = \
 	src/mem/paging.o \
 	src/misc/graphics.o \
 	src/misc/stdbuff.o \
+	src/scheduler/atomic.o \
 	src/scheduler/scheduler.o \
 	src/sys/syscall_asm.o \
 	src/sys/syscall.o \

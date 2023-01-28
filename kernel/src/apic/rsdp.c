@@ -59,7 +59,6 @@ void list_sys_tables(void)
 	printf("\n");
 
 	kfree(rsdt);
-
 }
 
 uint64_t* find_sys_table_addr(const char* signature)

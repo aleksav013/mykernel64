@@ -19,6 +19,7 @@
 #include <serial.h>
 #include <containter_of.h>
 #include <madt.h>
+#include <atomic.h>
 
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
