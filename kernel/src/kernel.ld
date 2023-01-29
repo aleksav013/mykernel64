@@ -1,10 +1,18 @@
 ENTRY(_start)
 
+KERNEL_AP_PMA = 0x0000000000008000;
 KERNEL_PMA = 0x0000000000100000;
 KERNEL_VMA = 0xffffffff80000000;
 
 SECTIONS
 {
+	. = KERNEL_AP_PMA;
+
+	.apinit BLOCK(4K) : ALIGN(4K)
+	{
+		*(.apinit)
+	}
+
 	. = KERNEL_PMA;
 
 	.boot BLOCK(4K) : ALIGN(4K)

@@ -34,6 +34,8 @@ OBJS = \
 	src/mem/pmm.o \
 	src/misc/graphics.o \
 	src/misc/stdbuff.o \
+	src/scheduler/ap_init.o \
+	src/scheduler/ap_startup.o \
 	src/scheduler/atomic.o \
 	src/scheduler/scheduler.o \
 	src/sys/syscall_asm.o \
