@@ -31,6 +31,7 @@ OBJS = \
 	src/mem/heap.o \
 	src/mem/paging_asm.o \
 	src/mem/paging.o \
+	src/mem/pmm.o \
 	src/misc/graphics.o \
 	src/misc/stdbuff.o \
 	src/scheduler/atomic.o \
