@@ -145,6 +145,16 @@ void parse_madt()
 	}
 	kfree(madt);
 
+
+	uint8_t bspid = curr_cpu_apic_id();
+
+	map_addr(lapic_addr, lapic_addr, FLAG_PRESENT);
+	map_addr(ioapic_addr, ioapic_addr, FLAG_PRESENT);
+	// irq is 2 because of gsi remap
+	ioapic_set_irq(0x2, bspid, 0x20); // timer
+	ioapic_set_irq(0x1, bspid, 0x21); // keyboard
+	__asm__ volatile ("sti;");
+
 	/*
 	for(size_t i = 0; i < numcores; i++) {
 		// do not start BSP, that's already running this code
@@ -168,13 +178,4 @@ void parse_madt()
 		}
 	}
 	*/
-
-	uint8_t bspid = curr_cpu_apic_id();
-
-	map_addr(lapic_addr, lapic_addr, FLAG_PRESENT);
-	map_addr(ioapic_addr, ioapic_addr, FLAG_PRESENT);
-	// irq is 2 because of gsi remap
-	ioapic_set_irq(0x2, bspid, 0x20); // timer
-	ioapic_set_irq(0x1, bspid, 0x21); // keyboard
-	__asm__ volatile ("sti;");
 }

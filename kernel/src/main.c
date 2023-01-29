@@ -43,6 +43,11 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	init_tss();
 	list_sys_tables();
 	parse_madt();
+
+	printf("before wait\n");
+	wait(10000);
+	printf("\nafter wait\n");
+
 	jump_userspace();
 
 	for(;;) {
