@@ -5,6 +5,10 @@
 #include <libk/stdio.h>
 #include <apic.h>
 #include <timer.h>
+#include <atomic.h>
+
+mutex_t cnt_lock;
+uint64_t cnt;
 
 uint8_t curr_cpu_apic_id(void);
 uint8_t curr_cpu_apic_id()
@@ -146,6 +150,7 @@ void parse_madt()
 	}
 	kfree(madt);
 
+	init_mutex(&cnt_lock);
 
 	uint8_t bspid = curr_cpu_apic_id();
 	uint8_t* bspdone = (uint8_t*)0x3000100;
@@ -202,6 +207,7 @@ void parse_madt()
 		}
 	}
 	*bspdone = 1;
-	wait(1);
+	wait(100);
 	printf("aprunning: %d\n", *aprunning);
+	printf("cnt: %d\n", cnt);
 }

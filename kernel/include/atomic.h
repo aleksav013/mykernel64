@@ -14,4 +14,7 @@ bool test_and_set(mutex_t mutex, bool value);
 void lock(mutex_t mutex);
 void unlock(mutex_t mutex);
 
+extern mutex_t cnt_lock;
+extern uint64_t cnt;
+
 #endif

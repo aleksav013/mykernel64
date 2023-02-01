@@ -3,10 +3,12 @@
 
 .section .boot32.text, "a"
 
+.set STACK_TOP, 0x03008000
+
 .global _start
 _start:
 	cli
-	mov $stack_top, %esp
+	mov $STACK_TOP, %esp
 	pushl $0
 	pushl %eax
 	pushl $0
@@ -37,7 +39,7 @@ setup_page_tables:
 	leal (%edx, %ecx, 8), %edx
 	movl %eax, (%edx)
 	inc %ecx
-	cmp $1, %ecx
+	cmp $25, %ecx
 	jne 1b
 
 // first 2mb in hh
@@ -58,11 +60,12 @@ setup_page_tables:
 	leal (%edx, %ecx, 8), %edx
 	movl %eax, (%edx)
 	inc %ecx
-	cmp $1, %ecx
+	cmp $25, %ecx
 	jne 2b
 
 	ret
 
+.global enable_paging
 enable_paging:
 	// enable PAE
 	mov %cr4, %edx
@@ -104,6 +107,7 @@ gdt_data = . - gdt
 	.byte 0x92
 	.byte 0xAF
 	.byte 0
+.global gdtp
 gdtp:
 	.word . - gdt - 1
 	.quad gdt
@@ -122,7 +126,3 @@ pt_lvl2:
 	.skip 4096
 pt_lvl2_hh:
 	.skip 4096
-
-stack_bottom:
-	.skip 4096*8
-stack_top:

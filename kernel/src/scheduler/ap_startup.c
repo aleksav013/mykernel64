@@ -1,5 +1,11 @@
-// this C code can be anywhere you want it, no relocation needed
-void ap_startup(int apicid) {
-	// do what you want to do on the AP
-	while(1);
+#include <atomic.h>
+
+void ap_startup(void) {
+	lock(cnt_lock);
+	cnt++;
+	unlock(cnt_lock);
+
+	for(;;) {
+		__asm__ volatile ("hlt;");
+	}
 }

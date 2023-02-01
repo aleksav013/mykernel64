@@ -50,8 +50,8 @@ void init_paging(void)
 {
 	page_table_lvl4[511] = (uint64_t)page_table_lvl3 - KERNEL_VMA + (FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER);
 	page_table_lvl3[510] = (uint64_t)page_table_lvl2 - KERNEL_VMA + (FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER);
-	// 16mb kernel + 32mb heap
-	for (size_t i = 0; i < 24; i++) {
+	// 16mb kernel + 32mb heap + 2mb (32kb stack * 64 threads) = first 50mb
+	for (size_t i = 0; i < 25; i++) {
 		page_table_lvl2[i] = (uint64_t)0x0 + PAGE_SIZE * i + (FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER | FLAG_HUGE);
 	}
 
