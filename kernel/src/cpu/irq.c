@@ -9,7 +9,7 @@
 #include <libk/serial_stdio.h>
 #include <libk/stdio.h>
 #include <panic.h>
-#include <apic.h>
+#include <ioapic.h>
 
 #define PIT 0
 
@@ -70,7 +70,7 @@ void eoi(uint64_t number)
 			outb(PIC2_COMMAND, PIC_EOI);
 		}
 	} else {
-		apic_eoi();
+		ioapic_eoi();
 	}
 }
 

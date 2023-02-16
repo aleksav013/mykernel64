@@ -4,7 +4,7 @@
 #include <graphics.h>
 #include <paging.h>
 
-#include <libk/stdio.h>
+#include <libk/serial_stdio.h>
 #include <libk/string.h>
 #include <libk/list.h>
 #include <heap.h>

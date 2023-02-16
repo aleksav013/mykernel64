@@ -19,6 +19,8 @@
 #include <serial.h>
 #include <containter_of.h>
 #include <madt.h>
+#include <apic.h>
+#include <ioapic.h>
 #include <atomic.h>
 #include <pmm.h>
 
@@ -43,6 +45,8 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	init_tss();
 	list_sys_tables();
 	parse_madt();
+	apic_remap_interrupts();
+	init_ap_cpus();
 	jump_userspace();
 
 	for(;;) {

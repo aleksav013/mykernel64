@@ -1,6 +1,8 @@
 CFLAGS += -I include
 
 OBJS = \
+	src/apic/apic.o \
+	src/apic/ioapic.o \
 	src/apic/madt.o \
 	src/apic/rsdp.o \
 	src/boot/boot64.o \

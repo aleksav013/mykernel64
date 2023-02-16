@@ -1,4 +1,5 @@
 #include <atomic.h>
+#include <apic.h>
 
 void ap_startup(void) {
 	lock(cnt_lock);
