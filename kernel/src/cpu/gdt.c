@@ -26,7 +26,7 @@ void add_gdt_tss(uint32_t num, uint64_t offset, uint32_t limit, uint8_t access, 
 
 void reload_gdt()
 {
-	__asm__ volatile (
+	__asm__ __volatile__ (
 			// reload segment registers
 			"mov $0x10, %ax;"
 			"mov %ax, %ds;"
@@ -39,7 +39,7 @@ void reload_gdt()
 
 void load_gdt(gdt_p* pointer)
 {
-	__asm__ volatile ("lgdt (%0);" : : "r"(pointer) : );
+	__asm__ __volatile__ ("lgdt (%0);" : : "r"(pointer) : );
 	reload_gdt();
 }
 

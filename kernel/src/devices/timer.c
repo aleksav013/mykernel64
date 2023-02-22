@@ -3,6 +3,7 @@
 #include <heap.h>
 #include <libk/list.h>
 #include <io.h>
+#include <idt.h>
 
 uint32_t tick = 0;
 uint32_t seconds = 0;
@@ -31,11 +32,11 @@ void timer_handler()
 
 void wait(uint64_t ms)
 {
-	__asm__ volatile ("cli;");
+	disable_interrupts();
 	wait_queue* queue = (wait_queue*)kalloc(sizeof(wait_queue));
 	queue->ticks = (int64_t)ms;
 	add_to_list(&queue->list, &timer_queue.list, timer_queue.list.next);
-	__asm__ volatile ("sti;");
+	enable_interrupts();
 
 	while (queue->ticks > 0) ;
 

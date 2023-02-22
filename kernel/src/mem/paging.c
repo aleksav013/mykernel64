@@ -59,7 +59,7 @@ void init_paging(void)
 void page_fault(uint64_t error)
 {
 	uint64_t addr;
-	__asm__ volatile ("mov %%cr2, %0;" : "=r"(addr) : : "memory");
+	__asm__ __volatile__ ("mov %%cr2, %0;" : "=r"(addr) : : "memory");
 
 	printf("address: 0x%x, error code: 0x%x\n", addr, error);
 

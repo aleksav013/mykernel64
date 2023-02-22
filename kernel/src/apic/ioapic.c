@@ -3,26 +3,27 @@
 #include <paging.h>
 #include <libk/stdio.h>
 #include <msr.h>
+#include <idt.h>
 
 void ioapic_eoi()
 {
-	*((volatile uint32_t*)((uint64_t)lapic_addr + 0xB0)) = 0;
+	*((__volatile__ uint32_t*)((uint64_t)lapic_addr + 0xB0)) = 0;
 }
 
 uint32_t ioapic_read(const uint8_t offset)
 {
     /* tell IOREGSEL where we want to read from */
-    *(volatile uint32_t*)(uint64_t)ioapic_addr = offset;
+    *(__volatile__ uint32_t*)(uint64_t)ioapic_addr = offset;
     /* return the data from IOWIN */
-    return *(volatile uint32_t*)((uint64_t)ioapic_addr + 0x10);
+    return *(__volatile__ uint32_t*)((uint64_t)ioapic_addr + 0x10);
 }
 
 void ioapic_write(const uint8_t offset, const uint32_t val)
 {
     /* tell IOREGSEL where we want to write to */
-    *(volatile uint32_t*)(uint64_t)ioapic_addr = offset;
+    *(__volatile__ uint32_t*)(uint64_t)ioapic_addr = offset;
     /* write the value to IOWIN */
-    *(volatile uint32_t*)((uint64_t)ioapic_addr + 0x10) = val;
+    *(__volatile__ uint32_t*)((uint64_t)ioapic_addr + 0x10) = val;
 }
 
 void ioapic_set_irq(uint8_t irq, uint64_t apic_id, uint8_t vector)
@@ -68,7 +69,5 @@ void apic_remap_interrupts()
 	ioapic_set_irq(0x1, bspid, 0x21); // keyboard
 
 	write_msr(APIC_BASE_MSR, read_msr(APIC_BASE_MSR) | (1<<11));
-	*((volatile uint32_t*)(lapic_addr + 0xF0)) = (*(volatile uint32_t*)(lapic_addr + 0xF0) | 0x1FF );
-
-	__asm__ volatile ("sti;");
+	*((__volatile__ uint32_t*)(lapic_addr + 0xF0)) = (*(__volatile__ uint32_t*)(lapic_addr + 0xF0) | 0x1FF );
 }

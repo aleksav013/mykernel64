@@ -48,11 +48,12 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	list_sys_tables();
 	parse_madt();
 	apic_remap_interrupts();
+	enable_interrupts();
 	init_ap_cpus();
 	jump_userspace();
 
 	for(;;) {
-		__asm__ volatile ("hlt;");
+		__asm__ __volatile__ ("hlt;");
 	}
 	return 0;
 }

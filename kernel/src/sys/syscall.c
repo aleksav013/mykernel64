@@ -8,9 +8,9 @@ void syscall_handler()
 	uint64_t rax;
 	uint64_t rdi;
 	uint64_t rsi;
-	__asm__ volatile ("mov %%rax, %0;" : "=r"(rax) : :);
-	__asm__ volatile ("mov %%rdi, %0;" : "=r"(rdi) : :);
-	__asm__ volatile ("mov %%rsi, %0;" : "=r"(rsi) : :);
+	__asm__ __volatile__ ("mov %%rax, %0;" : "=r"(rax) : :);
+	__asm__ __volatile__ ("mov %%rdi, %0;" : "=r"(rdi) : :);
+	__asm__ __volatile__ ("mov %%rsi, %0;" : "=r"(rsi) : :);
 	switch(rax) {
 		case SYSCALL_READ:
 			syscall_read();

@@ -20,6 +20,6 @@ void ap_startup(void) {
 	unlock(cnt_lock);
 
 	for(;;) {
-		__asm__ volatile ("hlt;");
+		__asm__ __volatile__ ("hlt;");
 	}
 }

@@ -7,7 +7,7 @@ tss_type tss;
 
 void load_tss()
 {
-	__asm__ volatile ("push %rax; mov $0x28, %ax; ltr %ax; pop %rax;");
+	__asm__ __volatile__ ("push %rax; mov $0x28, %ax; ltr %ax; pop %rax;");
 }
 
 void init_tss()

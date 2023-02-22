@@ -4,7 +4,7 @@
 #include <types.h>
 
 struct mutex_t {
-	volatile uint64_t* addr;
+	__volatile__ uint64_t* addr;
 };
 typedef struct mutex_t mutex_t;
 

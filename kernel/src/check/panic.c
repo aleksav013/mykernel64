@@ -1,6 +1,7 @@
 #include <libk/stdio.h>
 #include <panic.h>
 #include <graphics.h>
+#include <idt.h>
 
 uint64_t panic_rsp;
 
@@ -44,8 +45,8 @@ void panic(const char *s, ...)
 		printf("ss: 0x%x   ", *((uint64_t*)panic_rsp + i++));
 	}
 
-	__asm__ volatile ("cli;");
+	disable_interrupts();
 	for(;;) {
-		__asm__ volatile ("hlt;");
+		__asm__ __volatile__ ("hlt;");
 	}
 }

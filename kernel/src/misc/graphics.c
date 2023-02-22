@@ -14,7 +14,7 @@ void fb_draw_pixel(fb_t fb, int32_t x, int32_t y, uint32_t col)
 	if (x >= (int32_t)fb.width || y >= (int32_t)fb.height) return;
 
 	uint32_t fb_offset = (uint32_t)y * fb.pitch + (uint32_t)x * fb.bpp / 8;
-	volatile uint32_t* fb_buff = (uint32_t*)fb.addr;
+	__volatile__ uint32_t* fb_buff = (uint32_t*)fb.addr;
 	fb_buff[fb_offset / 4] = col;
 }
 

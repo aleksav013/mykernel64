@@ -6,9 +6,19 @@
 __attribute__((aligned(0x10))) static idt_entry idt_table[256];
 idtp idt_pointer;
 
+void enable_interrupts(void)
+{
+	__asm__ __volatile__ ("sti;");
+}
+
+void disable_interrupts(void)
+{
+	__asm__ __volatile__ ("cli;");
+}
+
 void load_idt(idtp* pointer)
 {
-	__asm__ volatile ("lidt (%0);" : : "r"(pointer) : );
+	__asm__ __volatile__ ("lidt (%0);" : : "r"(pointer) : );
 }
 
 void add_to_idt(uint16_t num, uint64_t offset, uint16_t selector, uint8_t type)

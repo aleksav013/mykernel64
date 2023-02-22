@@ -25,6 +25,8 @@ struct idtp {
 } __attribute__((packed));
 typedef struct idtp idtp;
 
+void enable_interrupts(void);
+void disable_interrupts(void);
 void init_idt(void);
 void load_idt(idtp* pointer);
 void init_idt_table(void);

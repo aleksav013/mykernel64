@@ -12,7 +12,7 @@ void init_mutex(mutex_t* mutex)
 bool test_and_set(mutex_t mutex, bool value)
 {
 	bool rax;
-	__asm__ volatile ("lock xchg %%rax, (%%rbx);" : "=a"(rax) : "b"(mutex.addr), "a"(value));
+	__asm__ __volatile__ ("lock xchg %%rax, (%%rbx);" : "=a"(rax) : "b"(mutex.addr), "a"(value));
 	return rax;
 }
 

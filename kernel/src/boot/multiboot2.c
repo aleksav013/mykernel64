@@ -56,7 +56,7 @@ void read_mb2(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 {
 	if (multiboot_magic != MB2_MAGIC) {
 		// not loaded by multiboot2 bootloader
-		__asm__ volatile ("hlt;");
+		__asm__ __volatile__ ("hlt;");
 	}
 
 	// we will store framebuffer information here

@@ -21,7 +21,7 @@ uint8_t curr_cpu_apic_id()
 //	CpuId(1, 0, &info);
 //	return (uint8_t)(info.EBX >> 24);
 
-	return (uint8_t)(((*((volatile uint32_t*)((uint64_t)lapic_addr + 0x20))) >> 24) & 0xFF);
+	return (uint8_t)(((*((__volatile__ uint32_t*)((uint64_t)lapic_addr + 0x20))) >> 24) & 0xFF);
 }
 
 void init_ap_cpus()
@@ -39,19 +39,19 @@ void init_ap_cpus()
 		// send INIT IPI
 
 		// clear APIC errors
-		*((volatile uint32_t*)(lapic_addr + 0x280)) = 0;
+		*((__volatile__ uint32_t*)(lapic_addr + 0x280)) = 0;
 		// select AP
-		*((volatile uint32_t*)(lapic_addr + 0x310)) = (*((volatile uint32_t*)(lapic_addr + 0x310)) & 0x00ffffff) | ((uint32_t)cpu_apic_ids[i] << 24);
+		*((__volatile__ uint32_t*)(lapic_addr + 0x310)) = (*((__volatile__ uint32_t*)(lapic_addr + 0x310)) & 0x00ffffff) | ((uint32_t)cpu_apic_ids[i] << 24);
 		// trigger INIT IPI
-		*((volatile uint32_t*)(lapic_addr + 0x300)) = (*((volatile uint32_t*)(lapic_addr + 0x300)) & 0xfff00000) | 0x00C500;
+		*((__volatile__ uint32_t*)(lapic_addr + 0x300)) = (*((__volatile__ uint32_t*)(lapic_addr + 0x300)) & 0xfff00000) | 0x00C500;
 		// wait for delivery
-		do { __asm__ __volatile__ ("pause" : : : "memory"); }while(*((volatile uint32_t*)(uint64_t)(lapic_addr + 0x300)) & (1 << 12));
+		do { __asm__ __volatile__ ("pause" : : : "memory"); }while(*((__volatile__ uint32_t*)(uint64_t)(lapic_addr + 0x300)) & (1 << 12));
 		// select AP
-		*((volatile uint32_t*)(lapic_addr + 0x310)) = (*((volatile uint32_t*)(lapic_addr + 0x310)) & 0x00ffffff) | ((uint32_t)cpu_apic_ids[i] << 24);
+		*((__volatile__ uint32_t*)(lapic_addr + 0x310)) = (*((__volatile__ uint32_t*)(lapic_addr + 0x310)) & 0x00ffffff) | ((uint32_t)cpu_apic_ids[i] << 24);
 		// deassert
-		*((volatile uint32_t*)(lapic_addr + 0x300)) = (*((volatile uint32_t*)(lapic_addr + 0x300)) & 0xfff00000) | 0x008500;
+		*((__volatile__ uint32_t*)(lapic_addr + 0x300)) = (*((__volatile__ uint32_t*)(lapic_addr + 0x300)) & 0xfff00000) | 0x008500;
 		// wait for delivery
-		do { __asm__ __volatile__ ("pause" : : : "memory"); }while(*((volatile uint32_t*)(uint64_t)(lapic_addr + 0x300)) & (1 << 12));
+		do { __asm__ __volatile__ ("pause" : : : "memory"); }while(*((__volatile__ uint32_t*)(uint64_t)(lapic_addr + 0x300)) & (1 << 12));
 		// wait 10 msec
 		wait(10);
 
@@ -59,15 +59,15 @@ void init_ap_cpus()
 
 		for(size_t j = 0; j < 2; j++) {
 			// clear APIC errors
-			*((volatile uint32_t*)(lapic_addr + 0x280)) = 0;
+			*((__volatile__ uint32_t*)(lapic_addr + 0x280)) = 0;
 			// select AP
-			*((volatile uint32_t*)(lapic_addr + 0x310)) = (*((volatile uint32_t*)(lapic_addr + 0x310)) & 0x00ffffff) | ((uint32_t)cpu_apic_ids[i] << 24);
+			*((__volatile__ uint32_t*)(lapic_addr + 0x310)) = (*((__volatile__ uint32_t*)(lapic_addr + 0x310)) & 0x00ffffff) | ((uint32_t)cpu_apic_ids[i] << 24);
 			// trigger STARTUP IPI for 0800:0000
-			*((volatile uint32_t*)(lapic_addr + 0x300)) = (*((volatile uint32_t*)(lapic_addr + 0x300)) & 0xfff0f800) | 0x000608;
+			*((__volatile__ uint32_t*)(lapic_addr + 0x300)) = (*((__volatile__ uint32_t*)(lapic_addr + 0x300)) & 0xfff0f800) | 0x000608;
 			// wait 200 usec
 			wait(1);
 			// wait for delivery
-			do { __asm__ __volatile__ ("pause" : : : "memory"); }while(*((volatile uint32_t*)(uint64_t)(lapic_addr + 0x300)) & (1 << 12));
+			do { __asm__ __volatile__ ("pause" : : : "memory"); }while(*((__volatile__ uint32_t*)(uint64_t)(lapic_addr + 0x300)) & (1 << 12));
 		}
 	}
 
