@@ -3,8 +3,6 @@
 
 .SET stack_top, 0x3008000
 .SET stack_off, 0x8000
-.SET bspdone, 0x3000100
-.SET aprunning, 0x3000200
 
 .code16
 ap_trampoline:
@@ -53,16 +51,8 @@ _start32:
 	cmp $0, %ecx
 	jne 22b
 
-
-# spinlock, wait for the BSP to finish
-11:
-	pause
-	cmpb $0, bspdone
-	jz 11b
-
 	call enable_paging
 	lgdt gdtp
-
 
 	# jump into C code (should never return)
 	ljmp $8, $_start64
@@ -86,5 +76,4 @@ _start64:
 
 .section .text
 _higher_half:
-	lock incb aprunning
 	call ap_startup

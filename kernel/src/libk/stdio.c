@@ -3,6 +3,8 @@
 #include <graphics.h>
 #include <serial.h>
 
+mutex_t stdio_lock;
+
 void print_char(char c)
 {
 	if (main_fb.x * 8 >= main_fb.width) {
@@ -64,6 +66,7 @@ void printf(const char *s, ...)
 
 void vprintf(const char *s, va_list list)
 {
+	lock(stdio_lock);
 	size_t count = 0;
 	for(size_t i = 0; i < strlen(s); i++) if(s[i] == '%') count++;
 
@@ -84,4 +87,5 @@ void vprintf(const char *s, va_list list)
 		}
 		else print_char(s[i]);
 	}
+	unlock(stdio_lock);
 }

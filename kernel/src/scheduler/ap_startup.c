@@ -10,9 +10,13 @@ void ap_startup(void) {
 	load_gdt(&gdt_pointer);
 	load_pt_lvl4(page_table_lvl4);
 
-	lock(cnt_lock);
+	while (bspdone) {
+		__asm__ __volatile__ ("pause;");
+	}
+
 	printf("curr_cpu_apic_id: 0x%x\n", curr_cpu_apic_id());
-	cnt++;
+	lock(cnt_lock);
+	ap_cnt++;
 	unlock(cnt_lock);
 
 	for(;;) {

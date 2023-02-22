@@ -7,7 +7,8 @@
 #include <timer.h>
 
 mutex_t cnt_lock;
-uint32_t cnt = 0;
+uint32_t ap_cnt = 0;
+uint32_t bspdone = 0;
 uint32_t ioapic_addr = 0;
 uint64_t lapic_addr = 0;
 uint32_t numcores = 0;
@@ -26,10 +27,6 @@ uint8_t curr_cpu_apic_id()
 void init_ap_cpus()
 {
 	uint8_t bspid = curr_cpu_apic_id();
-	uint8_t* bspdone = (uint8_t*)0x3000100;
-	uint8_t* aprunning = (uint8_t*)0x3000200;
-	*bspdone = 0;
-	*aprunning = 0;
 
 	init_mutex(&cnt_lock);
 	map_addr(lapic_addr, lapic_addr, FLAG_PRESENT);
@@ -74,8 +71,7 @@ void init_ap_cpus()
 		}
 	}
 
-	*bspdone = 1;
-	wait(1000);
-	printf("aprunning: %d\n", *aprunning);
-	printf("cnt: %d\n", cnt);
+	bspdone = 1;
+	wait(10);
+	printf("ap_cnt: %d\n", ap_cnt);
 }

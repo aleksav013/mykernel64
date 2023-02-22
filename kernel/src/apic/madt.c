@@ -18,9 +18,6 @@ void parse_madt()
 	memcpy(madt, madt_addr, sizeof(struct MADT));
 	lapic_addr = madt->lapic_addr;
 
-	printf("curr_cpu_apic_id: 0x%x\n", curr_cpu_apic_id());
-	printf("lapic_addr: 0x%x\n", lapic_addr);
-
 	for (size_t curr_size = sizeof(struct MADT); curr_size < madt->h.Length;) {
 		struct MADT_type_header* m = (struct MADT_type_header*)kalloc(sizeof(struct MADT_type_header));
 		memcpy(m, (uint64_t*)((uint64_t)madt_addr + (uint64_t)curr_size), sizeof(struct MADT_type_header));

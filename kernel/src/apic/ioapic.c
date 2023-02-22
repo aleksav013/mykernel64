@@ -58,10 +58,10 @@ void ioapic_set_irq(uint8_t irq, uint64_t apic_id, uint8_t vector)
 
 void apic_remap_interrupts()
 {
-	uint8_t bspid = curr_cpu_apic_id();
-
 	map_addr(ioapic_addr, ioapic_addr, FLAG_PRESENT);
 	map_addr(lapic_addr, lapic_addr, FLAG_PRESENT);
+
+	uint8_t bspid = curr_cpu_apic_id();
 
 	// irq is 2 because of gsi remap
 	ioapic_set_irq(0x2, bspid, 0x20); // timer

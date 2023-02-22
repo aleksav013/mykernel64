@@ -5,6 +5,8 @@
 #include <graphics.h>
 #include <serial.h>
 
+mutex_t serial_stdio_lock;
+
 void serial_print_char(char c)
 {
 	write_serial(c);
@@ -43,6 +45,7 @@ void serial_printf(const char *s, ...)
 
 void serial_vprintf(const char *s, va_list list)
 {
+	lock(serial_stdio_lock);
 	size_t count = 0;
 	for(size_t i = 0; i < strlen(s); i++) if(s[i] == '%') count++;
 
@@ -63,4 +66,5 @@ void serial_vprintf(const char *s, va_list list)
 		}
 		else serial_print_char(s[i]);
 	}
+	unlock(serial_stdio_lock);
 }

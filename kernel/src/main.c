@@ -34,6 +34,8 @@ int kernel_main(mb2_tag_header* multiboot_bootinfo, uint32_t multiboot_magic)
 	init_heap();
 	read_mb2(multiboot_bootinfo, multiboot_magic);
 	clear_screen(main_fb);
+	init_mutex(&stdio_lock);
+	init_mutex(&serial_stdio_lock);
 // framebuffer is enabled from this point
 	init_pmm();
 	memory_usage();
