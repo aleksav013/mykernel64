@@ -37,4 +37,6 @@ void reload_gdt(void);
 void load_gdt(gdt_p* pointer);
 void init_gdt(void);
 
+extern gdt_p gdt_pointer;
+
 #endif

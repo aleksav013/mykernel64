@@ -84,6 +84,9 @@ void irq_def_handler(uint64_t number)
 		case 1:
 			keyboard_handler();
 			break;
+		default:
+			printf("spurious interrupt\n");
+			break;
 	}
 	eoi(number);
 }

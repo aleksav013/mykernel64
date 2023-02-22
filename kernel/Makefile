@@ -17,6 +17,8 @@ OBJS = \
 	src/cpu/io.o \
 	src/cpu/irq.o \
 	src/cpu/irq_stub.o \
+	src/cpu/kcpuid.o \
+	src/cpu/msr.o \
 	src/cpu/pic.o \
 	src/cpu/tss.o \
 	src/devices/disc.o \

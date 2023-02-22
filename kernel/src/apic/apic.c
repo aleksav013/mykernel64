@@ -15,9 +15,12 @@ uint8_t cpu_apic_ids[256];
 
 uint8_t curr_cpu_apic_id()
 {
-	uint8_t apic_id = 0;
-	__asm__ __volatile__ ("movl $1, %%eax; cpuid; shrl $24, %%ebx;": "=b"(apic_id));
-	return apic_id;
+// Initial APIC ID
+//	CPUIDinfo info;
+//	CpuId(1, 0, &info);
+//	return (uint8_t)(info.EBX >> 24);
+
+	return (uint8_t)(((*((volatile uint32_t*)((uint64_t)lapic_addr + 0x20))) >> 24) & 0xFF);
 }
 
 void init_ap_cpus()
@@ -36,7 +39,6 @@ void init_ap_cpus()
 		if(cpu_apic_ids[i] == bspid)
 			continue;
 
-		printf("initializing cpu with apic id 0x%x\n", cpu_apic_ids[i]);
 		// send INIT IPI
 
 		// clear APIC errors
@@ -73,7 +75,7 @@ void init_ap_cpus()
 	}
 
 	*bspdone = 1;
-	wait(100);
+	wait(1000);
 	printf("aprunning: %d\n", *aprunning);
 	printf("cnt: %d\n", cnt);
 }

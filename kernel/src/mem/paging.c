@@ -8,11 +8,9 @@
 #include <libk/string.h>
 #include <kernel_vma.h>
 
-void load_pt_lvl4(uint64_t*);
-
-__attribute__((aligned(4096))) uint64_t page_table_lvl4[512];
-__attribute__((aligned(4096))) uint64_t page_table_lvl3[512];
-__attribute__((aligned(4096))) uint64_t page_table_lvl2[512];
+uint64_t __attribute__((aligned(4096))) page_table_lvl4[512];
+uint64_t __attribute__((aligned(4096))) page_table_lvl3[512];
+uint64_t __attribute__((aligned(4096))) page_table_lvl2[512];
 
 void map_addr(uint64_t virt, uint64_t phys, uint32_t flags)
 {

@@ -2,6 +2,7 @@
 #include <apic.h>
 #include <paging.h>
 #include <libk/stdio.h>
+#include <msr.h>
 
 void ioapic_eoi()
 {
@@ -53,6 +54,8 @@ void ioapic_set_irq(uint8_t irq, uint64_t apic_id, uint8_t vector)
 	ioapic_write((uint8_t)low_index, low);
 }
 
+#define APIC_BASE_MSR 0x0000001B
+
 void apic_remap_interrupts()
 {
 	uint8_t bspid = curr_cpu_apic_id();
@@ -63,5 +66,9 @@ void apic_remap_interrupts()
 	// irq is 2 because of gsi remap
 	ioapic_set_irq(0x2, bspid, 0x20); // timer
 	ioapic_set_irq(0x1, bspid, 0x21); // keyboard
+
+	write_msr(APIC_BASE_MSR, read_msr(APIC_BASE_MSR) | (1<<11));
+	*((volatile uint32_t*)(lapic_addr + 0xF0)) = (*(volatile uint32_t*)(lapic_addr + 0xF0) | 0x1FF );
+
 	__asm__ volatile ("sti;");
 }

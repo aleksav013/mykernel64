@@ -3,6 +3,7 @@
 #include <heap.h>
 #include <libk/string.h>
 #include <libk/stdio.h>
+#include <apic.h>
 
 void parse_madt()
 {
@@ -16,6 +17,9 @@ void parse_madt()
 	struct MADT* madt = (struct MADT*)kalloc(sizeof(struct MADT));
 	memcpy(madt, madt_addr, sizeof(struct MADT));
 	lapic_addr = madt->lapic_addr;
+
+	printf("curr_cpu_apic_id: 0x%x\n", curr_cpu_apic_id());
+	printf("lapic_addr: 0x%x\n", lapic_addr);
 
 	for (size_t curr_size = sizeof(struct MADT); curr_size < madt->h.Length;) {
 		struct MADT_type_header* m = (struct MADT_type_header*)kalloc(sizeof(struct MADT_type_header));

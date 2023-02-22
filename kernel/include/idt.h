@@ -30,5 +30,6 @@ void load_idt(idtp* pointer);
 void init_idt_table(void);
 void add_to_idt(uint16_t num, uint64_t offset, uint16_t selector, uint8_t type);
 
+extern idtp idt_pointer;
 
 #endif
