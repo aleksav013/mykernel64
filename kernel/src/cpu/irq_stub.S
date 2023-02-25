@@ -1,61 +1,15 @@
 .extern panic_rsp
 
-.macro pushall
-	push %rax
-	push %rbx
-	push %rcx
-	push %rdx
-	push %rsi
-	push %rdi
-	push %r8
-	push %r9
-	push %r10
-	push %r11
-	push %r12
-	push %r13
-	push %r14
-	push %r15
-	mov %ds, %ax
-	push %rax
-	mov %es, %ax
-	push %rax
-	mov %ss, %ax
-	push %rax
-	mov $0x10, %ax
-	mov %ax, %ds
-	mov %ax, %es
-	mov 0x80(%rsp), %rax
-.endm
-
-.macro popall
-	pop %rax
-	pop %rax
-	mov %ax, %es
-	pop %rax
-	mov %ax, %ds
-	pop %r15
-	pop %r14
-	pop %r13
-	pop %r12
-	pop %r11
-	pop %r10
-	pop %r9
-	pop %r8
-	pop %rdi
-	pop %rsi
-	pop %rdx
-	pop %rcx
-	pop %rbx
-	pop %rax
-.endm
+#include "x86_64_regs.S"
 
 .macro isrstub
-	pushall
-	mov 0x88(%rsp), %rsi
+	push_caller_saved
+	/* get error code from stack */
+	mov 0x50(%rsp), %rsi
 	mov %rsp, panic_rsp
 	cld
 	call isr_def_handler
-	popall
+	pop_caller_saved
 	add $8, %rsp
 	iretq
 .endm
@@ -78,12 +32,12 @@ isr\number:
 .macro irq number
 .global irq\number
 irq\number:
-	pushall
+	push_caller_saved
 	mov $\number, %rdi
 	mov %rsp, panic_rsp
 	cld
 	call irq_def_handler
-	popall
+	pop_caller_saved
 	iretq
 .endm
 

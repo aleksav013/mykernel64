@@ -1,6 +1,5 @@
 .section .apinit, "a"
 
-
 .SET stack_top, 0x3008000
 .SET stack_off, 0x8000
 

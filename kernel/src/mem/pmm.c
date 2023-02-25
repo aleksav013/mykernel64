@@ -1,5 +1,4 @@
 #include <paging.h>
-#include <heap.h>
 #include <libk/list.h>
 #include <libk/stdio.h>
 #include <libk/serial_stdio.h>
@@ -33,12 +32,6 @@ void init_pmm()
 		}
 	}
 	all_mem_cnt = free_mem_cnt;
-
-	// print addr of every free block of memory
-	//list_t* pok;
-	//list_for_each(pok, (&pmm_list)) {
-	//	serial_printf("0x%x\n", pok);
-	//}
 }
 
 void memory_usage()
