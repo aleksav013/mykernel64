@@ -9,7 +9,7 @@
 #define FLAG_USER 0x4
 #define FLAG_HUGE 0x80
 
-void load_pt_lvl4(uint64_t*);
+void load_pt_lvl4(uint64_t *);
 void init_paging(void);
 void map_addr(uint64_t virt, uint64_t phys, uint32_t flags);
 void page_fault(uint64_t error);

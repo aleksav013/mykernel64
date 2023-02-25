@@ -2,11 +2,10 @@
 #define EXT2_H
 
 #include <types.h>
-
 #include <libk/list.h>
 
 struct ext2_superblock_t {
-// base fields
+	// base fields
 	uint32_t inodes_count;
 	uint32_t blocks_count;
 	uint32_t superuser_blocks;
@@ -32,7 +31,7 @@ struct ext2_superblock_t {
 	uint32_t version_major;
 	uint16_t superuser_id;
 	uint16_t supergroup_id;
-// extended fields
+	// extended fields
 	uint32_t first_inode;
 	uint16_t inode_size;
 	uint16_t superblock_group;
@@ -90,13 +89,13 @@ struct ext2_inode_t {
 typedef struct ext2_inode_t ext2_inode_t;
 
 // inode type
-#define TYPE_FIFO		0x1000
-#define TYPE_CHAR_DEV		0x2000
-#define TYPE_DIR		0x4000
-#define TYPE_BLOCK DEV		0x6000
-#define TYPE_FILE		0x8000
-#define TYPE_SYMLINK		0xA000
-#define TYPE_SOCKET		0xC000
+#define TYPE_FIFO 0x1000
+#define TYPE_CHAR_DEV 0x2000
+#define TYPE_DIR 0x4000
+#define TYPE_BLOCK DEV 0x6000
+#define TYPE_FILE 0x8000
+#define TYPE_SYMLINK 0xA000
+#define TYPE_SOCKET 0xC000
 
 // inode permission
 #define PERM_OE 0x001
@@ -117,12 +116,12 @@ struct ext2_dentry_t {
 	uint16_t size;
 	uint8_t name_length_lower;
 	uint8_t type;
-	char* name;
+	char *name;
 };
 typedef struct ext2_dentry_t ext2_dentry_t;
 
 struct path_t {
-	char* name;
+	char *name;
 	list_t list;
 };
 typedef struct path_t path_t;
@@ -133,7 +132,7 @@ struct dentry_list_t {
 };
 typedef struct dentry_list_t dentry_list_t;
 
-extern ext2_superblock_t* ext2_superblock;
+extern ext2_superblock_t *ext2_superblock;
 
 // size of structs
 #define BG_DESC_SIZE 32
@@ -141,16 +140,16 @@ extern ext2_superblock_t* ext2_superblock;
 #define INODE_SIZE (ext2_superblock->inode_size)
 #define INODES_PER_BLOCK (BLOCK_SIZE / INODE_SIZE)
 
-
 void ext2_init(void);
-void read_block(uint32_t block_num, void* block_ptr);
-void read_superblock(ext2_superblock_t* ext2_superblock);
-void read_bg_desc(uint32_t bg_desc, ext2_bg_desc_t* ext2_bg_desc);
-void read_inode(uint32_t starting_block_num, uint32_t inode_index, ext2_inode_t* ext2_inode);
-dentry_list_t* directory_to_entries(uint32_t inode);
-char* files_to_buffer(uint32_t inode);
-path_t* path_to_list(const char* path);
-uint32_t path_to_inode(const char* path);
+void read_block(uint32_t block_num, void *block_ptr);
+void read_superblock(ext2_superblock_t *ext2_superblock);
+void read_bg_desc(uint32_t bg_desc, ext2_bg_desc_t *ext2_bg_desc);
+void read_inode(uint32_t starting_block_num, uint32_t inode_index,
+		ext2_inode_t *ext2_inode);
+dentry_list_t *directory_to_entries(uint32_t inode);
+char *files_to_buffer(uint32_t inode);
+path_t *path_to_list(const char *path);
+uint32_t path_to_inode(const char *path);
 void ls(uint32_t inode);
 void print_inode(uint32_t inode);
 

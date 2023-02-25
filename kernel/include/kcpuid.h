@@ -3,8 +3,7 @@
 
 #include <types.h>
 
-struct CPUIDinfo
-{
+struct CPUIDinfo {
 	uint32_t EAX;
 	uint32_t EBX;
 	uint32_t ECX;
@@ -12,6 +11,6 @@ struct CPUIDinfo
 };
 typedef struct CPUIDinfo CPUIDinfo;
 
-void kcpuid(uint32_t func, uint32_t subfunc, CPUIDinfo* info);
+void kcpuid(uint32_t func, uint32_t subfunc, CPUIDinfo *info);
 
 #endif

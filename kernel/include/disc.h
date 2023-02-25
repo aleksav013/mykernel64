@@ -3,8 +3,6 @@
 
 #include <types.h>
 
-#include <libk/stdio.h>
-
 #define SECTOR_SIZE 512
 
 struct disc_sector_t {
@@ -12,10 +10,10 @@ struct disc_sector_t {
 };
 typedef struct disc_sector_t disc_sector_t;
 
-extern disc_sector_t* disc;
+extern disc_sector_t *disc;
 
 void disc_init(void);
-void read_sector(size_t sector_num, disc_sector_t* disc_sector);
-void write_sector(size_t sector_num, disc_sector_t* disc_sector);
+void read_sector(size_t sector_num, disc_sector_t *disc_sector);
+void write_sector(size_t sector_num, disc_sector_t *disc_sector);
 
 #endif

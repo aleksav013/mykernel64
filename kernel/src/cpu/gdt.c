@@ -4,7 +4,8 @@
 gdt_seg_entry gdt[7];
 gdt_p gdt_pointer;
 
-void add_gdt_entry(uint32_t num, uint32_t offset, uint32_t limit, uint8_t access, uint8_t flags)
+void add_gdt_entry(uint32_t num, uint32_t offset, uint32_t limit,
+		   uint8_t access, uint8_t flags)
 {
 	gdt[num].offset1 = offset & 0xffff;
 	gdt[num].offset2 = (offset >> 16) & 0xff;
@@ -15,31 +16,31 @@ void add_gdt_entry(uint32_t num, uint32_t offset, uint32_t limit, uint8_t access
 	gdt[num].limitflags = (uint8_t)(flags << 4);
 }
 
-void add_gdt_tss(uint32_t num, uint64_t offset, uint32_t limit, uint8_t access, uint8_t flags)
+void add_gdt_tss(uint32_t num, uint64_t offset, uint32_t limit, uint8_t access,
+		 uint8_t flags)
 {
 	uint32_t offset_low = (offset & 0xffffffff);
 	uint32_t offset_high = (uint32_t)(offset >> 32);
 	add_gdt_entry(num, offset_low, limit, access, flags);
-	gdt[num+1].limit = (offset_high & 0xffff);
-	gdt[num+1].offset1 = (uint16_t)(offset_high >> 16);
+	gdt[num + 1].limit = (offset_high & 0xffff);
+	gdt[num + 1].offset1 = (uint16_t)(offset_high >> 16);
 }
 
 void reload_gdt()
 {
-	__asm__ __volatile__ (
-			// reload segment registers
-			"mov $0x10, %ax;"
-			"mov %ax, %ds;"
-			"mov %ax, %es;"
-			"mov %ax, %ss;"
-			"mov %ax, %fs;"
-			"mov %ax, %gs;"
-			);
+	__asm__ __volatile__(
+		// reload segment registers
+		"mov $0x10, %ax;"
+		"mov %ax, %ds;"
+		"mov %ax, %es;"
+		"mov %ax, %ss;"
+		"mov %ax, %fs;"
+		"mov %ax, %gs;");
 }
 
-void load_gdt(gdt_p* pointer)
+void load_gdt(gdt_p *pointer)
 {
-	__asm__ __volatile__ ("lgdt (%0);" : : "r"(pointer) : );
+	__asm__ __volatile__("lgdt (%0);" : : "r"(pointer) :);
 	reload_gdt();
 }
 

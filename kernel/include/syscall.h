@@ -8,6 +8,6 @@
 
 void syscall_handler(void);
 void syscall_read(void);
-void syscall_write(char* buff, size_t count);
+void syscall_write(char *buff, size_t count);
 
 #endif

@@ -31,10 +31,12 @@ struct gdt_p {
 } __attribute__((packed));
 typedef struct gdt_p gdt_p;
 
-void add_gdt_entry(uint32_t num, uint32_t offset, uint32_t limit, uint8_t access, uint8_t flags);
-void add_gdt_tss(uint32_t num, uint64_t offset, uint32_t limit, uint8_t access, uint8_t flags);
+void add_gdt_entry(uint32_t num, uint32_t offset, uint32_t limit,
+		   uint8_t access, uint8_t flags);
+void add_gdt_tss(uint32_t num, uint64_t offset, uint32_t limit, uint8_t access,
+		 uint8_t flags);
 void reload_gdt(void);
-void load_gdt(gdt_p* pointer);
+void load_gdt(gdt_p *pointer);
 void init_gdt(void);
 
 extern gdt_p gdt_pointer;

@@ -1,5 +1,4 @@
 #include <idt.h>
-
 #include <irq.h>
 #include <pic.h>
 
@@ -8,17 +7,17 @@ idtp idt_pointer;
 
 void enable_interrupts(void)
 {
-	__asm__ __volatile__ ("sti;");
+	__asm__ __volatile__("sti;");
 }
 
 void disable_interrupts(void)
 {
-	__asm__ __volatile__ ("cli;");
+	__asm__ __volatile__("cli;");
 }
 
-void load_idt(idtp* pointer)
+void load_idt(idtp *pointer)
 {
-	__asm__ __volatile__ ("lidt (%0);" : : "r"(pointer) : );
+	__asm__ __volatile__("lidt (%0);" : : "r"(pointer) :);
 }
 
 void add_to_idt(uint16_t num, uint64_t offset, uint16_t selector, uint8_t type)
@@ -72,7 +71,8 @@ void init_idt_table(void)
 	add_to_idt(32, (uint64_t)irq0, GDT_CODE_SEG, INTERRUPT_GATE);
 	add_to_idt(33, (uint64_t)irq1, GDT_CODE_SEG, INTERRUPT_GATE);
 	for (size_t i = 34; i < 256; i++) {
-		add_to_idt((uint16_t)i, (uint64_t)irq2, GDT_CODE_SEG, INTERRUPT_GATE);
+		add_to_idt((uint16_t)i, (uint64_t)irq2, GDT_CODE_SEG,
+			   INTERRUPT_GATE);
 	}
 }
 

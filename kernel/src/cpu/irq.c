@@ -1,6 +1,5 @@
 #include <types.h>
 #include <irq_handler.h>
-
 #include <pic.h>
 #include <io.h>
 #include <keyboard.h>
@@ -13,7 +12,7 @@
 
 #define PIT 0
 
-const char* const exception_name[] = {
+const char *const exception_name[] = {
 	"Divide-by-zero Error",
 	"Debug",
 	"Non-maskable Interrupt",
@@ -50,13 +49,13 @@ const char* const exception_name[] = {
 
 void isr_def_handler(uint64_t number, uint64_t error)
 {
-	switch(number) {
-		case 14:
-			printf("%s, error: 0x%x\n", exception_name[14], error);
-			page_fault(error);
-			break;
-		default:
-			panic("%s, error: 0x%x\n", exception_name[number], error);
+	switch (number) {
+	case 14:
+		printf("%s, error: 0x%x\n", exception_name[14], error);
+		page_fault(error);
+		break;
+	default:
+		panic("%s, error: 0x%x\n", exception_name[number], error);
 	}
 }
 
@@ -76,17 +75,16 @@ void eoi(uint64_t number)
 
 void irq_def_handler(uint64_t number)
 {
-	switch(number)
-	{
-		case 0:
-			timer_handler();
-			break;
-		case 1:
-			keyboard_handler();
-			break;
-		default:
-			printf("spurious interrupt\n");
-			break;
+	switch (number) {
+	case 0:
+		timer_handler();
+		break;
+	case 1:
+		keyboard_handler();
+		break;
+	default:
+		printf("spurious interrupt\n");
+		break;
 	}
 	eoi(number);
 }

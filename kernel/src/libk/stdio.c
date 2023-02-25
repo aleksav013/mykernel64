@@ -27,13 +27,14 @@ void print_char(char c)
 		}
 		return;
 	}
-	fb_draw_character(main_fb, c, (int32_t)main_fb.x * 8, (int32_t)main_fb.y * 16);
+	fb_draw_character(main_fb, c, (int32_t)main_fb.x * 8,
+			  (int32_t)main_fb.y * 16);
 	main_fb.x++;
 
 	write_serial(c);
 }
 
-void print_string(const char* s)
+void print_string(const char *s)
 {
 	for (size_t i = 0; i < strlen(s); i++) {
 		print_char(s[i]);
@@ -68,24 +69,27 @@ void vprintf(const char *s, va_list list)
 {
 	lock(stdio_lock);
 	size_t count = 0;
-	for(size_t i = 0; i < strlen(s); i++) if(s[i] == '%') count++;
+	for (size_t i = 0; i < strlen(s); i++)
+		if (s[i] == '%')
+			count++;
 
-	for(size_t i = 0; i < strlen(s); i++)
-	{
-		if(s[i] == '%')
-		{
+	for (size_t i = 0; i < strlen(s); i++) {
+		if (s[i] == '%') {
 			i++;
-			if(s[i] == 'c') print_char((char)va_arg(list, uint32_t));
-			else if(s[i] == 's') print_string(va_arg(list, char*));
-			else if(s[i] == 'd') print_int((uint64_t)va_arg(list, uint64_t));
-			else if(s[i] == 'x') print_hex((uint64_t)va_arg(list, uint64_t));
-			else
-			{
+			if (s[i] == 'c')
+				print_char((char)va_arg(list, uint32_t));
+			else if (s[i] == 's')
+				print_string(va_arg(list, char *));
+			else if (s[i] == 'd')
+				print_int((uint64_t)va_arg(list, uint64_t));
+			else if (s[i] == 'x')
+				print_hex((uint64_t)va_arg(list, uint64_t));
+			else {
 				print_string("Wrong format using printf\n");
 				return;
 			}
-		}
-		else print_char(s[i]);
+		} else
+			print_char(s[i]);
 	}
 	unlock(stdio_lock);
 }

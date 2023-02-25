@@ -9,7 +9,7 @@ struct MADT {
 	uint32_t flags;
 } __attribute__((packed));
 
-struct MADT_type_header  {
+struct MADT_type_header {
 	uint8_t type;
 	uint8_t len;
 } __attribute__((packed));

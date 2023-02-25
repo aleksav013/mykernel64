@@ -7,29 +7,29 @@
 
 void ioapic_eoi()
 {
-	*((__volatile__ uint32_t*)((uint64_t)lapic_addr + 0xB0)) = 0;
+	*((__volatile__ uint32_t *)((uint64_t)lapic_addr + 0xB0)) = 0;
 }
 
 uint32_t ioapic_read(const uint8_t offset)
 {
-    /* tell IOREGSEL where we want to read from */
-    *(__volatile__ uint32_t*)(uint64_t)ioapic_addr = offset;
-    /* return the data from IOWIN */
-    return *(__volatile__ uint32_t*)((uint64_t)ioapic_addr + 0x10);
+	/* tell IOREGSEL where we want to read from */
+	*(__volatile__ uint32_t *)(uint64_t)ioapic_addr = offset;
+	/* return the data from IOWIN */
+	return *(__volatile__ uint32_t *)((uint64_t)ioapic_addr + 0x10);
 }
 
 void ioapic_write(const uint8_t offset, const uint32_t val)
 {
-    /* tell IOREGSEL where we want to write to */
-    *(__volatile__ uint32_t*)(uint64_t)ioapic_addr = offset;
-    /* write the value to IOWIN */
-    *(__volatile__ uint32_t*)((uint64_t)ioapic_addr + 0x10) = val;
+	/* tell IOREGSEL where we want to write to */
+	*(__volatile__ uint32_t *)(uint64_t)ioapic_addr = offset;
+	/* write the value to IOWIN */
+	*(__volatile__ uint32_t *)((uint64_t)ioapic_addr + 0x10) = val;
 }
 
 void ioapic_set_irq(uint8_t irq, uint64_t apic_id, uint8_t vector)
 {
-	const uint32_t low_index = (uint32_t)0x10 + irq*2;
-	const uint32_t high_index = (uint32_t)0x10 + irq*2 + 1;
+	const uint32_t low_index = (uint32_t)0x10 + irq * 2;
+	const uint32_t high_index = (uint32_t)0x10 + irq * 2 + 1;
 
 	uint32_t high = ioapic_read((uint8_t)high_index);
 	// set APIC ID
@@ -40,10 +40,10 @@ void ioapic_set_irq(uint8_t irq, uint64_t apic_id, uint8_t vector)
 	uint32_t low = ioapic_read((uint8_t)low_index);
 
 	// unmask the IRQ
-	low &= (uint32_t)~(1<<16);
+	low &= (uint32_t) ~(1 << 16);
 
 	// set to physical delivery mode
-	low &= (uint32_t)~(1<<11);
+	low &= (uint32_t) ~(1 << 11);
 
 	// set to fixed delivery mode
 	low &= (uint32_t)~0x700;
@@ -66,6 +66,7 @@ void apic_remap_interrupts()
 	ioapic_set_irq(0x2, bspid, 0x20); // timer
 	ioapic_set_irq(0x1, bspid, 0x21); // keyboard
 
-	write_msr(APIC_BASE_MSR, read_msr(APIC_BASE_MSR) | (1<<11));
-	*((__volatile__ uint32_t*)(lapic_addr + 0xF0)) = (*(__volatile__ uint32_t*)(lapic_addr + 0xF0) | 0x1FF );
+	write_msr(APIC_BASE_MSR, read_msr(APIC_BASE_MSR) | (1 << 11));
+	*((__volatile__ uint32_t *)(lapic_addr + 0xF0)) =
+		(*(__volatile__ uint32_t *)(lapic_addr + 0xF0) | 0x1FF);
 }

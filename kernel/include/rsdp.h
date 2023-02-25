@@ -23,9 +23,8 @@ struct ACPI_header {
 	uint32_t CreatorRevision;
 } __attribute__((packed));
 
-
-uint64_t* find_rsdp(void);
+uint64_t *find_rsdp(void);
 void list_sys_tables(void);
-uint64_t* find_sys_table_addr(const char* signature);
+uint64_t *find_sys_table_addr(const char *signature);
 
 #endif

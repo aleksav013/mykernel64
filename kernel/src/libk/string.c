@@ -1,13 +1,14 @@
 #include <types.h>
 #include <libk/string.h>
 
-size_t strlen(const char* s)
+size_t strlen(const char *s)
 {
 	if (s == NULL)
 		return 0;
 
-	char *p = (char*)s;
-	while (*p) p++;
+	char *p = (char *)s;
+	while (*p)
+		p++;
 	return (size_t)(p - s);
 }
 
@@ -36,7 +37,7 @@ void strrev(char *s)
 	}
 }
 
-void itos(uint64_t num, char* s)
+void itos(uint64_t num, char *s)
 {
 	if (num == 0) {
 		s[0] = '0';
@@ -52,7 +53,7 @@ void itos(uint64_t num, char* s)
 	strrev(s);
 }
 
-void itoh(uint64_t num, char* s)
+void itoh(uint64_t num, char *s)
 {
 	if (num == 0) {
 		s[0] = '0';
@@ -71,35 +72,35 @@ void itoh(uint64_t num, char* s)
 	strrev(s);
 }
 
-void memcpy(const void* destptr, const void* srcptr, size_t n)
+void memcpy(const void *destptr, const void *srcptr, size_t n)
 {
 	if (destptr == NULL || srcptr == NULL)
 		return;
 
-	uint8_t* dest = (uint8_t*)destptr;
-	const uint8_t* src = (const uint8_t*)srcptr;
+	uint8_t *dest = (uint8_t *)destptr;
+	const uint8_t *src = (const uint8_t *)srcptr;
 
-	for(size_t i = 0; i < n; i++) {
+	for (size_t i = 0; i < n; i++) {
 		dest[i] = src[i];
 	}
 }
 
-void memset(const void* destptr, uint8_t value, size_t n)
+void memset(const void *destptr, uint8_t value, size_t n)
 {
-	uint8_t* dest = (uint8_t*)destptr;
+	uint8_t *dest = (uint8_t *)destptr;
 
 	for (size_t i = 0; i < n; i++) {
 		dest[i] = value;
 	}
 }
 
-int32_t memcmp(const void* aptr, const void* bptr)
+int32_t memcmp(const void *aptr, const void *bptr)
 {
-	const uint8_t* a = (const uint8_t*)aptr;
-	const uint8_t* b = (const uint8_t*)bptr;
+	const uint8_t *a = (const uint8_t *)aptr;
+	const uint8_t *b = (const uint8_t *)bptr;
 
-	const size_t len_a = strlen((char*)a);
-	const size_t len_b = strlen((char*)b);
+	const size_t len_a = strlen((char *)a);
+	const size_t len_b = strlen((char *)b);
 
 	for (size_t i = 0; i < len_a && i < len_b; i++) {
 		if (a[i] != b[i])
