@@ -5,7 +5,7 @@
 #include <libk/list.h>
 
 struct ext2_superblock_t {
-	// base fields
+	/* base fields */
 	uint32_t inodes_count;
 	uint32_t blocks_count;
 	uint32_t superuser_blocks;
@@ -31,7 +31,7 @@ struct ext2_superblock_t {
 	uint32_t version_major;
 	uint16_t superuser_id;
 	uint16_t supergroup_id;
-	// extended fields
+	/* extended fields */
 	uint32_t first_inode;
 	uint16_t inode_size;
 	uint16_t superblock_group;
@@ -49,7 +49,7 @@ struct ext2_superblock_t {
 	uint32_t journal_inode;
 	uint32_t journal_device;
 	uint32_t orphan_inode_head;
-	// unused
+	/* unused */
 };
 typedef struct ext2_superblock_t ext2_superblock_t;
 
@@ -88,7 +88,7 @@ struct ext2_inode_t {
 };
 typedef struct ext2_inode_t ext2_inode_t;
 
-// inode type
+/* inode type */
 #define TYPE_FIFO 0x1000
 #define TYPE_CHAR_DEV 0x2000
 #define TYPE_DIR 0x4000
@@ -97,7 +97,7 @@ typedef struct ext2_inode_t ext2_inode_t;
 #define TYPE_SYMLINK 0xA000
 #define TYPE_SOCKET 0xC000
 
-// inode permission
+/* inode permission */
 #define PERM_OE 0x001
 #define PERM_OR 0x002
 #define PERM_OW 0x004
@@ -134,7 +134,7 @@ typedef struct dentry_list_t dentry_list_t;
 
 extern ext2_superblock_t *ext2_superblock;
 
-// size of structs
+/* size of structs */
 #define BG_DESC_SIZE 32
 #define BLOCK_SIZE (uint32_t)(1024 << ext2_superblock->block_size)
 #define INODE_SIZE (ext2_superblock->inode_size)

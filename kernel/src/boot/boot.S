@@ -21,7 +21,7 @@ _start:
 	ljmp $0x08, $begin_long_mode
 
 setup_page_tables:
-// first 2mb
+/* first 2mb */
 	mov $pt_lvl3, %eax
 	or $0x3, %eax
 	mov %eax, pt_lvl4
@@ -42,7 +42,7 @@ setup_page_tables:
 	cmp $25, %ecx
 	jne 1b
 
-// first 2mb in hh
+/* first 2mb in hh */
 	mov $pt_lvl3_hh, %eax
 	or $0x3, %eax
 	mov %eax, pt_lvl4 + 4096 - 8
@@ -67,22 +67,22 @@ setup_page_tables:
 
 .global enable_paging
 enable_paging:
-	// enable PAE
+	/* enable PAE */
 	mov %cr4, %edx
 	or $1<<5 ,%edx
 	mov %edx, %cr4
 
-	// set LME (long mode enable)
+	/* set LME (long mode enable) */
 	mov $0xC0000080, %ecx
 	rdmsr
 	or $1<<8, %eax
 	wrmsr
 
-	// pt_lvl4
+	/* pt_lvl4 */
 	mov $pt_lvl4, %eax
 	mov %eax, %cr3
 
-	// enable paging (+ protected mode if not already enabled)
+	/* enable paging (+ protected mode if not already enabled) */
 	mov %cr0, %eax
 	or $1<<31 + 1<<0, %eax
 	mov %eax, %cr0

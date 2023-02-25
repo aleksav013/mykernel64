@@ -11,9 +11,9 @@ ap_trampoline:
 .align 16
 gdt32:
 	.long 0, 0
-	.long 0x0000FFFF, 0x00CF9A00 # flat code
-	.long 0x0000FFFF, 0x008F9200 # flat data
-	.long 0x00000068, 0x00CF8900 # tss
+	.long 0x0000FFFF, 0x00CF9A00 /* flat code */
+	.long 0x0000FFFF, 0x008F9200 /* flat data */
+	.long 0x00000068, 0x00CF8900 /* tss */
 gdt32p:
 	.word gdt32p - gdt32 - 1
 	.long 0x8010
@@ -34,14 +34,14 @@ _start32:
 	movw $16, %ax
 	movw %ax, %ds
 	movw %ax, %ss
-	# get our Local APIC ID
+	/* get our Local APIC ID */
 	mov $1, %eax
 	cpuid
 	shrl $24, %ebx
 	movl %ebx, %edi
 
 
-	# set up 32k stack, one for each core. It is important that all core must have its own stack
+	/* set up 32k stack, one for each core. It is important that all core must have its own stack */
 	movl $stack_top, %esp
 	movl %ebx, %ecx
 22:
@@ -53,7 +53,7 @@ _start32:
 	call enable_paging
 	lgdt gdtp
 
-	# jump into C code (should never return)
+	/* jump into C code (should never return) */
 	ljmp $8, $_start64
 
 .set KERNEL_VMA, 0xffffffff80000000

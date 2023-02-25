@@ -8,8 +8,6 @@
 #include <heap.h>
 #include <kernel_vma.h>
 
-/* https://www.gnu.org/software/grub/manual/multiboot2/html_node/Boot-information-format.html */
-
 mb2_tag_module *ext2_module;
 
 mmap_t mmap;
@@ -24,7 +22,7 @@ void init_fb(mb2_tag_fb *tag_fb)
 	main_fb.char_col = WHITE;
 	main_fb.bg_col = BLACK;
 
-	// identity map framebuffer address
+	/* identity map framebuffer address */
 	map_addr(main_fb.addr, main_fb.addr, FLAG_PRESENT | FLAG_WRITABLE);
 	map_addr(main_fb.addr + PAGE_SIZE, main_fb.addr + PAGE_SIZE,
 		 FLAG_PRESENT | FLAG_WRITABLE);
@@ -34,7 +32,7 @@ void init_mmap(mb2_tag_mmap *tag_mmap)
 {
 	INIT_LIST(mmap.list)
 
-	// get data and store it into list
+	/* get data and store it into list */
 	for (size_t i = sizeof(mb2_tag_mmap); i < tag_mmap->size;
 	     i += sizeof(mb2_tag_mmap_entry)) {
 		mmap_t *curr_mmap_entry = (mmap_t *)kalloc(sizeof(mmap_t));
@@ -46,7 +44,7 @@ void init_mmap(mb2_tag_mmap *tag_mmap)
 
 void init_module(mb2_tag_module *tag_module)
 {
-	// name is utf-8 encoded string!
+	/* name is utf-8 encoded string! */
 	uint32_t name_size =
 		tag_module->size - sizeof(tag_module) + sizeof(char *);
 	tag_module->name = (char *)kalloc(name_size);
@@ -58,21 +56,21 @@ void init_module(mb2_tag_module *tag_module)
 void read_mb2(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
 {
 	if (multiboot_magic != MB2_MAGIC) {
-		// not loaded by multiboot2 bootloader
+		/* not loaded by multiboot2 bootloader */
 		__asm__ __volatile__("hlt;");
 	}
 
-	// we will store framebuffer information here
+	/* we will store framebuffer information here */
 	static mb2_tag_fb *tag_fb;
 	static mb2_tag_mmap *tag_mmap;
 
-	// skip first 8 bytes (total_size + reserved)
+	/* skip first 8 bytes (total_size + reserved) */
 	mb2_tag_header *tag_header =
 		(mb2_tag_header *)((uint64_t)multiboot_bootinfo + 8 +
 				   KERNEL_VMA);
 
 	while (tag_header->type != MB2_TAG_END) {
-		// process tag_type
+		/* process tag_type */
 		switch (tag_header->type) {
 		case MB2_TAG_FB:
 			tag_fb = (mb2_tag_fb *)tag_header;
@@ -87,7 +85,7 @@ void read_mb2(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
 			break;
 		}
 
-		// next mb2_tag
+		/* next mb2_tag */
 		tag_header +=
 			tag_header->size / 8 + ((tag_header->size % 8) > 0);
 	}

@@ -32,23 +32,23 @@ void ioapic_set_irq(uint8_t irq, uint64_t apic_id, uint8_t vector)
 	const uint32_t high_index = (uint32_t)0x10 + irq * 2 + 1;
 
 	uint32_t high = ioapic_read((uint8_t)high_index);
-	// set APIC ID
+	/* set APIC ID */
 	high &= (uint32_t)~0xff000000;
 	high |= (uint32_t)apic_id << 24;
 	ioapic_write((uint8_t)high_index, high);
 
 	uint32_t low = ioapic_read((uint8_t)low_index);
 
-	// unmask the IRQ
+	/* unmask the IRQ */
 	low &= (uint32_t) ~(1 << 16);
 
-	// set to physical delivery mode
+	/* set to physical delivery mode */
 	low &= (uint32_t) ~(1 << 11);
 
-	// set to fixed delivery mode
+	/* set to fixed delivery mode */
 	low &= (uint32_t)~0x700;
 
-	// set delivery vector
+	/* set delivery vector */
 	low &= (uint32_t)~0xff;
 	low |= vector;
 
@@ -62,9 +62,9 @@ void apic_remap_interrupts()
 
 	uint8_t bspid = curr_cpu_apic_id();
 
-	// irq is 2 because of gsi remap
-	ioapic_set_irq(0x2, bspid, 0x20); // timer
-	ioapic_set_irq(0x1, bspid, 0x21); // keyboard
+	/* irq is 2 because of gsi remap */
+	ioapic_set_irq(0x2, bspid, 0x20); /* timer */
+	ioapic_set_irq(0x1, bspid, 0x21); /* keyboard */
 
 	write_msr(APIC_BASE_MSR, read_msr(APIC_BASE_MSR) | (1 << 11));
 	*((__volatile__ uint32_t *)(lapic_addr + 0xF0)) =

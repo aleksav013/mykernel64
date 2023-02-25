@@ -17,20 +17,20 @@ void kheap_add_block(kheap_t *kheap, uint64_t addr, uint32_t size,
 {
 	kheapblock_t *kheapblock;
 
-	// store size & bsize into kheapblock
+	/* store size & bsize into kheapblock */
 	kheapblock = (kheapblock_t *)addr;
 	kheapblock->size = size - (uint32_t)sizeof(kheapblock_t);
 	kheapblock->bsize = bsize;
 
-	// add kheapblock to kheap
+	/* add kheapblock to kheap */
 	kheapblock->next = kheap->fblock;
 	kheap->fblock = kheapblock;
 
-	// block count & bitmap
+	/* block count & bitmap */
 	uint32_t bcnt = kheapblock->size / kheapblock->bsize;
 	uint8_t *bm = (uint8_t *)&kheapblock[1];
 
-	// clear bitmap
+	/* clear bitmap */
 	for (size_t i = 0; i < bcnt; i++) {
 		bm[i] = 0;
 	}
@@ -48,7 +48,7 @@ void *kheap_alloc(kheap_t *kheap, uint32_t size)
 {
 	kheapblock_t *kheapblock;
 
-	// find kheapblock that has enough space
+	/* find kheapblock that has enough space */
 	for (kheapblock = kheap->fblock; kheapblock;
 	     kheapblock = kheapblock->next) {
 		if (kheapblock->size - (kheapblock->used * kheapblock->bsize) <
@@ -56,7 +56,7 @@ void *kheap_alloc(kheap_t *kheap, uint32_t size)
 			continue;
 		}
 
-		// use heap with bsize 4096 just for that block size
+		/* use heap with bsize 4096 just for that block size */
 		bool ind1 = ((size % 4096) == 0);
 		bool ind2 = (kheapblock->bsize == 4096);
 		if (ind1 + ind2 == 1) {
@@ -67,13 +67,13 @@ void *kheap_alloc(kheap_t *kheap, uint32_t size)
 		uint32_t bneed = upper_div(size, kheapblock->bsize);
 		uint8_t *bm = (uint8_t *)&kheapblock[1];
 
-		// find empty block
+		/* find empty block */
 		for (size_t i = 0; i < bcnt; i++) {
 			if (bm[i] != 0) {
 				continue;
 			}
 
-			// find bneed consecutive empty blocks
+			/* find bneed consecutive empty blocks */
 			size_t j;
 			for (j = 0; bm[i + j] == 0 && j < bneed && i + j < bcnt;
 			     j++)
@@ -83,12 +83,12 @@ void *kheap_alloc(kheap_t *kheap, uint32_t size)
 				continue;
 			}
 
-			// using id for the block that is different from previous or next block
+			/* using id for the block that is different from previous or next block */
 			uint8_t idp = bm[i - 1], idn = bm[i + j], id;
 			for (id = idp + 1; id == idn || id == 0; id++)
 				;
 
-			// mark blocks as used
+			/* mark blocks as used */
 			for (j = 0; j < bneed; j++) {
 				bm[i + j] = id;
 			}
@@ -112,9 +112,9 @@ void kheap_free(kheap_t *kheap, void *pointer)
 		    (uintptr_t)(pointer) < (uintptr_t)kheapblock +
 						   sizeof(kheapblock_t) +
 						   kheapblock->size) {
-			// found block
+			/* found block */
 
-			// get index of bitmap entry
+			/* get index of bitmap entry */
 			uintptr_t pointer_offset =
 				(uintptr_t)pointer - (uintptr_t)&kheapblock[0];
 			uint32_t bi =
@@ -123,7 +123,7 @@ void kheap_free(kheap_t *kheap, void *pointer)
 			uint8_t id = bm[bi];
 			uint32_t max = kheapblock->size / kheapblock->bsize;
 
-			// set blocks as free
+			/* set blocks as free */
 			size_t i;
 			for (i = bi; bm[i] == id && i < max; i++) {
 				bm[i] = 0;

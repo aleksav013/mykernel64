@@ -5,9 +5,9 @@
 
 void begin_userspace()
 {
-	// read
+	/* read */
 	__asm__ __volatile__("mov $0x0, %rax; syscall;");
-	// write
+	/* write */
 	__asm__ __volatile__("mov $0x1, %rax; syscall;");
 
 	while (true) {

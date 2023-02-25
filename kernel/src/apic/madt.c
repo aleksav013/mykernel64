@@ -29,7 +29,7 @@ void parse_madt()
 		kfree(m);
 
 		if (type == 0) {
-			// Processor Local APIC
+			/* Processor Local APIC */
 			struct MADT_cpu_local_apic *cpu =
 				(struct MADT_cpu_local_apic *)kalloc(
 					sizeof(struct MADT_cpu_local_apic));
@@ -43,10 +43,10 @@ void parse_madt()
 				numcores++;
 			}
 
-			// printf("found cpu: acpi_id: 0x%x, apic_id: 0x%x, flags: 0x%x\n", cpu->acpi_id, cpu->apic_id, cpu->flags);
+			/* printf("found cpu: acpi_id: 0x%x, apic_id: 0x%x, flags: 0x%x\n", cpu->acpi_id, cpu->apic_id, cpu->flags); */
 			kfree(cpu);
 		} else if (type == 1) {
-			// I/O APIC
+			/* I/O APIC */
 			struct MADT_io_apic *io = (struct MADT_io_apic *)kalloc(
 				sizeof(struct MADT_io_apic));
 			memcpy(io,
@@ -56,10 +56,10 @@ void parse_madt()
 
 			ioapic_addr = io->io_apic_addr;
 
-			// printf("found io: apic_id: 0x%x, addr: 0x%x, int_base: 0x%x\n", io->apic_id, io->io_apic_addr, io->int_base);
+			/* printf("found io: apic_id: 0x%x, addr: 0x%x, int_base: 0x%x\n", io->apic_id, io->io_apic_addr, io->int_base); */
 			kfree(io);
 		} else if (type == 2) {
-			// IO/APIC Interrupt Source Override
+			/* IO/APIC Interrupt Source Override */
 			struct MADT_io_apic_int *io_apic_int =
 				(struct MADT_io_apic_int *)kalloc(
 					sizeof(struct MADT_io_apic_int));
@@ -68,13 +68,13 @@ void parse_madt()
 					    (uint64_t)curr_size),
 			       sizeof(struct MADT_io_apic_int));
 
-			// printf("found io_apic_int: bus: 0x%x, irq_source: 0x%x, global_sys_int: 0x%x, flags: 0x%x\n", io_apic_int->bus_source, io_apic_int->irq_source, io_apic_int->global_sys_int, io_apic_int->flags);
+			/* printf("found io_apic_int: bus: 0x%x, irq_source: 0x%x, global_sys_int: 0x%x, flags: 0x%x\n", io_apic_int->bus_source, io_apic_int->irq_source, io_apic_int->global_sys_int, io_apic_int->flags); */
 			kfree(io_apic_int);
 		} else if (type == 3) {
-			// IO/APIC Non-maskable interrupt source
+			/* IO/APIC Non-maskable interrupt source */
 			printf("MADT entry of type %d\n", type);
 		} else if (type == 4) {
-			// Local APIC Non-maskable interrupts
+			/* Local APIC Non-maskable interrupts */
 			struct MADT_lapic_nmi *lapic_nmi =
 				(struct MADT_lapic_nmi *)kalloc(
 					sizeof(struct MADT_lapic_nmi));
@@ -83,10 +83,10 @@ void parse_madt()
 					    (uint64_t)curr_size),
 			       sizeof(struct MADT_lapic_nmi));
 
-			// printf("found lapic_nmi: acpi_cpu_id: 0x%x, flags: 0x%x, lint: 0x%x\n", lapic_nmi->acpi_cpu_id, lapic_nmi->flags, lapic_nmi->lint);
+			/* printf("found lapic_nmi: acpi_cpu_id: 0x%x, flags: 0x%x, lint: 0x%x\n", lapic_nmi->acpi_cpu_id, lapic_nmi->flags, lapic_nmi->lint); */
 			kfree(lapic_nmi);
 		} else if (type == 5) {
-			// Local APIC Address Override
+			/* Local APIC Address Override */
 			struct MADT_lapic_addr *lapic_addr_ovr =
 				(struct MADT_lapic_addr *)kalloc(
 					sizeof(struct MADT_lapic_addr));
@@ -95,13 +95,13 @@ void parse_madt()
 					    (uint64_t)curr_size),
 			       sizeof(struct MADT_lapic_addr));
 
-			// printf("found lapic: addr: 0x%x\n", lapic_addr_ovr->phys_addr);
+			/* printf("found lapic: addr: 0x%x\n", lapic_addr_ovr->phys_addr); */
 			kfree(lapic_addr_ovr);
 		} else if (type == 9) {
-			// Processor Local x2APIC
+			/* Processor Local x2APIC */
 			printf("MADT entry of type %d\n", type);
 		} else {
-			// ERROR
+			/* ERROR */
 			printf("ERROR: MADT entry of type %d\n", type);
 		}
 		curr_size += len;

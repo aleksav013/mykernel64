@@ -33,7 +33,7 @@ void add_to_idt(uint16_t num, uint64_t offset, uint16_t selector, uint8_t type)
 
 void init_idt_table(void)
 {
-	// exceptions
+	/* exceptions */
 	add_to_idt(0, (uint64_t)isr0, GDT_CODE_SEG, TRAP_GATE);
 	add_to_idt(1, (uint64_t)isr1, GDT_CODE_SEG, TRAP_GATE);
 	add_to_idt(2, (uint64_t)isr2, GDT_CODE_SEG, TRAP_GATE);
@@ -67,7 +67,7 @@ void init_idt_table(void)
 	add_to_idt(30, (uint64_t)isr30, GDT_CODE_SEG, TRAP_GATE);
 	add_to_idt(31, (uint64_t)isr31, GDT_CODE_SEG, TRAP_GATE);
 
-	// interrupts
+	/* interrupts */
 	add_to_idt(32, (uint64_t)irq0, GDT_CODE_SEG, INTERRUPT_GATE);
 	add_to_idt(33, (uint64_t)irq1, GDT_CODE_SEG, INTERRUPT_GATE);
 	for (size_t i = 34; i < 256; i++) {

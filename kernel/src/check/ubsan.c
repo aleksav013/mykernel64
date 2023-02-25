@@ -247,10 +247,11 @@ void __ubsan_handle_vla_bound_not_positive(void *data_raw, void *bound_raw)
 ABORT_VARIANT_VP_VP(vla_bound_not_positive);
 
 struct ubsan_float_cast_overflow_data {
-	// TODO: Remove this GCC 5.x compatibility after switching to GCC 6.x. The
-	//       GCC developers accidentally forgot the source location. Their
-	//       libubsan probes to see if it looks like a path, but we don't need
-	//       to maintain compatibility with multiple gcc releases. See below.
+	/* TODO: Remove this GCC 5.x compatibility after switching to GCC 6.x. The
+	 *     GCC developers accidentally forgot the source location. Their
+	 *     libubsan probes to see if it looks like a path, but we don't need
+	 *     to maintain compatibility with multiple gcc releases. See below.
+	 */
 #if !(defined(__GNUC__) && __GNUC__ < 6)
 	struct ubsan_source_location location;
 #endif
@@ -324,8 +325,9 @@ struct ubsan_nonnull_arg_data {
 	struct ubsan_source_location attr_location;
 };
 
-// TODO: GCC's libubsan does not have the second parameter, but its builtin
-//       somehow has it and conflict if we don't match it.
+/* TODO: GCC's libubsan does not have the second parameter, but its builtin
+ *       somehow has it and conflict if we don't match it.
+ */
 void __ubsan_handle_nonnull_arg(void *data_raw, intptr_t index_raw)
 {
 	struct ubsan_nonnull_arg_data *data =

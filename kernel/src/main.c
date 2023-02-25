@@ -28,7 +28,7 @@ int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
 {
 	init_serial();
-	// serial is enabled from this point
+	/* serial is enabled from this point */
 	init_gdt();
 	init_paging();
 	init_heap();
@@ -36,7 +36,7 @@ int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
 	clear_screen(main_fb);
 	init_mutex(&stdio_lock);
 	init_mutex(&serial_stdio_lock);
-	// framebuffer is enabled from this point
+	/* framebuffer is enabled from this point */
 	init_pmm();
 	memory_usage();
 	init_keyboard();

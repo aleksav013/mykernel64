@@ -55,10 +55,10 @@ typedef struct mmap_t mmap_t;
 
 extern mmap_t mmap;
 
-// multiboot2 magic check
+/* multiboot2 magic check */
 #define MB2_MAGIC 0x36D76289
 
-// multiboot2 tag
+/* multiboot2 tag */
 #define MB2_TAG_END 0
 #define MB2_TAG_CMDLINE 1
 #define MB2_TAG_BOOTLOADER 2

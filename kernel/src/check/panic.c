@@ -9,7 +9,7 @@ __attribute__((noreturn)) void panic(const char *s, ...)
 {
 	set_color(&main_fb, RED, BLACK);
 	printf("KERNEL PANIC\n");
-	//	set_color(&main_fb, WHITE, BLACK);
+	/*	set_color(&main_fb, WHITE, BLACK); */
 	va_list list;
 	va_start(list, s);
 	vprintf(s, list);

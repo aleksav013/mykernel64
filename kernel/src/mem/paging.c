@@ -16,11 +16,11 @@ void map_addr(uint64_t virt, uint64_t phys, uint32_t flags)
 	virt -= virt % PAGE_SIZE;
 	phys -= phys % PAGE_SIZE;
 
-	// i is in range [0, 511]
-	size_t pt_lvl4_i = (virt >> 39) % 0x200; // 512gb entry
-	size_t pt_lvl3_i = (virt >> 30) % 0x200; // 1gb entry
-	size_t pt_lvl2_i = (virt >> 21) % 0x200; // 2mb entry
-	//	size_t pt_lvl1_i = (virt >> 12) % 0x200; // 4kb entry
+	/* i is in range [0, 511] */
+	size_t pt_lvl4_i = (virt >> 39) % 0x200; /* 512gb entry */
+	size_t pt_lvl3_i = (virt >> 30) % 0x200; /* 1gb entry */
+	size_t pt_lvl2_i = (virt >> 21) % 0x200; /* 2mb entry */
+	/*	size_t pt_lvl1_i = (virt >> 12) % 0x200; 4kb entry */
 
 	uint64_t *pt_lvl3 =
 		(uint64_t *)(page_table_lvl4[pt_lvl4_i] + KERNEL_VMA);
@@ -53,7 +53,7 @@ void init_paging(void)
 			       (FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER);
 	page_table_lvl3[510] = (uint64_t)page_table_lvl2 - KERNEL_VMA +
 			       (FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER);
-	// 16mb kernel + 32mb heap + 2mb (32kb stack * 64 threads) = first 50mb
+	/* 16mb kernel + 32mb heap + 2mb (32kb stack * 64 threads) = first 50mb */
 	for (size_t i = 0; i < 25; i++) {
 		page_table_lvl2[i] =
 			(uint64_t)0x0 + PAGE_SIZE * i +

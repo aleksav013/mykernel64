@@ -36,8 +36,6 @@ void clear_screen(fb_t fb)
 	fb.y = 0;
 }
 
-/* https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm */
-
 void fb_draw_line_low(fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1,
 		      uint32_t col)
 {

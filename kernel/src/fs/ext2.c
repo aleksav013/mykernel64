@@ -71,45 +71,45 @@ dentry_list_t *directory_to_entries(uint32_t inode)
 	uint32_t bg_desc = (inode - 1) / ext2_superblock->inodes_per_group;
 	uint32_t inode_index = (inode - 1) % ext2_superblock->inodes_per_group;
 
-	// block group descriptor
+	/* block group descriptor */
 	ext2_bg_desc_t *ext2_bg_desc;
 	ext2_bg_desc = (ext2_bg_desc_t *)kalloc(sizeof(ext2_bg_desc_t));
 	read_bg_desc(bg_desc, ext2_bg_desc);
 
-	// inode table
+	/* inode table */
 	ext2_inode_t *ext2_inode;
 	ext2_inode = (ext2_inode_t *)kalloc(sizeof(ext2_inode_t));
 	read_inode(ext2_bg_desc->inode_block_address, inode_index, ext2_inode);
 
-	// if it is not directory
+	/* if it is not directory */
 	if (!(ext2_inode->type_perms & TYPE_DIR))
 		return dentry_list;
 
-	// read inode contents
+	/* read inode contents */
 	for (size_t i = 0; i < 12; i++) {
 		if (ext2_inode->dbp[i] == 0)
 			break;
 
-		// get block
+		/* get block */
 		char block[BLOCK_SIZE];
 		read_block(ext2_inode->dbp[i], block);
 
-		// parse block
+		/* parse block */
 		for (size_t block_offset = 0; block_offset < BLOCK_SIZE;) {
-			// get dentry header
+			/* get dentry header */
 			dentry_list_t *ext2_dentry_list =
 				(dentry_list_t *)kalloc(sizeof(dentry_list_t));
 			memcpy(&ext2_dentry_list->ext2_dentry,
 			       (char *)block + block_offset,
 			       sizeof(ext2_dentry_t) - sizeof(char *));
 
-			// dentry is unused
+			/* dentry is unused */
 			if (ext2_dentry_list->ext2_dentry.inode == 0) {
 				kfree(ext2_dentry_list);
 				continue;
 			}
 
-			// get dentry name
+			/* get dentry name */
 			ext2_dentry_list->ext2_dentry.name = (char *)kalloc(
 				ext2_dentry_list->ext2_dentry.name_length_lower +
 				1);
@@ -121,11 +121,11 @@ dentry_list_t *directory_to_entries(uint32_t inode)
 				.name[ext2_dentry_list->ext2_dentry
 					      .name_length_lower] = '\0';
 
-			// put dentry in list
+			/* put dentry in list */
 			add_to_list(&ext2_dentry_list->list, &dentry_list->list,
 				    dentry_list->list.next);
 
-			// offset
+			/* offset */
 			block_offset += ext2_dentry_list->ext2_dentry.size;
 		}
 	}
@@ -145,12 +145,12 @@ char *files_to_buffer(uint32_t inode)
 	uint32_t bg_desc = (inode - 1) / ext2_superblock->inodes_per_group;
 	uint32_t inode_index = (inode - 1) % ext2_superblock->inodes_per_group;
 
-	// block group descriptor
+	/* block group descriptor */
 	ext2_bg_desc_t *ext2_bg_desc;
 	ext2_bg_desc = (ext2_bg_desc_t *)kalloc(sizeof(ext2_bg_desc_t));
 	read_bg_desc(bg_desc, ext2_bg_desc);
 
-	// inode table
+	/* inode table */
 	ext2_inode_t *ext2_inode;
 	ext2_inode = (ext2_inode_t *)kalloc(sizeof(ext2_inode_t));
 	read_inode(ext2_bg_desc->inode_block_address, inode_index, ext2_inode);
@@ -192,7 +192,7 @@ path_t *path_to_list(const char *path)
 	size_t n = strlen(path);
 	for (i = 0, j = 0; i <= n; i++) {
 		if (i == n || path[i] == '/') {
-			// add data before slash
+			/* add data before slash */
 			if (i != j) {
 				path_t *curr_path =
 					(path_t *)kalloc(sizeof(path_t));
@@ -204,7 +204,7 @@ path_t *path_to_list(const char *path)
 					    &divided_path->list,
 					    divided_path->list.next);
 			}
-			// add slash
+			/* add slash */
 			if (i != n) {
 				path_t *curr_path =
 					(path_t *)kalloc(sizeof(path_t));
@@ -228,22 +228,22 @@ uint32_t path_to_inode(const char *path)
 	uint32_t inode = 0;
 	path_t *divided_path = path_to_list(path);
 
-	// first entry is /
+	/* first entry is / */
 	path_t *curr_path = list_prev_entry(divided_path, list);
 	curr_path = list_prev_entry(curr_path, list);
 	inode = 2;
 
 	while (curr_path != divided_path) {
-		// list of dentry
+		/* list of dentry */
 		dentry_list_t *dentry_list = directory_to_entries(inode);
 
-		// check if inode is actually a dir
+		/* check if inode is actually a dir */
 		if (list_is_empty((&dentry_list->list))) {
 			printf("not a directory\n");
 			return 0;
 		}
 
-		// iterate through all direntries
+		/* iterate through all direntries */
 		uint8_t ind = 1;
 		dentry_list_t *curr_dir;
 		list_for_each_entry_prev(curr_dir, (&dentry_list->list), list) {
@@ -255,13 +255,13 @@ uint32_t path_to_inode(const char *path)
 			}
 		}
 
-		// if dir not found error
+		/* if dir not found error */
 		if (ind) {
 			printf("file/dir not found\n");
 			return 0;
 		}
 
-		// next dir
+		/* next dir */
 		curr_path = list_prev_entry(curr_path, list);
 		if (curr_path != divided_path)
 			curr_path = list_prev_entry(curr_path, list);
