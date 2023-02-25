@@ -10,8 +10,8 @@ ext2_superblock_t *ext2_superblock;
 void read_block(uint32_t block_num, void *block_ptr)
 {
 	uint32_t sectors_per_block = BLOCK_SIZE / SECTOR_SIZE;
-
-	for (size_t i = 0; i < sectors_per_block; i++) {
+	size_t i;
+	for (i = 0; i < sectors_per_block; i++) {
 		read_sector(block_num * sectors_per_block + i,
 			    (disc_sector_t *)block_ptr + i);
 	}
@@ -86,7 +86,9 @@ dentry_list_t *directory_to_entries(uint32_t inode)
 		return dentry_list;
 
 	/* read inode contents */
-	for (size_t i = 0; i < 12; i++) {
+	size_t i;
+	size_t block_offset;
+	for (i = 0; i < 12; i++) {
 		if (ext2_inode->dbp[i] == 0)
 			break;
 
@@ -95,7 +97,7 @@ dentry_list_t *directory_to_entries(uint32_t inode)
 		read_block(ext2_inode->dbp[i], block);
 
 		/* parse block */
-		for (size_t block_offset = 0; block_offset < BLOCK_SIZE;) {
+		for (block_offset = 0; block_offset < BLOCK_SIZE;) {
 			/* get dentry header */
 			dentry_list_t *ext2_dentry_list =
 				(dentry_list_t *)kalloc(sizeof(dentry_list_t));
@@ -168,7 +170,8 @@ char *files_to_buffer(uint32_t inode)
 	data = (char *)kalloc(size + 1);
 
 	uint32_t block_num = upper_div(size, BLOCK_SIZE);
-	for (size_t i = 0; i < min(block_num, 12); i++) {
+	size_t i;
+	for (i = 0; i < min(block_num, 12); i++) {
 		char block[BLOCK_SIZE];
 		read_block(ext2_inode->dbp[i], block);
 		memcpy(data + i * BLOCK_SIZE, block,
@@ -185,7 +188,8 @@ char *files_to_buffer(uint32_t inode)
 
 path_t *path_to_list(const char *path)
 {
-	size_t i, j;
+	size_t i;
+	size_t j;
 	path_t *divided_path = (path_t *)kalloc(sizeof(path_t));
 	INIT_LIST(divided_path->list)
 

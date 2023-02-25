@@ -36,7 +36,8 @@ void print_char(char c)
 
 void print_string(const char *s)
 {
-	for (size_t i = 0; i < strlen(s); i++) {
+	size_t i;
+	for (i = 0; i < strlen(s); i++) {
 		print_char(s[i]);
 	}
 }
@@ -69,11 +70,12 @@ void vprintf(const char *s, va_list list)
 {
 	lock(stdio_lock);
 	size_t count = 0;
-	for (size_t i = 0; i < strlen(s); i++)
+	size_t i;
+	for (i = 0; i < strlen(s); i++)
 		if (s[i] == '%')
 			count++;
 
-	for (size_t i = 0; i < strlen(s); i++) {
+	for (i = 0; i < strlen(s); i++) {
 		if (s[i] == '%') {
 			i++;
 			if (s[i] == 'c')

@@ -26,8 +26,8 @@ void init_pmm()
 					 (uint64_t) ~(PAGE_SIZE - 1)) +
 						PAGE_SIZE :
 					entry.base_addr;
-		for (uint64_t i = base;
-		     i + PAGE_SIZE <= entry.base_addr + entry.length;
+		uint64_t i;
+		for (i = base; i + PAGE_SIZE <= entry.base_addr + entry.length;
 		     i += PAGE_SIZE) {
 			if (i >= MEM_USED_BELOW) {
 				free_mem_cnt++;

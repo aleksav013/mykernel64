@@ -14,7 +14,8 @@ void serial_print_char(char c)
 
 void serial_print_string(const char *s)
 {
-	for (size_t i = 0; i < strlen(s); i++) {
+	size_t i;
+	for (i = 0; i < strlen(s); i++) {
 		serial_print_char(s[i]);
 	}
 }
@@ -47,11 +48,12 @@ void serial_vprintf(const char *s, va_list list)
 {
 	lock(serial_stdio_lock);
 	size_t count = 0;
-	for (size_t i = 0; i < strlen(s); i++)
+	size_t i;
+	for (i = 0; i < strlen(s); i++)
 		if (s[i] == '%')
 			count++;
 
-	for (size_t i = 0; i < strlen(s); i++) {
+	for (i = 0; i < strlen(s); i++) {
 		if (s[i] == '%') {
 			i++;
 			if (s[i] == 'c')

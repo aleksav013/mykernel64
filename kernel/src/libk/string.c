@@ -17,7 +17,8 @@ uint64_t stoi(const char *s)
 	uint64_t num = 0;
 	size_t n = strlen(s);
 
-	for (size_t i = 0; i < n; i++) {
+	size_t i;
+	for (i = 0; i < n; i++) {
 		num *= 10;
 		num += (uint64_t)(s[i] - '0');
 	}
@@ -29,10 +30,11 @@ void strrev(char *s)
 {
 	size_t n = strlen(s);
 	char a[100];
-	for (size_t i = 0; i < n; i++) {
+	size_t i;
+	for (i = 0; i < n; i++) {
 		a[i] = s[n - 1 - i];
 	}
-	for (size_t i = 0; i < n; i++) {
+	for (i = 0; i < n; i++) {
 		s[i] = a[i];
 	}
 }
@@ -80,7 +82,8 @@ void memcpy(const void *destptr, const void *srcptr, size_t n)
 	uint8_t *dest = (uint8_t *)destptr;
 	const uint8_t *src = (const uint8_t *)srcptr;
 
-	for (size_t i = 0; i < n; i++) {
+	size_t i;
+	for (i = 0; i < n; i++) {
 		dest[i] = src[i];
 	}
 }
@@ -88,8 +91,8 @@ void memcpy(const void *destptr, const void *srcptr, size_t n)
 void memset(const void *destptr, uint8_t value, size_t n)
 {
 	uint8_t *dest = (uint8_t *)destptr;
-
-	for (size_t i = 0; i < n; i++) {
+	size_t i;
+	for (i = 0; i < n; i++) {
 		dest[i] = value;
 	}
 }
@@ -101,8 +104,8 @@ int32_t memcmp(const void *aptr, const void *bptr)
 
 	const size_t len_a = strlen((char *)a);
 	const size_t len_b = strlen((char *)b);
-
-	for (size_t i = 0; i < len_a && i < len_b; i++) {
+	size_t i;
+	for (i = 0; i < len_a && i < len_b; i++) {
 		if (a[i] != b[i])
 			return a[i] - b[i];
 	}

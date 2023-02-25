@@ -70,7 +70,8 @@ void init_idt_table(void)
 	/* interrupts */
 	add_to_idt(32, (uint64_t)irq0, GDT_CODE_SEG, INTERRUPT_GATE);
 	add_to_idt(33, (uint64_t)irq1, GDT_CODE_SEG, INTERRUPT_GATE);
-	for (size_t i = 34; i < 256; i++) {
+	size_t i;
+	for (i = 34; i < 256; i++) {
 		add_to_idt((uint16_t)i, (uint64_t)irq2, GDT_CODE_SEG,
 			   INTERRUPT_GATE);
 	}

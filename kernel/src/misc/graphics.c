@@ -27,8 +27,10 @@ void set_color(fb_t *fb, uint32_t char_col, uint32_t bg_col)
 
 void clear_screen(fb_t fb)
 {
-	for (size_t i = 0; i < fb.height; i++) {
-		for (size_t j = 0; j < fb.width; j++) {
+	size_t i;
+	size_t j;
+	for (i = 0; i < fb.height; i++) {
+		for (j = 0; j < fb.width; j++) {
 			fb_draw_pixel(fb, (int32_t)i, (int32_t)j, BLACK);
 		}
 	}
@@ -48,8 +50,9 @@ void fb_draw_line_low(fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1,
 	}
 	int32_t D = (2 * dy) - dx;
 	int32_t y = y0;
+	int32_t x;
 
-	for (int32_t x = x0; x <= x1; x++) {
+	for (x = x0; x <= x1; x++) {
 		fb_draw_pixel(fb, x, y, col);
 		if (D > 0) {
 			y = y + yi;
@@ -73,7 +76,8 @@ void fb_draw_line_high(fb_t fb, int32_t x0, int32_t y0, int32_t x1, int32_t y1,
 	int32_t D = (2 * dx) - dy;
 	int32_t x = x0;
 
-	for (int32_t y = y0; y <= y1; y++) {
+	int32_t y;
+	for (y = y0; y <= y1; y++) {
 		fb_draw_pixel(fb, x, y, col);
 		if (D > 0) {
 			x = x + xi;
@@ -106,8 +110,10 @@ void fb_draw_character(fb_t fb, char c, int32_t x, int32_t y)
 		return;
 
 	int32_t offset = 32 + c * 16;
-	for (int32_t i = 0; i < 16; i++) {
-		for (int32_t j = 0; j < 8; j++) {
+	int32_t i;
+	int32_t j;
+	for (i = 0; i < 16; i++) {
+		for (j = 0; j < 8; j++) {
 			if (font[offset + i] & (1 << (7 - j))) {
 				fb_draw_pixel(fb, x + j, y + i, fb.char_col);
 			} else {

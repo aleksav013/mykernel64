@@ -31,13 +31,14 @@ void kheap_add_block(kheap_t *kheap, uint64_t addr, uint32_t size,
 	uint8_t *bm = (uint8_t *)&kheapblock[1];
 
 	/* clear bitmap */
-	for (size_t i = 0; i < bcnt; i++) {
+	size_t i;
+	for (i = 0; i < bcnt; i++) {
 		bm[i] = 0;
 	}
 
 	uint32_t bcnt_used =
 		upper_div((bcnt + (uint32_t)sizeof(kheapblock_t)), bsize);
-	for (size_t i = 0; i < bcnt_used; i++) {
+	for (i = 0; i < bcnt_used; i++) {
 		bm[i] = 5;
 	}
 
@@ -68,13 +69,14 @@ void *kheap_alloc(kheap_t *kheap, uint32_t size)
 		uint8_t *bm = (uint8_t *)&kheapblock[1];
 
 		/* find empty block */
-		for (size_t i = 0; i < bcnt; i++) {
+		size_t i;
+		size_t j;
+		for (i = 0; i < bcnt; i++) {
 			if (bm[i] != 0) {
 				continue;
 			}
 
 			/* find bneed consecutive empty blocks */
-			size_t j;
 			for (j = 0; bm[i + j] == 0 && j < bneed && i + j < bcnt;
 			     j++)
 				;

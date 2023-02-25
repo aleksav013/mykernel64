@@ -29,7 +29,9 @@ void init_ap_cpus()
 	init_mutex(&cnt_lock);
 	map_addr(lapic_addr, lapic_addr, FLAG_PRESENT);
 
-	for (size_t i = 0; i < numcores; i++) {
+	size_t i;
+	size_t j;
+	for (i = 0; i < numcores; i++) {
 		/* do not start BSP, that's already running this code */
 		if (cpu_apic_ids[i] == bspid)
 			continue;
@@ -75,7 +77,7 @@ void init_ap_cpus()
 
 		/* send STARTUP IPI (twice) */
 
-		for (size_t j = 0; j < 2; j++) {
+		for (j = 0; j < 2; j++) {
 			/* clear APIC errors */
 			*((__volatile__ uint32_t *)(lapic_addr + 0x280)) = 0;
 			/* select AP */

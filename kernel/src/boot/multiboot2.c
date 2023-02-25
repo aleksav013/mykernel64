@@ -33,7 +33,8 @@ void init_mmap(mb2_tag_mmap *tag_mmap)
 	INIT_LIST(mmap.list)
 
 	/* get data and store it into list */
-	for (size_t i = sizeof(mb2_tag_mmap); i < tag_mmap->size;
+	size_t i;
+	for (i = sizeof(mb2_tag_mmap); i < tag_mmap->size;
 	     i += sizeof(mb2_tag_mmap_entry)) {
 		mmap_t *curr_mmap_entry = (mmap_t *)kalloc(sizeof(mmap_t));
 		memcpy(&curr_mmap_entry->mmap_entry, (char *)tag_mmap + i,

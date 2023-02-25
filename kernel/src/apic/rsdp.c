@@ -8,10 +8,13 @@ uint64_t *find_rsdp()
 {
 	map_addr(0x0, 0x0, FLAG_PRESENT);
 	const char *rsdp_cs = "RSD PTR ";
-	for (uint64_t i = 0x10; i < 0x100000; i += 0x10) {
+	uint64_t i;
+	size_t j;
+
+	for (i = 0x10; i < 0x100000; i += 0x10) {
 		char *x = (char *)i;
 		uint8_t ind = 1;
-		for (size_t j = 0; j < strlen(rsdp_cs); j++) {
+		for (j = 0; j < strlen(rsdp_cs); j++) {
 			if (rsdp_cs[j] != x[j]) {
 				ind = 0;
 				break;
@@ -43,8 +46,9 @@ void list_sys_tables(void)
 
 	uint32_t entries =
 		(rsdt->Length - (uint32_t)sizeof(struct ACPI_header)) / 4;
-
-	for (size_t i = 0; i < entries; i++) {
+	size_t i;
+	size_t j;
+	for (i = 0; i < entries; i++) {
 		uint32_t na_addr = (uint32_t)rsdp_desc->RsdtAddress +
 				   (uint32_t)sizeof(struct ACPI_header) +
 				   (uint32_t)i * 4;
@@ -56,7 +60,7 @@ void list_sys_tables(void)
 		memcpy(t, (uint64_t *)(uint64_t)addr,
 		       sizeof(struct ACPI_header));
 
-		for (size_t j = 0; j < 4; j++) {
+		for (j = 0; j < 4; j++) {
 			printf("%c", t->Signature[j]);
 		}
 		printf(", ");
@@ -88,7 +92,9 @@ uint64_t *find_sys_table_addr(const char *signature)
 	uint32_t entries =
 		(rsdt->Length - (uint32_t)sizeof(struct ACPI_header)) / 4;
 
-	for (size_t i = 0; i < entries; i++) {
+	size_t i;
+	size_t j;
+	for (i = 0; i < entries; i++) {
 		uint32_t na_addr = (uint32_t)rsdp_desc->RsdtAddress +
 				   (uint32_t)sizeof(struct ACPI_header) +
 				   (uint32_t)i * 4;
@@ -101,7 +107,7 @@ uint64_t *find_sys_table_addr(const char *signature)
 		       sizeof(struct ACPI_header));
 
 		int ind = 1;
-		for (size_t j = 0; j < 4; j++) {
+		for (j = 0; j < 4; j++) {
 			if (t->Signature[j] != signature[j])
 				ind = 0;
 		}
