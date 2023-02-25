@@ -14,8 +14,8 @@ uint64_t __attribute__((aligned(4096))) page_table_lvl2[512];
 
 void map_addr(uint64_t virt, uint64_t phys, uint32_t flags)
 {
-	virt -= virt % 0x00200000;
-	phys -= phys % 0x00200000;
+	virt -= virt % PAGE_SIZE;
+	phys -= phys % PAGE_SIZE;
 
 	// i is in range [0, 511]
 	size_t pt_lvl4_i = (virt >> 39) % 0x200; // 512gb entry

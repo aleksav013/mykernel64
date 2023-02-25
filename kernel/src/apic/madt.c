@@ -3,7 +3,6 @@
 #include <heap.h>
 #include <libk/string.h>
 #include <libk/stdio.h>
-#include <apic.h>
 
 void parse_madt()
 {

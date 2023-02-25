@@ -16,11 +16,6 @@ uint8_t cpu_apic_ids[256];
 
 uint8_t curr_cpu_apic_id()
 {
-// Initial APIC ID
-//	CPUIDinfo info;
-//	CpuId(1, 0, &info);
-//	return (uint8_t)(info.EBX >> 24);
-
 	return (uint8_t)(((*((__volatile__ uint32_t*)((uint64_t)lapic_addr + 0x20))) >> 24) & 0xFF);
 }
 

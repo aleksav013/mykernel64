@@ -7,8 +7,7 @@
 #include <multiboot2.h>
 #include <pmm.h>
 
-#define PMM_PAGE_SIZE 4096 * 512
-#define MEM_USED_BELOW 0x03000000
+#define MEM_USED_BELOW 50*1024*1024
 
 uint64_t free_mem_cnt;
 uint64_t all_mem_cnt;
@@ -23,8 +22,8 @@ void init_pmm()
 		mb2_tag_mmap_entry entry = pos->mmap_entry;
 		if (entry.type != 1)
 			continue;
-		uint64_t base = entry.base_addr & (PMM_PAGE_SIZE - 1) ? (entry.base_addr & (uint64_t)~(PMM_PAGE_SIZE - 1)) + PMM_PAGE_SIZE : entry.base_addr;
-		for (uint64_t i = base; i + PMM_PAGE_SIZE <= entry.base_addr + entry.length; i += PMM_PAGE_SIZE) {
+		uint64_t base = entry.base_addr & (PAGE_SIZE - 1) ? (entry.base_addr & (uint64_t)~(PAGE_SIZE - 1)) + PAGE_SIZE : entry.base_addr;
+		for (uint64_t i = base; i + PAGE_SIZE <= entry.base_addr + entry.length; i += PAGE_SIZE) {
 			if (i >= MEM_USED_BELOW) {
 				free_mem_cnt++;
 				map_addr(i, i, FLAG_PRESENT);
@@ -44,6 +43,6 @@ void init_pmm()
 
 void memory_usage()
 {
-	printf("memory used: %dMB\n", (48 * 1024 * 1024 + (all_mem_cnt - free_mem_cnt) * PAGE_SIZE) / 1024 / 1024);
+	printf("memory used: %dMB\n", (MEM_USED_BELOW + (all_mem_cnt - free_mem_cnt) * PAGE_SIZE) / 1024 / 1024);
 	printf("memory free: %dMB\n", free_mem_cnt * PAGE_SIZE / 1024 / 1024);
 }

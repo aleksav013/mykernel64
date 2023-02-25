@@ -55,8 +55,6 @@ void ioapic_set_irq(uint8_t irq, uint64_t apic_id, uint8_t vector)
 	ioapic_write((uint8_t)low_index, low);
 }
 
-#define APIC_BASE_MSR 0x0000001B
-
 void apic_remap_interrupts()
 {
 	map_addr(ioapic_addr, ioapic_addr, FLAG_PRESENT);

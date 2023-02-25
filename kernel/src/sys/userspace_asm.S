@@ -3,6 +3,10 @@
 .extern begin_userspace
 .extern syscall_handler
 
+.set IA32_EFER, 0xc0000080
+.set STAR_MSR, 0xc0000081
+.set LSTAR_MSR, 0xc0000082
+
 .global jump_userspace
 jump_userspace:
 	mov $0x1b, %ax
@@ -11,17 +15,17 @@ jump_userspace:
 	mov %ax, %fs
 	mov %ax, %gs
 
-	mov $0xc0000082, %rcx
+	mov $LSTAR_MSR, %rcx
 	movabs $__syscall, %rax
 	shr $32, %rax
 	mov %eax, %edx
 	movabs $__syscall, %rax
 	wrmsr
-	mov $0xc0000080, %rcx
+	mov $IA32_EFER, %rcx
 	rdmsr
 	or $1, %eax
 	wrmsr
-	mov $0xc0000081, %rcx
+	mov $STAR_MSR, %rcx
 	rdmsr
 	mov $0x00130008, %edx
 	wrmsr
