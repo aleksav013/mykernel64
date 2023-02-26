@@ -2,7 +2,7 @@
 
 /* %rdi - irq's rsp */
 /* %rsi - task's rsp */
-.global save_to_rsp
+.global save_context_to_rsp
 save_context_to_rsp:
 	mov %rsi, %rsp
 	push SS_OFF(%rdi)
@@ -29,7 +29,7 @@ save_context_to_rsp:
 	push R15_OFF(%rdi)
 
 /* %rdi - task's rsp */
-.global restore_from_rsp
+.global restore_context_from_rsp
 restore_context_from_rsp:
 	mov %rdi, %rsp
 	pop_callee_saved

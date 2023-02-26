@@ -41,6 +41,7 @@ OBJS = \
 	src/scheduler/ap_init.o \
 	src/scheduler/ap_startup.o \
 	src/scheduler/atomic.o \
+	src/scheduler/process.o \
 	src/scheduler/scheduler.o \
 	src/scheduler/switch.o \
 	src/sys/syscall_asm.o \

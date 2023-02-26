@@ -4,8 +4,10 @@
 #include <libk/list.h>
 #include <io.h>
 #include <idt.h>
+#include <process.h>
 
-uint32_t tick = 0;
+uint32_t scheduler_ticks = 0;
+uint32_t seconds_tick = 0;
 uint32_t seconds = 0;
 
 struct wait_queue {
@@ -23,11 +25,15 @@ void timer_handler(uint64_t rsp)
 		pos->ticks--;
 	}
 
-	tick++;
-
-	if (tick >= TICKS_PER_SECOND) {
-		tick = 0;
+	seconds_tick++;
+	if (seconds_tick >= TICKS_PER_SECOND) {
+		seconds_tick = 0;
 		seconds++;
+	}
+	scheduler_ticks++;
+	if (scheduler_ticks >= TICKS_PER_SECOND / CONTEXT_SWITCHES_PER_SECOND) {
+		scheduler_ticks = 0;
+/*		context_switch(rsp); */
 	}
 }
 
