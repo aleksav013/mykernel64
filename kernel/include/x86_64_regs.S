@@ -8,6 +8,22 @@
  * else use push/pop_callee_saved with push/pop_caller_saved
  */
 
+.set R15_OFF, 0x0
+.set R14_OFF, 0x08
+.set R13_OFF, 0x10
+.set R12_OFF, 0x18
+.set RBP_OFF, 0x20
+.set RBX_OFF, 0x28
+.set SEG_OFF, 0x30
+.set R11_OFF, 0x38
+.set R10_OFF, 0x40
+.set R9_OFF, 0x48
+.set R8_OFF, 0x50
+.set RDI_OFF, 0x58
+.set RSI_OFF, 0x60
+.set RDX_OFF, 0x68
+.set RCX_OFF, 0x70
+.set RAX_OFF, 0x78
 .set ERROR_OFF, 0x80
 .set RIP_OFF, 0x88
 .set CS_OFF, 0x90
