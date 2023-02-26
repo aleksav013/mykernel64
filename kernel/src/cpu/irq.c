@@ -47,10 +47,9 @@ const char *const exception_name[] = {
 	"Reserved",
 };
 
-void isr_def_handler(uint64_t number, uint64_t error)
-{
+void exception(uint64_t number, uint64_t error) {
 	switch (number) {
-	case 14:
+	case 0xe:
 		printf("%s, error: 0x%x\n", exception_name[14], error);
 		page_fault(error);
 		break;
@@ -62,9 +61,9 @@ void isr_def_handler(uint64_t number, uint64_t error)
 void eoi(uint64_t number)
 {
 	if (PIT) {
-		if (number < 8) {
+		if (number < 0x28) {
 			outb(PIC1_COMMAND, PIC_EOI);
-		} else if (number < 16) {
+		} else if (number < 0x30) {
 			outb(PIC1_COMMAND, PIC_EOI);
 			outb(PIC2_COMMAND, PIC_EOI);
 		}
@@ -73,18 +72,28 @@ void eoi(uint64_t number)
 	}
 }
 
-void irq_def_handler(uint64_t number)
+void interrupt(uint64_t number)
 {
 	switch (number) {
-	case 0:
+	case 0x20:
 		timer_handler();
+		eoi(number);
 		break;
-	case 1:
+	case 0x21:
 		keyboard_handler();
+		eoi(number);
 		break;
 	default:
 		printf("spurious interrupt\n");
 		break;
 	}
-	eoi(number);
+}
+
+void isr_def_handler(uint64_t number, uint64_t error)
+{
+	if (number < 0x20) {
+		exception(number, error);
+	} else {
+		interrupt(number);
+	}
 }

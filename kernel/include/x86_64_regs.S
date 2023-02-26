@@ -8,6 +8,13 @@
  * else use push/pop_callee_saved with push/pop_caller_saved
  */
 
+.set ERROR_OFF, 0x80
+.set RIP_OFF, 0x88
+.set CS_OFF, 0x90
+.set RFLAGS_OFF, 0x98
+.set RSP_OFF, 0x100
+.set SS_OFF, 0x108
+
 /* push 0x30 bytes to stack */
 .macro push_callee_saved
 	push %rbx
@@ -20,12 +27,12 @@
 
 /* pop 0x30 bytes from stack */
 .macro pop_callee_saved
-	push %rbx
-	push %rbp
-	push %r12
-	push %r13
-	push %r14
-	push %r15
+	pop %r15
+	pop %r14
+	pop %r13
+	pop %r12
+	pop %rbp
+	pop %rbx
 .endm
 
 /* push 0x50 bytes to stack */

@@ -2,13 +2,16 @@
 
 #include "x86_64_regs.S"
 
-.macro isrstub
+.macro isrstub number
 	push_caller_saved
+	push_callee_saved
 	/* get error code from stack */
-	mov 0x50(%rsp), %rsi
+	mov ERROR_OFF(%rsp), %rsi
 	mov %rsp, panic_rsp
+	mov $\number, %rdi
 	cld
 	call isr_def_handler
+	pop_callee_saved
 	pop_caller_saved
 	add $8, %rsp
 	iretq
@@ -18,27 +21,20 @@
 .global isr\number
 isr\number:
 	push $0
-	mov $\number, %rdi
-	isrstub
+	isrstub \number
 .endm
 
 .macro isr_error number
 .global isr\number
 isr\number:
-	mov $\number, %rdi
-	isrstub
+	isrstub \number
 .endm
 
 .macro irq number
 .global irq\number
 irq\number:
-	push_caller_saved
-	mov $\number, %rdi
-	mov %rsp, panic_rsp
-	cld
-	call irq_def_handler
-	pop_caller_saved
-	iretq
+	push $0
+	isrstub (\number + 0x20)
 .endm
 
 isr_no_error 0
