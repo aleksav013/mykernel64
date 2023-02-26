@@ -16,7 +16,7 @@ typedef struct wait_queue wait_queue;
 
 wait_queue timer_queue;
 
-void timer_handler()
+void timer_handler(uint64_t rsp)
 {
 	wait_queue *pos;
 	list_for_each_entry(pos, (&timer_queue.list), list) {
@@ -24,6 +24,7 @@ void timer_handler()
 	}
 
 	tick++;
+
 	if (tick >= TICKS_PER_SECOND) {
 		tick = 0;
 		seconds++;

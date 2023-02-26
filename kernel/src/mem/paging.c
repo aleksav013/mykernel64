@@ -64,7 +64,7 @@ void init_paging(void)
 	load_pt_lvl4(page_table_lvl4);
 }
 
-void page_fault(uint64_t error)
+void page_fault(uint64_t rsp, uint64_t error)
 {
 	uint64_t addr;
 	__asm__ __volatile__("mov %%cr2, %0;" : "=r"(addr) : : "memory");
@@ -72,7 +72,7 @@ void page_fault(uint64_t error)
 	printf("address: 0x%x, error code: 0x%x\n", addr, error);
 
 	if (error == 7) {
-		panic("Accessing privileged page in usermode\n");
+		panic(rsp, "Accessing privileged page in usermode\n");
 	}
 
 	map_addr(addr, addr, FLAG_PRESENT | FLAG_WRITABLE | FLAG_USER);

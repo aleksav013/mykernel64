@@ -12,7 +12,7 @@
 void load_pt_lvl4(uint64_t *);
 void init_paging(void);
 void map_addr(uint64_t virt, uint64_t phys, uint32_t flags);
-void page_fault(uint64_t error);
+void page_fault(uint64_t rsp, uint64_t error);
 
 extern uint64_t __attribute__((aligned(4096))) page_table_lvl4[512];
 extern uint64_t __attribute__((aligned(4096))) page_table_lvl3[512];

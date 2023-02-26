@@ -5,7 +5,7 @@
 
 #define TICKS_PER_SECOND 1000
 
-void timer_handler(void);
+void timer_handler(uint64_t rsp);
 void wait(uint64_t ms);
 void init_timer(uint32_t frequency);
 

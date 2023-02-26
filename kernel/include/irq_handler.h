@@ -3,8 +3,7 @@
 
 #include <types.h>
 
-void isr_def_handler(uint64_t number, uint64_t error);
 void eoi(uint64_t number);
-void irq_def_handler(uint64_t number);
+void isr_def_handler(uint64_t number, uint64_t rsp, uint64_t error);
 
 #endif

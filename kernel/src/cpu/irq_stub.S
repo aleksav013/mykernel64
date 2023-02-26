@@ -1,14 +1,12 @@
-.extern panic_rsp
-
 #include "x86_64_regs.S"
 
 .macro isrstub number
 	push_caller_saved
 	push_callee_saved
 	/* get error code from stack */
-	mov ERROR_OFF(%rsp), %rsi
-	mov %rsp, panic_rsp
 	mov $\number, %rdi
+	mov %rsp, %rsi
+	mov ERROR_OFF(%rsp), %rdx
 	cld
 	call isr_def_handler
 	pop_callee_saved

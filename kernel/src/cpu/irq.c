@@ -47,14 +47,15 @@ const char *const exception_name[] = {
 	"Reserved",
 };
 
-void exception(uint64_t number, uint64_t error) {
+void exception(uint64_t number, uint64_t rsp, uint64_t error)
+{
 	switch (number) {
 	case 0xe:
 		printf("%s, error: 0x%x\n", exception_name[14], error);
-		page_fault(error);
+		page_fault(rsp, error);
 		break;
 	default:
-		panic("%s, error: 0x%x\n", exception_name[number], error);
+		panic(rsp, "%s, error: 0x%x\n", exception_name[number], error);
 	}
 }
 
@@ -72,11 +73,11 @@ void eoi(uint64_t number)
 	}
 }
 
-void interrupt(uint64_t number)
+void interrupt(uint64_t number, uint64_t rsp)
 {
 	switch (number) {
 	case 0x20:
-		timer_handler();
+		timer_handler(rsp);
 		eoi(number);
 		break;
 	case 0x21:
@@ -89,11 +90,11 @@ void interrupt(uint64_t number)
 	}
 }
 
-void isr_def_handler(uint64_t number, uint64_t error)
+void isr_def_handler(uint64_t number, uint64_t rsp, uint64_t error)
 {
 	if (number < 0x20) {
-		exception(number, error);
+		exception(number, rsp, error);
 	} else {
-		interrupt(number);
+		interrupt(number, rsp);
 	}
 }
