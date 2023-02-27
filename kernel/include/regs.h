@@ -52,4 +52,6 @@ struct regs_t {
 } __attribute__((packed));
 typedef struct regs_t regs_t;
 
+void print_regs_from_rsp(uint64_t rsp);
+
 #endif

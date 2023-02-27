@@ -30,7 +30,8 @@ void disable_interrupts(void);
 void init_idt(void);
 void load_idt(idtp *pointer);
 void init_idt_table(void);
-void add_to_idt(uint16_t num, uint64_t offset, uint16_t selector, uint8_t type);
+void add_to_idt(uint16_t num, uint64_t offset, uint16_t selector, uint8_t type,
+		uint8_t ist);
 
 extern idtp idt_pointer;
 

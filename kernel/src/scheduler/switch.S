@@ -1,10 +1,13 @@
 #include "x86_64_regs.S"
 
 /* %rdi - irq's rsp */
-/* %rsi - task's rsp */
-.global save_context_to_rsp
-save_context_to_rsp:
-	mov %rsi, %rsp
+.global save_context_from_rsp
+save_context_from_rsp:
+	push %rbp
+	mov %rsp, %rbp
+
+	mov RSP_OFF(%rdi), %rsp
+
 	push SS_OFF(%rdi)
 	push RSP_OFF(%rdi)
 	push RFLAGS_OFF(%rdi)
@@ -27,6 +30,12 @@ save_context_to_rsp:
 	push R13_OFF(%rdi)
 	push R14_OFF(%rdi)
 	push R15_OFF(%rdi)
+
+	mov %rsp, %rax
+
+	mov %rbp, %rsp
+	pop %rbp
+	ret
 
 /* %rdi - task's rsp */
 .global restore_context_from_rsp

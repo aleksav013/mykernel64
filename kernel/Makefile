@@ -20,6 +20,7 @@ OBJS = \
 	src/cpu/kcpuid.o \
 	src/cpu/msr.o \
 	src/cpu/pic.o \
+	src/cpu/regs.o \
 	src/cpu/tss.o \
 	src/devices/disc.o \
 	src/devices/keyboard.o \

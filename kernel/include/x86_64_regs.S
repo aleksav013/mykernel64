@@ -1,3 +1,6 @@
+#ifndef X86_64_REGS_H
+#define X86_64_REGS_H
+
 /* isr stack */
 /* ss:rsp (original rsp) -> rflags -> cs -> rip */
 
@@ -99,3 +102,5 @@
 	pop %rcx
 	pop %rax
 .endm
+
+#endif

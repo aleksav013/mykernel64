@@ -77,12 +77,12 @@ void interrupt(uint64_t number, uint64_t rsp)
 {
 	switch (number) {
 	case 0x20:
-		timer_handler(rsp);
 		eoi(number);
+		timer_handler(rsp);
 		break;
 	case 0x21:
-		keyboard_handler();
 		eoi(number);
+		keyboard_handler();
 		break;
 	default:
 		printf("spurious interrupt\n");
