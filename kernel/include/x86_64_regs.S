@@ -31,8 +31,8 @@
 .set RIP_OFF, 0x88
 .set CS_OFF, 0x90
 .set RFLAGS_OFF, 0x98
-.set RSP_OFF, 0x100
-.set SS_OFF, 0x108
+.set RSP_OFF, 0xA0
+.set SS_OFF, 0xA8
 
 /* push 0x30 bytes to stack */
 .macro push_callee_saved

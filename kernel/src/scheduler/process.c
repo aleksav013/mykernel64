@@ -87,9 +87,6 @@ void process_init_wrapper(uint64_t rip, uint64_t argc, uint64_t *argv)
 
 __attribute__((noreturn)) void idle_thread()
 {
-	uint64_t x = 0;
-	__asm__ __volatile__("mov %%rsp, %0;" : "=r"(x) : :);
-	printf("current rsp: 0x%x\n", x);
 	printf("idle_thread()\n");
 	for (;;) {
 		printf("1");
@@ -124,8 +121,6 @@ __attribute__((noreturn)) void remove_current_process()
 
 __attribute__((noreturn)) void context_switch(uint64_t irq_rsp)
 {
-	printf("irq_rsp: 0x%x\n", irq_rsp);
-	print_regs_from_rsp(irq_rsp);
 	curr_process->rsp = save_context_from_rsp(irq_rsp);
 	curr_process = scheduler();
 	restore_context_from_rsp(curr_process->rsp);

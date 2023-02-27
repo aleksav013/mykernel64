@@ -30,4 +30,5 @@ void print_regs_from_rsp(uint64_t rsp)
 	printf("fs: 0x%x; ", (regs->seg >> 16) & 0xFFFF);
 	printf("gs: 0x%x; ", regs->seg & 0xFFFF);
 	printf("rflags: 0x%x; ", regs->rflags);
+	printf("\n");
 }

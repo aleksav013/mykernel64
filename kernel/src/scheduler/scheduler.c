@@ -6,6 +6,7 @@
 #include <libk/string.h>
 #include <libk/stdio.h>
 #include <panic.h>
+#include <regs.h>
 
 mutex_t scheduler_lock;
 uint32_t sched_init = 0;
