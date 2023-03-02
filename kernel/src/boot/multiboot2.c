@@ -30,10 +30,11 @@ void init_fb(mb2_tag_fb *tag_fb)
 
 void init_mmap(mb2_tag_mmap *tag_mmap)
 {
+	size_t i;
+
 	INIT_LIST(mmap.list)
 
 	/* get data and store it into list */
-	size_t i;
 	for (i = sizeof(mb2_tag_mmap); i < tag_mmap->size;
 	     i += sizeof(mb2_tag_mmap_entry)) {
 		mmap_t *curr_mmap_entry = (mmap_t *)kalloc(sizeof(mmap_t));
@@ -45,9 +46,9 @@ void init_mmap(mb2_tag_mmap *tag_mmap)
 
 void init_module(mb2_tag_module *tag_module)
 {
+	uint32_t name_size;
 	/* name is utf-8 encoded string! */
-	uint32_t name_size =
-		tag_module->size - sizeof(tag_module) + sizeof(char *);
+	name_size = tag_module->size - sizeof(tag_module) + sizeof(char *);
 	tag_module->name = (char *)kalloc(name_size);
 	memcpy(tag_module->name, tag_module + tag_module->size - name_size,
 	       name_size);
@@ -56,19 +57,19 @@ void init_module(mb2_tag_module *tag_module)
 
 void read_mb2(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
 {
+	/* we will store framebuffer information here */
+	static mb2_tag_fb *tag_fb;
+	static mb2_tag_mmap *tag_mmap;
+	mb2_tag_header *tag_header;
+
 	if (multiboot_magic != MB2_MAGIC) {
 		/* not loaded by multiboot2 bootloader */
 		__asm__ __volatile__("hlt;");
 	}
 
-	/* we will store framebuffer information here */
-	static mb2_tag_fb *tag_fb;
-	static mb2_tag_mmap *tag_mmap;
-
 	/* skip first 8 bytes (total_size + reserved) */
-	mb2_tag_header *tag_header =
-		(mb2_tag_header *)((uint64_t)multiboot_bootinfo + 8 +
-				   KERNEL_VMA);
+	tag_header = (mb2_tag_header *)((uint64_t)multiboot_bootinfo + 8 +
+					KERNEL_VMA);
 
 	while (tag_header->type != MB2_TAG_END) {
 		/* process tag_type */

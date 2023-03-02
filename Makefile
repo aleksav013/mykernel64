@@ -17,7 +17,7 @@ WNO += -Wno-error=infinite-recursion
 
 CFLAGS = $(W) $(WNO) -fno-omit-frame-pointer -mcmodel=large
 CFLAGS += -mgeneral-regs-only # disables SIMD instructions
-CFLAGS += -MD -O3 -ffreestanding -nostdlib
+CFLAGS += -MD -O3 -ffreestanding -nostdlib -std=gnu89
 CFLAGS += -fno-common -fno-stack-protector
 CFLAGS += -fno-pie -no-pie -fno-pic
 CFLAGS += -g -fsanitize=undefined

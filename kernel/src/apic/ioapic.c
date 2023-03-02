@@ -30,14 +30,16 @@ void ioapic_set_irq(uint8_t irq, uint64_t apic_id, uint8_t vector)
 {
 	const uint32_t low_index = (uint32_t)0x10 + irq * 2;
 	const uint32_t high_index = (uint32_t)0x10 + irq * 2 + 1;
+	uint32_t high;
+	uint32_t low;
 
-	uint32_t high = ioapic_read((uint8_t)high_index);
+	high = ioapic_read((uint8_t)high_index);
 	/* set APIC ID */
 	high &= (uint32_t)~0xff000000;
 	high |= (uint32_t)apic_id << 24;
 	ioapic_write((uint8_t)high_index, high);
 
-	uint32_t low = ioapic_read((uint8_t)low_index);
+	low = ioapic_read((uint8_t)low_index);
 
 	/* unmask the IRQ */
 	low &= (uint32_t) ~(1 << 16);
@@ -57,10 +59,12 @@ void ioapic_set_irq(uint8_t irq, uint64_t apic_id, uint8_t vector)
 
 void apic_remap_interrupts()
 {
+	uint8_t bspid;
+
 	map_addr(ioapic_addr, ioapic_addr, FLAG_PRESENT);
 	map_addr(lapic_addr, lapic_addr, FLAG_PRESENT);
 
-	uint8_t bspid = curr_cpu_apic_id();
+	bspid = curr_cpu_apic_id();
 
 	/* irq is 2 because of gsi remap */
 	ioapic_set_irq(0x2, bspid, 0x20); /* timer */

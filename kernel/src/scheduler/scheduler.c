@@ -7,19 +7,27 @@
 #include <libk/stdio.h>
 #include <panic.h>
 #include <regs.h>
+#include <userspace.h>
+#include <apic.h>
 
 mutex_t scheduler_lock;
 uint32_t sched_init = 0;
 
 __attribute__((noreturn)) void init_scheduler()
 {
+	uint32_t argc;
+	uint64_t *argv;
+
 	INIT_LIST(process_queue.list);
 	init_mutex(&scheduler_lock);
-	uint64_t argc = 6;
-	uint64_t *argv = (uint64_t *)kalloc(sizeof(uint64_t) * 6);
-	memset(argv, 0, sizeof(uint64_t) * 6);
-	init_process(0, (uint64_t)idle_thread2, argc, argv);
-	curr_process = init_process(0, (uint64_t)idle_thread, argc, argv);
+
+	argc = 1;
+	argv = (uint64_t *)kalloc(argc * sizeof(uint64_t));
+	memset(argv, 0, sizeof(uint64_t) * argc);
+	init_process(0, (uint64_t)idle_thread, argc, argv);
+	curr_process = init_process(0, (uint64_t)init_ap_cpus, argc, argv);
+	init_process(3, (uint64_t)begin_userspace, argc, argv);
+
 	sched_init = 1;
 	restore_context_from_rsp(curr_process->rsp);
 }

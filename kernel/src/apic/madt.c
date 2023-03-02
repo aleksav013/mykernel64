@@ -66,25 +66,28 @@ void madt_parse_lapic_addr_ovr(uint64_t *addr)
 void parse_madt()
 {
 	uint64_t *madt_addr = find_sys_table_addr("APIC");
+	struct MADT *madt;
+	size_t curr_size;
+	uint8_t type;
+	uint8_t len;
 
 	if (madt_addr == NULL) {
 		printf("MADT NOT FOUND\n");
 		return;
 	}
 
-	struct MADT *madt = (struct MADT *)kalloc(sizeof(struct MADT));
+	madt = (struct MADT *)kalloc(sizeof(struct MADT));
 	memcpy(madt, madt_addr, sizeof(struct MADT));
 	lapic_addr = madt->lapic_addr;
 
-	size_t curr_size;
 	for (curr_size = sizeof(struct MADT); curr_size < madt->h.Length;) {
 		struct MADT_type_header *m = (struct MADT_type_header *)kalloc(
 			sizeof(struct MADT_type_header));
 		memcpy(m,
 		       (uint64_t *)((uint64_t)madt_addr + (uint64_t)curr_size),
 		       sizeof(struct MADT_type_header));
-		uint8_t type = m->type;
-		uint8_t len = m->len;
+		type = m->type;
+		len = m->len;
 		kfree(m);
 
 		switch (type) {

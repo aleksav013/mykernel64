@@ -51,11 +51,9 @@ int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
 	parse_madt();
 	apic_remap_interrupts();
 	enable_interrupts();
+	init_userspace();
 
 	init_scheduler();
-
-	/* init_ap_cpus(); */
-	/* jump_userspace(); */
 
 	for (;;) {
 		__asm__ __volatile__("pause; hlt;");

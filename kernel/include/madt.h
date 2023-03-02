@@ -50,6 +50,11 @@ struct MADT_lapic_addr {
 	uint64_t phys_addr;
 } __attribute__((packed));
 
+void madt_parse_cpu(uint64_t *addr);
+void madt_parse_ioapic(uint64_t *addr);
+void madt_parse_int(uint64_t *addr);
+void madt_parse_lapic_nmi(uint64_t *addr);
+void madt_parse_lapic_addr_ovr(uint64_t *addr);
 void parse_madt(void);
 
 #endif

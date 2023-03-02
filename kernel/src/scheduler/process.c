@@ -35,7 +35,7 @@ process_t *init_process(uint64_t priv_lvl, uint64_t rip, uint64_t argc,
 	regs->r14 = 0;
 	regs->r15 = 0;
 	regs->rip = (uint64_t)process_init_wrapper;
-	regs->rflags = 0;
+	regs->rflags = 0x202;
 	regs->error = 0;
 
 	if (priv_lvl == 0) {
@@ -87,20 +87,7 @@ void process_init_wrapper(uint64_t rip, uint64_t argc, uint64_t *argv)
 
 __attribute__((noreturn)) void idle_thread()
 {
-	printf("idle_thread()\n");
 	for (;;) {
-		printf("1");
-		wait(2000);
-		__asm__ __volatile__("pause; hlt;");
-	}
-}
-
-__attribute__((noreturn)) void idle_thread2()
-{
-	printf("idle_thread2()\n");
-	for (;;) {
-		printf("2");
-		wait(1000);
 		__asm__ __volatile__("pause; hlt;");
 	}
 }
@@ -111,10 +98,7 @@ __attribute__((noreturn)) void remove_current_process()
 	kfree(curr_process);
 	curr_process = scheduler();
 	if (curr_process == NULL) {
-		printf("no processes left\n");
-		for (;;) {
-			__asm__ __volatile__("pause; hlt;");
-		}
+		panic(0, "no processes left\n");
 	}
 	restore_context_from_rsp(curr_process->rsp);
 }

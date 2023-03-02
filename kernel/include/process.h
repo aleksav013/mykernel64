@@ -20,7 +20,6 @@ process_t *init_process(uint64_t priv_lvl, uint64_t rip, uint64_t argc,
 			uint64_t *argv);
 void process_init_wrapper(uint64_t rip, uint64_t argc, uint64_t *argv);
 __attribute__((noreturn)) void idle_thread(void);
-__attribute__((noreturn)) void idle_thread2(void);
 __attribute__((noreturn)) void remove_current_process(void);
 __attribute__((noreturn)) void context_switch(uint64_t irq_rsp);
 

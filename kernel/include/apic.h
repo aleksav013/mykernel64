@@ -5,6 +5,11 @@
 #include <atomic.h>
 
 uint8_t curr_cpu_apic_id(void);
+void clear_apic_errors(void);
+void wait_for_delivery(void);
+void select_ap(uint32_t apic_id);
+void send_init_ipi(uint32_t apic_id);
+void send_sipi(uint32_t apic_id);
 void init_ap_cpus(void);
 
 extern mutex_t cnt_lock;
