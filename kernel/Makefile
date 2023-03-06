@@ -24,6 +24,7 @@ OBJS = \
 	src/cpu/tss.o \
 	src/devices/disc.o \
 	src/devices/keyboard.o \
+	src/devices/pci.o \
 	src/devices/serial.o \
 	src/devices/timer.o \
 	src/fs/ext2.o \

@@ -25,6 +25,7 @@
 #include <pmm.h>
 #include <scheduler.h>
 #include <process.h>
+#include <mcfg.h>
 
 int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
@@ -52,6 +53,7 @@ int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
 	apic_remap_interrupts();
 	enable_interrupts();
 	init_userspace();
+	read_mcfgt();
 
 	init_scheduler();
 
