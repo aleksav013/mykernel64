@@ -19,7 +19,8 @@ void read_mcfgt()
 	}
 
 	mcfgt_cfg_addr = (uint64_t)((uint8_t *)mcfgt_addr + sizeof(MCFGT));
-	map_addr((uint64_t)mcfgt_addr, (uint64_t)mcfgt_addr, sizeof(MCFGT));
+	map_addr((uint64_t)mcfgt_addr, (uint64_t)mcfgt_addr, FLAG_PRESENT);
+
 	MCFGT *mcfgt = (MCFGT *)kalloc(sizeof(MCFGT));
 	memcpy(mcfgt, mcfgt_addr, sizeof(MCFGT));
 	len = (mcfgt->length - sizeof(MCFGT)) / 16;
@@ -28,8 +29,6 @@ void read_mcfgt()
 	config_space_mcfgt *cfg_space =
 		(config_space_mcfgt *)kalloc(sizeof(config_space_mcfgt));
 	for (i = 0; i < len; i++) {
-		map_addr(mcfgt_cfg_addr, mcfgt_cfg_addr,
-			 sizeof(config_space_mcfgt));
 		memcpy(cfg_space, (uint64_t *)mcfgt_cfg_addr,
 		       sizeof(config_space_mcfgt));
 		printf("addr: 0x%x, group: %d, start: %d, stop: %d\n",
