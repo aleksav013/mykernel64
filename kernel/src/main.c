@@ -41,14 +41,12 @@ int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
 	init_mutex(&serial_stdio_lock);
 	/* framebuffer is enabled from this point */
 	init_pmm();
-	memory_usage();
 	init_keyboard();
 	init_timer(TICKS_PER_SECOND);
 	init_idt();
 	disc_init();
 	ext2_init();
 	init_tss();
-	list_sys_tables();
 	parse_madt();
 	apic_remap_interrupts();
 	enable_interrupts();

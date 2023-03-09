@@ -1,10 +1,100 @@
 #include <types.h>
 #include <rsdp.h>
 #include <libk/stdio.h>
+#include <libk/serial_stdio.h>
 #include <mcfg.h>
 #include <heap.h>
 #include <paging.h>
 #include <libk/string.h>
+#include <pci.h>
+
+const char *vendor_name(uint64_t vendor_id)
+{
+	switch (vendor_id) {
+	case 0x8086:
+		return "Intel";
+	case 0x1022:
+		return "AMD";
+	default:
+		return "Unknown";
+	}
+}
+
+void enumerate_function(uint64_t dev_addr, uint64_t function)
+{
+	uint64_t func_addr = dev_addr + (function << 12);
+
+	map_addr(func_addr, func_addr, FLAG_PRESENT);
+	pci_dev *pci_func = (pci_dev *)kalloc(sizeof(pci_dev));
+	memcpy(pci_func, (uint64_t *)func_addr, sizeof(pci_dev));
+
+	if (pci_func->device_id == 0)
+		goto error;
+	if (pci_func->device_id == 0xFFFF)
+		goto error;
+
+	const char *vendor_str = vendor_name(pci_func->vendor_id);
+	size_t class_str =
+		pci_func->class_ < sizeof(class_string) ? pci_func->class_ : 0;
+
+	printf("%s, 0x%x, %s, 0x%x\n", vendor_str, pci_func->device_id,
+	       class_string[class_str], pci_func->subclass);
+
+error:
+	kfree(pci_func);
+}
+
+void enumerate_device(uint64_t bus_addr, uint64_t device)
+{
+	uint64_t dev_addr = bus_addr + (device << 15);
+
+	map_addr(dev_addr, dev_addr, FLAG_PRESENT);
+	pci_dev *pci_device = (pci_dev *)kalloc(sizeof(pci_dev));
+	memcpy(pci_device, (uint64_t *)bus_addr, sizeof(pci_dev));
+
+	if (pci_device->device_id == 0)
+		goto error;
+	if (pci_device->device_id == 0xFFFF)
+		goto error;
+
+	size_t func;
+	for (func = 0; func < 8; func++) {
+		enumerate_function(dev_addr, func);
+	}
+
+error:
+	kfree(pci_device);
+}
+
+void enumerate_bus(uint64_t base_addr, uint64_t bus)
+{
+	uint64_t bus_addr = base_addr + (bus << 20);
+
+	map_addr(bus_addr, bus_addr, FLAG_PRESENT);
+	pci_dev *pci_device = (pci_dev *)kalloc(sizeof(pci_dev));
+	memcpy(pci_device, (uint64_t *)bus_addr, sizeof(pci_dev));
+
+	if (pci_device->device_id == 0)
+		goto error;
+	if (pci_device->device_id == 0xFFFF)
+		goto error;
+
+	size_t dev;
+	for (dev = 0; dev < 32; dev++) {
+		enumerate_device(bus_addr, dev);
+	}
+
+error:
+	kfree(pci_device);
+}
+
+void enumerate_cfg_space(config_space_mcfgt *cfg_space)
+{
+	size_t i;
+	for (i = cfg_space->start_bus; i < cfg_space->end_bus; i++) {
+		enumerate_bus(cfg_space->base_addr, i);
+	}
+}
 
 void read_mcfgt()
 {
@@ -31,9 +121,9 @@ void read_mcfgt()
 	for (i = 0; i < len; i++) {
 		memcpy(cfg_space, (uint64_t *)mcfgt_cfg_addr,
 		       sizeof(config_space_mcfgt));
-		printf("addr: 0x%x, group: %d, start: %d, stop: %d\n",
-		       cfg_space->base_addr, cfg_space->pci_seg_group,
-		       cfg_space->start_pci_bus, cfg_space->end_pci_bus);
+		/*		printf("addr: 0x%x, group: %d, start: %d, stop: %d\n", cfg_space->base_addr, cfg_space->pci_seg_group, cfg_space->start_bus, cfg_space->end_bus); */
+		enumerate_cfg_space(cfg_space);
 	}
+	printf("\n");
 	kfree(cfg_space);
 }

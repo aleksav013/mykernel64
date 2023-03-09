@@ -42,7 +42,7 @@ void init_pmm()
 
 void memory_usage()
 {
-	printf("memory used: %dMB\n",
+	printf("memory used: %dMB",
 	       (MEM_USED_BELOW + (all_mem_cnt - free_mem_cnt) * PAGE_SIZE) /
 		       1024 / 1024);
 	printf("memory free: %dMB\n", free_mem_cnt * PAGE_SIZE / 1024 / 1024);

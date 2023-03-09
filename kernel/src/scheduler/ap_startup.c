@@ -15,7 +15,7 @@ void ap_startup(void)
 		__asm__ __volatile__("pause;");
 	}
 
-	printf("curr_cpu_apic_id: 0x%x\n", curr_cpu_apic_id());
+	/*	printf("curr_cpu_apic_id: 0x%x\n", curr_cpu_apic_id()); */
 	lock(cnt_lock);
 	ap_cnt++;
 	unlock(cnt_lock);

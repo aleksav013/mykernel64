@@ -6,8 +6,8 @@
 struct config_space_mcfgt {
 	uint64_t base_addr;
 	uint16_t pci_seg_group;
-	uint8_t start_pci_bus;
-	uint8_t end_pci_bus;
+	uint8_t start_bus;
+	uint8_t end_bus;
 	uint32_t reserved;
 } __attribute__((packed));
 typedef struct config_space_mcfgt config_space_mcfgt;
