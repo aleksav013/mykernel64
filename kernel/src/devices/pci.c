@@ -7,17 +7,46 @@
 #include <paging.h>
 #include <libk/string.h>
 #include <pci.h>
+#include <pci_info.h>
 
-const char *vendor_name(uint64_t vendor_id)
+inline void pci_print_dev(pci_dev *pci_func)
 {
-	switch (vendor_id) {
-	case 0x8086:
-		return "Intel";
-	case 0x1022:
-		return "AMD";
-	default:
-		return "Unknown";
+	const char *vendor_str = get_vendor(pci_func->vendor_id);
+	const char *class_str = get_class(pci_func->class_);
+	const char *subclass_str =
+		get_subclass(pci_func->class_, pci_func->subclass);
+	const char *progif_str = get_progif(
+		pci_func->class_, pci_func->subclass, pci_func->progif);
+
+	if (vendor_str != NULL) {
+		printf("%s", vendor_str);
+	} else {
+		printf("%x", pci_func->vendor_id);
 	}
+	printf(" / ");
+
+	if (class_str != NULL) {
+		printf("%s", class_str);
+	} else {
+		printf("%x", pci_func->class_);
+	}
+	printf(" / ");
+
+	if (subclass_str != NULL) {
+		printf("%s", subclass_str);
+	} else {
+		printf("%x", pci_func->subclass);
+	}
+	printf(" / ");
+
+	if (progif_str != NULL) {
+		printf("%s", progif_str);
+		printf(" / ");
+	}
+
+	printf("%x", pci_func->device_id);
+
+	printf("\n");
 }
 
 void enumerate_function(uint64_t dev_addr, uint64_t function)
@@ -33,12 +62,7 @@ void enumerate_function(uint64_t dev_addr, uint64_t function)
 	if (pci_func->device_id == 0xFFFF)
 		goto error;
 
-	const char *vendor_str = vendor_name(pci_func->vendor_id);
-	size_t class_str =
-		pci_func->class_ < sizeof(class_string) ? pci_func->class_ : 0;
-
-	printf("%s, 0x%x, %s, 0x%x\n", vendor_str, pci_func->device_id,
-	       class_string[class_str], pci_func->subclass);
+	pci_print_dev(pci_func);
 
 error:
 	kfree(pci_func);

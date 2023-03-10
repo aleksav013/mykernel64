@@ -19,31 +19,4 @@ struct pci_dev {
 };
 typedef struct pci_dev pci_dev;
 
-const char *class_string[] = {
-	"Unclassified",
-	"Mass Storage Controller",
-	"Network Controller",
-	"Display Controller",
-	"Multimedia Controller",
-	"Memory Controller",
-	"Bridge",
-	"Simple Communication Controller",
-	"Base System Peripheral",
-	"Input Device Controller",
-	"Docking Station",
-	"Processor",
-	"Serial Bus Controller",
-	"Wireless Controller",
-	"Intelligent Controller",
-	"Satellite Communication Controller",
-	"Encryption Controller",
-	"Signal Processing Controller",
-	"Processing Accelerator",
-	"Non-Essential Instrumentation",
-};
-
-const char *subclass_string[] = {
-
-};
-
 #endif
