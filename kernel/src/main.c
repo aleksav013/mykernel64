@@ -26,6 +26,7 @@
 #include <scheduler.h>
 #include <process.h>
 #include <mcfg.h>
+#include <sata.h>
 
 int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic);
 int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
@@ -52,6 +53,7 @@ int kernel_main(mb2_tag_header *multiboot_bootinfo, uint32_t multiboot_magic)
 	enable_interrupts();
 	init_userspace();
 	read_mcfgt();
+	ahci();
 
 	init_scheduler();
 

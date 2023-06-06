@@ -26,6 +26,7 @@ OBJS = \
 	src/devices/keyboard.o \
 	src/devices/pci_info.o \
 	src/devices/pci.o \
+	src/devices/sata.o \
 	src/devices/serial.o \
 	src/devices/timer.o \
 	src/fs/ext2.o \
